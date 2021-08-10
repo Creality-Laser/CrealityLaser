@@ -1,0 +1,28 @@
+@import '../../../../styles/variables.scss';
+
+.wrapper {
+  width: 100%;
+  border: 1px solid $btn-border-color;
+  border-radius: 3px;
+  background-color: transparent;
+  display: flex;
+  padding: 3px 5px;
+  margin-bottom: 5px;
+}
+.wrapper:focus {
+  outline-color: $btn-focus-color;
+}
+
+.icon {
+  margin-right: 5px;
+}
+
+.title {
+  text-align: left;
+  flex: 1;
+}
+
+.handlebar_icon {
+  cursor: pointer;
+  font-size: 12px;
+}

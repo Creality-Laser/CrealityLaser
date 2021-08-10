@@ -1,0 +1,56 @@
+{
+  "name": "cv_laser",
+  "version": "0.0.1",
+  "productName": "CV-Laser",
+  "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
+  "main": "./main.prod.js",
+  "author": {
+    "name": "Electron React Boilerplate Maintainers",
+    "email": "electronreactboilerplate@gmail.com",
+    "url": "https://github.com/electron-react-boilerplate"
+  },
+  "scripts": {
+    "electron-rebuild": "node -r ../.erb/scripts/BabelRegister.js ../.erb/scripts/ElectronRebuild.js",
+    "postinstall": "yarn electron-rebuild"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "~1.18.3",
+    "color-convert": "~2.0.0",
+    "commander": "~2.16.0",
+    "compression": "~1.7.3",
+    "connect-multiparty": "~2.1.1",
+    "connect-restreamer": "~1.0.3",
+    "consolidate": "~0.15.1",
+    "cookie-parser": "~1.4.3",
+    "ensure-array": "~1.0.0",
+    "errorhandler": "~1.5.0",
+    "express": "~4.16.3",
+    "express-jwt": "~5.3.1",
+    "express-session": "~1.15.6",
+    "hogan.js": "~3.0.2",
+    "jimp": "~0.2.28",
+    "jsonwebtoken": "~8.3.0",
+    "martinez-polygon-clipping": "~0.5.0",
+    "method-override": "~3.0.0",
+    "minimatch": "~3.0.4",
+    "mkdirp": "~0.5.1",
+    "morgan": "~1.9.0",
+    "mv": "~2.1.1",
+    "opentype.js": "~0.9.0",
+    "parse-json": "~2.2.0",
+    "range_check": "~1.4.0",
+    "serve-favicon": "~2.5.0",
+    "session-file-store": "~1.1.2",
+    "socket.io": "^4.1.2",
+    "socketio-jwt": "~4.5.0",
+    "tar": "^6.0.2",
+    "watch": "~1.0.2",
+    "webappengine": "~1.2.0",
+    "winston": "~3.3.3"
+  },
+  "devDependencies": {
+    "@types/cacheable-request": "^6.0.1"
+  }
+}

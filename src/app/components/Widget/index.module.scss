@@ -1,0 +1,222 @@
+$widget-background-color: #fafafa;
+
+.widget {
+  background-color: #fff;
+  margin-bottom: 10px;
+
+  box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px,
+    rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+
+  // default
+
+  .widget-header,
+  .widget-footer {
+    position: relative;
+    // border: 1px solid #ccc;
+    border: none;
+    background-color: $widget-background-color;
+    background-color: #4b90f2;
+    color: #222;
+  }
+
+  .widget-header {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+  }
+
+  .widget-header-fixed {
+    cursor: default;
+  }
+
+  .widget-content,
+  .widget-footer {
+    // border: 1px solid #ccc;
+    border-top: none;
+  }
+
+  .widget-content {
+    position: relative;
+    padding: 15px 10px;
+    border-bottom-left-radius: 13px;
+    border-bottom-right-radius: 13px;
+  }
+
+  &.widget-borderless {
+    .widget-header,
+    .widget-content,
+    .widget-footer {
+      border: 0;
+    }
+
+    .widget-header + .widget-content,
+    .widget-header + .widget-footer,
+    .widget-content + .widget-footer {
+      border-top: 1px solid #ccc;
+    }
+
+    .widget-content {
+      position: absolute;
+      padding: 15px 10px;
+    }
+  }
+
+  &.widget-fullscreen {
+    position: fixed;
+    top: 50px; // navbar
+    left: 64px; // sidebar
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    z-index: 1000;
+
+    .widget-sortable {
+      display: none;
+    }
+
+    .widget-content {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+
+    .widget-header + .widget-content {
+      position: absolute;
+      top: 34px; // .widget-header height
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+  }
+
+  .widget-sortable,
+  .widget-toolbar,
+  .widget-controls {
+    a {
+      color: #838383;
+    }
+
+    a:hover {
+      color: #505050;
+    }
+  }
+
+  .widget-sortable {
+    display: inline-block;
+    cursor: move;
+
+    > a {
+      cursor: move;
+    }
+  }
+
+  .widget-title {
+    color: white;
+    margin-top: 0;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 32px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 0;
+    padding: 0 10px;
+    max-width: 240px;
+    white-space: nowrap;
+    text-overflow: clip;
+
+    .glyphicon {
+      font-size: 14px;
+      top: 0;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+  }
+
+  .widget-toolbar {
+    cursor: auto;
+    float: right;
+    width: auto;
+    height: 32px;
+    line-height: 32px;
+    position: relative;
+    border-left: 1px solid rgba(0, 0, 0, 0.09);
+    padding: 0 8px;
+    text-align: center;
+    white-space: nowrap;
+
+    a {
+      text-decoration: none;
+      font-size: 12px;
+      text-align: center;
+      display: inline-block;
+      line-height: 32px;
+      padding: 0;
+      margin: 0;
+    }
+
+    i {
+      font-size: 14px;
+    }
+  }
+
+  .widget-button {
+    text-decoration: none;
+    font-size: 14px;
+    text-align: center;
+    display: inline-block;
+    line-height: 32px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background-color: transparent;
+  }
+
+  .widget-controls {
+    position: relative;
+    cursor: auto;
+    float: right;
+    width: auto;
+
+    .widget-button {
+      min-width: 30px;
+      height: 32px;
+      float: left;
+      position: relative;
+      font-size: 14px;
+      font-family: Arial, Helvetica, sans-serif;
+      border-left: 1px solid rgba(0, 0, 0, 0.09);
+      margin: 0;
+      text-align: center;
+
+      &.disabled {
+        color: #bbb;
+        cursor: not-allowed;
+      }
+
+      &.disabled:hover {
+        background-color: inherit;
+      }
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+
+      &.inverted {
+        color: #fff;
+        background-color: #404040;
+      }
+
+      &.inverted:hover {
+        background-color: #222;
+      }
+
+      &:first-child {
+        padding-left: 0;
+      }
+    }
+  }
+}

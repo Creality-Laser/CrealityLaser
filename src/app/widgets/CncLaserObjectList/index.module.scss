@@ -1,0 +1,114 @@
+@import '../index.module.scss';
+
+.bt {
+  border: none;
+  background: #ffffff;
+  &:hover {
+    opacity: 1;
+  }
+
+  &:active {
+    opacity: 0.3;
+  }
+}
+
+.name {
+  vertical-align: middle;
+  line-height: 30px;
+  height: 34px;
+  display: inline-block;
+  width: 240px;
+}
+
+.object_list_box {
+  margin-top: -15px;
+  margin-bottom: -15px;
+  margin-left: -10px;
+  margin-right: -10px;
+  max-height: 158px;
+  overflow: auto;
+  background: #ffffff;
+}
+
+.object_list_box::-webkit-scrollbar {
+  width: 8px;
+}
+
+.object_list_box::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.object_list_box::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.object_list_box::-webkit-scrollbar-thumb:hover {
+  background-color: #a8bbbf;
+}
+
+.bgr {
+  max-width: 340px;
+  background-color: unset;
+  background-size: 36px;
+}
+
+.selected {
+  background-color: #e7f2fd;
+}
+
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 36px;
+  height: 36px;
+
+  &.icon_shape {
+    background: url('./images/list_ic_shape_18x18@2x.png') no-repeat center
+      center;
+    display: inline-block;
+  }
+
+  &.icon_pic {
+    background: url('./images/list_ic_pic_18x18@2x.png') no-repeat center center;
+    display: inline-block;
+  }
+
+  &.icon_text {
+    background: url('./images/list_ic_text_18x18@2x.png') no-repeat center
+      center;
+    display: inline-block;
+  }
+
+  &.icon_hide_open {
+    background: url('./images/list_ic_open_18x18@2x.png') no-repeat center
+      center;
+    margin-left: 8px;
+    border: 0;
+  }
+
+  &.icon_hide_close {
+    background: url('./images/list_ic_close_18x18@2x.png') no-repeat center
+      center;
+    margin-left: 8px;
+    border: 0;
+  }
+}
+
+.no_content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  height: 60px;
+  margin-bottom: 10px;
+
+  .no_content_text {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #dbdbdb;
+  }
+}

@@ -1,0 +1,33 @@
+/*
+ * @NOTE: Prepend a `~` to css file paths that are in your node_modules
+ *        See https://github.com/webpack-contrib/sass-loader#imports
+ */
+
+// 定制 antd 主题
+// https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues/2439
+// https://ant.design/docs/react/customize-theme-cn
+
+@import '~antd/dist/antd.less';
+@import './../styles/override_antd.less';
+@import 'react-contexify/dist/ReactContexify.css';
+@import './../styles/parameter.less';
+@import 'rc-slider/assets/index.css';
+
+body {
+  position: relative;
+  min-height: 100vh;
+  // background: linear-gradient(
+  //   200.96deg,
+  //   #fedc2a -29.09%,
+  //   #dd5789 51.77%,
+  //   #7a2c9e 129.35%
+  // );
+}
+
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}

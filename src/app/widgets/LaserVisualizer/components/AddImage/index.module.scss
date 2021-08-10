@@ -1,0 +1,30 @@
+.qrcode_modal_content_wrapper {
+  display: flex;
+}
+
+.qrcode_modal_content_preview_wrapper {
+  margin-bottom: 10px;
+  margin-left: 10px;
+}
+
+.qrcode_modal_content_preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 200px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+
+.qrcode_modal_content_preview_img {
+}
+
+.qrcode_modal_content_preview_placeholder {
+  color: #dcdcdc;
+}
+
+.qrcode_modal_content_preview_textarea {
+  min-height: 240px !important;
+}
