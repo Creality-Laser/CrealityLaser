@@ -1,8 +1,8 @@
 import React from 'react';
 import { Select } from 'antd';
 import { useTranslation } from 'react-i18next';
-import useSendLanguageChanged from '../../hooks/useSendLanguageChanged';
-import config from '../../../config/app.config';
+import useSendLanguageChanged from '../../../hooks/useSendLanguageChanged';
+import config from '../../../../config/app.config';
 
 const { languages } = config;
 const { Option } = Select;

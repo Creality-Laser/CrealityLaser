@@ -119,6 +119,38 @@ export const LASER_PRINT_MODE_AUTO = 'auto';
 export const LASER_PRINT_MODE_MANUAL = 'manual';
 
 export const MACHINE_SERIES = {
+  CV20: {
+    value: 'CV20',
+    label: 'CV20',
+    setting: {
+      size: {
+        x: 100,
+        y: 100,
+        z: 100,
+      },
+      laserSize: {
+        x: 100,
+        y: 100,
+        z: 100,
+      },
+    },
+  },
+  CV30: {
+    value: 'CV30',
+    label: 'CV30',
+    setting: {
+      size: {
+        x: 300,
+        y: 300,
+        z: 300,
+      },
+      laserSize: {
+        x: 300,
+        y: 300,
+        z: 300,
+      },
+    },
+  },
   ORIGINAL: {
     value: 'Original',
     label: 'Snapmaker Original',

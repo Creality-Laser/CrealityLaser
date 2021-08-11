@@ -75,8 +75,7 @@ class Transformation extends PureComponent {
             <ParameterItem
               popover={{
                 title: 'Size',
-                content:
-                  'Enter the size of the engraved picture. The size cannot be larger than 125 x 125 mm or the size of your material.',
+                content: `Enter the size of the engraved picture. The size cannot be larger than ${size.x} x ${size.y} mm or the size of your material.`,
               }}
             >
               <ParameterItemLabel>Size (mm)</ParameterItemLabel>
