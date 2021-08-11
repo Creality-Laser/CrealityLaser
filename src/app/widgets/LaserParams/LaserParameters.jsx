@@ -273,6 +273,7 @@ class LaserParameters extends PureComponent {
             gcodeConfig={gcodeConfig}
             updateSelectedModelPrintOrder={updateSelectedModelPrintOrder}
             updateSelectedModelGcodeConfig={updateSelectedModelGcodeConfig}
+            mode={mode}
             paramsDescs={{
               jogSpeed:
                 'Determines how fast the machine moves when it’s not engraving.',
