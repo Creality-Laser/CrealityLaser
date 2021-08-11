@@ -160,7 +160,7 @@ class LaserToolPathGenerator extends EventEmitter {
       //   modelInfo,
       //   modelPath
       // );
-      workingGcode = await this.generateGcodeGreyscale(modelInfo, modelPath);
+      // workingGcode = await this.generateGcodeGreyscale(modelInfo, modelPath);
       workingGcode = await this.generateGcodeGreyscale_new(
         modelInfo,
         modelPath
