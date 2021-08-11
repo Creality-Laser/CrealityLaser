@@ -25,16 +25,32 @@ const CNC_LASER_FRAG_SHADER = [
   '}',
 ].join('');
 
-const motionColor = {
-  G0: new THREE.Color(0xc8c8c8),
-  G1: new THREE.Color(0x000000),
-  unknown: new THREE.Color(0x000000),
-};
+// const motionColor = {
+//   G0: new THREE.Color(0xc8c8c8),
+//   G1: new THREE.Color(0x000000),
+//   unknown: new THREE.Color(0x000000),
+// };
+
+class MotionColor {
+  G0() {
+    return new THREE.Color(0xc8c8c8);
+  }
+
+  G1(sPower = 0) {
+    const depth = 1 - parseFloat(sPower / 1000);
+    const threeColorObj = new THREE.Color(depth, depth, depth);
+    return threeColorObj;
+  }
+
+  unknown() {
+    return new THREE.Color(0x000000);
+  }
+}
+const motionColor = new MotionColor();
 
 class ToolPathRenderer {
   render(toolPath) {
     const { headType, mode, movementMode, data } = toolPath;
-
     // now only support cnc&laser
     if (!['cnc', 'laser'].includes(headType)) {
       return null;
@@ -125,19 +141,21 @@ class ToolPathRenderer {
       item.X !== undefined && (newState.X = item.X);
       item.Y !== undefined && (newState.Y = item.Y);
       item.Z !== undefined && (newState.Z = item.Z);
+      item.S !== undefined && (newState.S = item.S);
 
       if (
         state.G !== newState.G ||
         state.X !== newState.X ||
         state.Y !== newState.Y ||
-        state.Z !== newState.Z
+        state.Z !== newState.Z ||
+        state.S !== newState.S
       ) {
-        state = newState;
+        state = { ...state, ...newState };
         geometry.vertices.push(new THREE.Vector3(state.X, state.Y, state.Z));
         if (state.G === 0) {
           geometry.colors.push(motionColor.G0);
         } else if (state.G === 1) {
-          geometry.colors.push(motionColor.G1);
+          geometry.colors.push(motionColor.G1(state.S));
         } else {
           geometry.colors.push(motionColor.unknown);
         }
