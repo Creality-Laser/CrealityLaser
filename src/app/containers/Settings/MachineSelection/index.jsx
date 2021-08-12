@@ -15,9 +15,7 @@ const machines = Object.values(MACHINE_SERIES)
   .filter((m) => m.startsWith('CV'));
 
 function MachineSelection(props) {
-  const { series, updateMachineSeries, machine } = props;
-
-  console.log(machine, '----------- machine ---------');
+  const { series, updateMachineSeries } = props;
 
   const { t } = useTranslation();
 
@@ -29,7 +27,7 @@ function MachineSelection(props) {
       </span>
       <Select
         value={series}
-        style={{ width: 120 }}
+        style={{ width: 160 }}
         onChange={updateMachineSeries}
       >
         {machines.map((machine) => (
@@ -43,7 +41,6 @@ function MachineSelection(props) {
 }
 
 MachineSelection.propTypes = {
-  machine: PropTypes.object,
   series: PropTypes.string.isRequired,
   updateMachineSeries: PropTypes.func.isRequired,
 };

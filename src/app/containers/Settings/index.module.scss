@@ -16,8 +16,11 @@
 }
 
 .item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   min-height: 50px;
-  padding: 5px 10px;
+  padding: 5px 20px;
   margin: 0 10px 10px;
   border-bottom: 1px solid #ccc;
   &:last-child {
