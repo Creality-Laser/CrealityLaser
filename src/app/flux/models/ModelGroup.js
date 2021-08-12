@@ -448,8 +448,8 @@ class ModelGroup {
     return this.getState(this.selectedModel);
   }
 
-  generateModel(modelInfo) {
-    const model = new Model(modelInfo);
+  generateModel(modelInfo, machineSize) {
+    const model = new Model(modelInfo, machineSize);
     model.meshObject.addEventListener('update', this.onModelUpdate);
     model.generateModelObject3D();
     // model.generateProcessObject3D();

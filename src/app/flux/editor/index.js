@@ -100,7 +100,9 @@ export const actions = {
             config: modelDefaultConfigs.config,
             gcodeConfig: modelDefaultConfigs.gcodeConfig,
           };
-          dispatch(threejsModelActions.generateThreejsModel(headType, options));
+          dispatch(
+            threejsModelActions.generateThreejsModel(headType, options, size)
+          );
         })
         .catch((err) => {
           console.error(err);
@@ -296,7 +298,9 @@ export const actions = {
           options.processImageName = res.body.filename;
 
           // dispatch(svgModelActions.generateSvgModel(headType, options));
-          dispatch(threejsModelActions.generateThreejsModel(headType, options));
+          dispatch(
+            threejsModelActions.generateThreejsModel(headType, options, size)
+          );
 
           dispatch(baseActions.resetCalculatedState(headType));
           dispatch(
