@@ -81,9 +81,17 @@ class Visualizer extends Component {
     if (!isEqual(nextProps.size, this.props.size)) {
       const size = nextProps.size;
       this.printableArea.updateSize(size);
+      // this.canvas.current.setCamera(
+      //   new THREE.Vector3(0, 0, Math.min(size.z, 300)),
+      //   new THREE.Vector3()
+      // );
       this.canvas.current.setCamera(
-        new THREE.Vector3(0, 0, Math.min(size.z, 300)),
-        new THREE.Vector3()
+        new THREE.Vector3(
+          size.x / 1.2,
+          size.y / 2,
+          Math.min(size.z + 100, 500)
+        ),
+        new THREE.Vector3(size.x / 1.2, size.y / 2, 0)
       );
     }
 
