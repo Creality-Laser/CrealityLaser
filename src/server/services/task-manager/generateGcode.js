@@ -14,7 +14,9 @@ const addHeaderToFile = (
   tmpFilePath,
   filePath,
   thumbnail,
-  runBorderGcode
+  runBorderGcode,
+  estimatedTime,
+  fileTotalLines
 ) => {
   const useG90 = 'G90 (use absolute coordinates)\n';
 
@@ -26,7 +28,7 @@ const addHeaderToFile = (
       fs.unlinkSync(tmpFilePath);
     });
     rs.on('open', () => {
-      // ws.write(header);
+      ws.write(header);
       ws.write(useG90);
       ws.write(runBorderGcode);
       rs.pipe(ws);
@@ -49,6 +51,8 @@ const addHeaderToFile = (
           size: ws.bytesWritten,
           lastModifiedDate: new Date().getTime(),
           thumbnail,
+          printTime: estimatedTime,
+          lines: fileTotalLines,
         },
       });
     });
@@ -150,21 +154,27 @@ export const generateGcode = (modelInfos, onProgress) => {
       ? 'point'
       : 'line';
 
-  const power = gcodeConfig.fixedPowerEnabled ? gcodeConfig.fixedPower : 0;
+  const power = gcodeConfig.fixedPowerEnabled ? gcodeConfig.fixedPower : 1000;
 
   let headerStart =
     ';Header Start\n' +
-    `;header_type: ${headType}\n` +
-    `;thumbnail: ${thumbnail}\n` +
+    // `;header_type: ${headType}\n` +
+    // `;thumbnail: ${thumbnail}\n` +
     `;renderMethod: ${renderMethod}\n` +
     ';file_total_lines: fileTotalLines\n' +
     `;estimated_time(s): ${estimatedTime}\n` +
-    `;max_x(mm): ${boundingBox.max.x}\n` +
-    `;max_y(mm): ${boundingBox.max.y}\n` +
-    `;max_z(mm): ${boundingBox.max.z}\n` +
-    `;min_x(mm): ${boundingBox.min.x}\n` +
-    `;min_y(mm): ${boundingBox.min.y}\n` +
-    `;min_z(mm): ${boundingBox.min.z}\n` +
+    `;MAXX: ${boundingBox.max.x}\n` +
+    `;MAXY: ${boundingBox.max.y}\n` +
+    `;MAXZ: ${boundingBox.max.z}\n` +
+    `;MINX: ${boundingBox.min.x}\n` +
+    `;MINY: ${boundingBox.min.y}\n` +
+    `;MINZ: ${boundingBox.min.z}\n` +
+    // `;max_x(mm): ${boundingBox.max.x}\n` +
+    // `;max_y(mm): ${boundingBox.max.y}\n` +
+    // `;max_z(mm): ${boundingBox.max.z}\n` +
+    // `;min_x(mm): ${boundingBox.min.x}\n` +
+    // `;min_y(mm): ${boundingBox.min.y}\n` +
+    // `;min_z(mm): ${boundingBox.min.z}\n` +
     `;work_speed(mm/minute): ${gcodeConfig.workSpeed}\n` +
     `;jog_speed(mm/minute): ${gcodeConfig.jogSpeed}\n` +
     `;power(%): ${power}\n` +
@@ -185,7 +195,9 @@ export const generateGcode = (modelInfos, onProgress) => {
         outputFilePathTmp,
         outputFilePath,
         thumbnail,
-        runBorderGcode
+        runBorderGcode,
+        estimatedTime,
+        fileTotalLines
       );
       resolve(res);
     });

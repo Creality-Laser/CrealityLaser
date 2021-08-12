@@ -1044,6 +1044,8 @@ export const actions = {
           size: gcodeFile.size,
           lastModifiedDate: gcodeFile.lastModifiedDate,
           thumbnail: gcodeFile.thumbnail,
+          printTime: gcodeFile.printTime,
+          lines: gcodeFile.lines,
         },
         stage: CNC_LASER_STAGE.GENERATE_GCODE_SUCCESS,
         progress: 1,
@@ -1053,6 +1055,7 @@ export const actions = {
 
   getEstimatedTime: (headType, type) => (dispatch, getState) => {
     const { modelGroup } = getState()[headType];
+
     if (type === 'selected') {
       return modelGroup.estimatedTime;
     } else {

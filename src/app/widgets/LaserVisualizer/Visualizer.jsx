@@ -17,12 +17,6 @@ import CanvasContextMenu from './components/CanvasContextMenu';
 import CanvasViewController from './components/CanvasViewController';
 import ProgressInfo from './components/ProgressBar';
 
-function humanReadableTime(t) {
-  const hours = Math.floor(t / 3600);
-  const minutes = Math.ceil((t - hours * 3600) / 60);
-  return hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`;
-}
-
 class Visualizer extends Component {
   contextMenuRef = React.createRef();
 
@@ -170,17 +164,14 @@ class Visualizer extends Component {
       togglePage,
       uploadImage,
       setAutoPreview,
+      gcodeFile,
+      stage,
+      progress,
     } = this.props;
 
     const isModelSelected = !!this.props.selectedModelID;
 
-    // const hasModel = this.props.hasModel;
-
-    const estimatedTime = isModelSelected
-      ? this.props.getEstimatedTime('selected')
-      : this.props.getEstimatedTime('total');
-
-    const isEditor = this.props.page === PAGE_EDITOR;
+    // const isEditor = this.props.page === PAGE_EDITOR;
 
     // const isEditor = true;
 
@@ -275,17 +266,11 @@ class Visualizer extends Component {
             />
           </div>
         </div>
-        {estimatedTime && (
-          <div className={styles['visualizer-info']}>
-            Estimated Time:
-            <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            {humanReadableTime(estimatedTime)}
-          </div>
-        )}
         <div className={styles['visualizer-progress']}>
           <ProgressInfo
-            stage={this.props.stage}
-            progress={this.props.progress}
+            stage={stage}
+            progress={progress}
+            gcodeFile={gcodeFile}
           />
         </div>
         <CanvasContextMenu
@@ -304,7 +289,7 @@ class Visualizer extends Component {
 }
 
 Visualizer.propTypes = {
-  page: PropTypes.string.isRequired,
+  // page: PropTypes.string.isRequired,
   stage: PropTypes.number.isRequired,
   progress: PropTypes.number.isRequired,
 
@@ -324,9 +309,10 @@ Visualizer.propTypes = {
   svgModelGroup: PropTypes.object.isRequired,
   toolPathModelGroup: PropTypes.object.isRequired,
   renderingTimestamp: PropTypes.number.isRequired,
+  gcodeFile: PropTypes.object,
 
   // func
-  getEstimatedTime: PropTypes.func.isRequired,
+  // getEstimatedTime: PropTypes.func.isRequired,
   getSelectedModel: PropTypes.func.isRequired,
   bringSelectedModelToFront: PropTypes.func.isRequired,
   sendSelectedModelToBack: PropTypes.func.isRequired,
@@ -345,13 +331,7 @@ Visualizer.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  // const machine = state.machine;
-
-  const size = {
-    x: 125,
-    y: 125,
-    z: 125,
-  };
+  const { size } = state.machine;
 
   const { background } = state.laser;
   // call canvas.updateTransformControl2D() when transformation changed or model selected changed
@@ -367,6 +347,7 @@ const mapStateToProps = (state) => {
     progress,
     canUndo,
     canRedo,
+    gcodeFile,
   } = state.laser;
 
   return {
@@ -384,6 +365,7 @@ const mapStateToProps = (state) => {
     renderingTimestamp,
     stage,
     progress,
+    gcodeFile,
   };
 };
 
