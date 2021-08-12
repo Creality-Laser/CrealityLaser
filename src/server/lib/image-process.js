@@ -20,7 +20,7 @@ function bit(x) {
   // } else {
   //   return 0;
   // }
-  const step = 60;
+  const step = 30;
   if (x < step) {
     return 0;
   } else if (255 - x <= step) {

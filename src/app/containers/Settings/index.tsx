@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
-import ToggleLocale from '../../components/ToggleLocale';
-import MachineSelection from '../../components/MachineSelection';
+import ToggleLocale from './ToggleLocale';
+import MachineSelection from './MachineSelection';
 import styles from './index.module.scss';
 
 function Settings(props: any) {

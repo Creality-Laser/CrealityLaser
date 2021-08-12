@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import useListenLanguageChangeAndChangeLanguage from '../hooks/useListenLanguageChangeAndChangeLanguage';
+import { actions as machineActions } from '../flux/machine';
 import { actions as laserActions } from '../flux/laser';
 import { actions as editorActions } from '../flux/editor';
 import { actions as textActions } from '../flux/text';
@@ -18,6 +19,7 @@ function App(props) {
 
   const {
     location,
+    machineInit,
     laserInit,
     textInit,
     functionsInit,
@@ -30,6 +32,7 @@ function App(props) {
 
   useEffect(() => {
     keyboardShortcutInit();
+    machineInit();
     laserInit();
     textInit();
     functionsInit();
@@ -38,6 +41,7 @@ function App(props) {
   }, [
     functionsInit,
     initModelsPreviewChecker,
+    machineInit,
     laserInit,
     textInit,
     workspaceInit,
@@ -89,6 +93,7 @@ App.propTypes = {
   // match: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   // history: PropTypes.object.isRequired,
+  machineInit: PropTypes.func.isRequired,
   laserInit: PropTypes.func.isRequired,
   textInit: PropTypes.func.isRequired,
   functionsInit: PropTypes.func.isRequired,
@@ -103,6 +108,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    machineInit: () => dispatch(machineActions.init()),
     laserInit: () => dispatch(laserActions.init()),
     textInit: () => dispatch(textActions.init()),
     functionsInit: () => {

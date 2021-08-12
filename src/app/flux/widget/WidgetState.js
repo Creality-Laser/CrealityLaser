@@ -198,6 +198,20 @@ const DEFAULT_STATE = {
   },
 };
 const SERIES_STATES = {
+  CV20: {
+    laser: {
+      default: {
+        widgets: ['cnc-laser-object-list', 'laser-params', 'laser-output'],
+      },
+    },
+  },
+  CV30: {
+    laser: {
+      default: {
+        widgets: ['cnc-laser-object-list', 'laser-params', 'laser-output'],
+      },
+    },
+  },
   original: {},
   A150: {
     laser: {
@@ -336,6 +350,7 @@ class WidgetState {
 
     // Check series widgets
     widgetState.seriesStates.original = {};
+
     if (
       !arrayEqual(
         widgetState.seriesStates.A150.laser.default.widgets,

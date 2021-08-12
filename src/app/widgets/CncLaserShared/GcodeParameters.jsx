@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { Popover } from 'antd';
 
 import { ABSENT_VALUE } from '../../constants';
 import ParametersHead from '../components/params/ParametersHead';
@@ -8,15 +9,115 @@ import ParameterItem, {
   ParameterItemValue,
 } from '../components/params/ParameterItem';
 import StyledInputNumber from '../components/params/StyledInputNumber';
+import StyledSelect, { Option } from '../components/params/StyledSelect';
 import StyledSlider from '../components/params/StyledSlider';
 import OptionalDropdownParam from '../components/params/OptionalDropdownParam';
+
+// workSpeed: 1800 - 100%
+const materials = [
+  {
+    id: '',
+    name: 'None',
+    power: 0,
+    workSpeed: 0,
+    jogSpeed: 3000,
+  },
+  {
+    id: 'lindenWood_2mm',
+    name: '椴木板-2mm',
+    power: 30,
+    workSpeed: 900,
+    jogSpeed: 3000,
+  },
+  {
+    id: 'skewer_2mm',
+    name: '竹签-2mm',
+    power: 25,
+    workSpeed: 720,
+    jogSpeed: 3000,
+  },
+  {
+    id: 'leather_1mm',
+    name: '皮革-1mm',
+    power: 20,
+    workSpeed: 720,
+    jogSpeed: 3000,
+  },
+  {
+    id: 'kraft paper',
+    name: '牛皮纸',
+    power: 70,
+    workSpeed: 540,
+    jogSpeed: 3000,
+  },
+  {
+    id: 'paperboard_green',
+    name: '卡纸-绿色',
+    power: 80,
+    workSpeed: 360,
+    jogSpeed: 3000,
+  },
+  {
+    id: 'feltPaper_blue',
+    name: '毛毡纸-蓝色',
+    power: 95,
+    workSpeed: 90,
+    jogSpeed: 3000,
+  },
+  {
+    id: 'feltPaper_green',
+    name: '毛毡纸-绿色',
+    power: 50,
+    workSpeed: 180,
+    jogSpeed: 3000,
+  },
+  {
+    id: 'feltPaper_yellow',
+    name: '毛毡纸-黄色',
+    power: 50,
+    workSpeed: 180,
+    jogSpeed: 3000,
+  },
+];
 
 class GcodeParameters extends PureComponent {
   state = {
     expanded: true,
+    currentMaterialId: '',
   };
 
   actions = {
+    onChangeMaterial: (materialId) => {
+      const {
+        gcodeConfig: { fixedPowerEnabled },
+      } = this.props;
+
+      this.setState(
+        {
+          currentMaterialId: materialId,
+        },
+        () => {
+          const isSelectedMaterialNone = materialId === '';
+          if (isSelectedMaterialNone) {
+            return;
+          }
+          const currentMaterial = materials.find(({ id }) => id === materialId);
+          const { power, workSpeed, jogSpeed } = currentMaterial;
+
+          // change power
+          if (!fixedPowerEnabled) {
+            this.actions.onToggleFixedPowerEnabled();
+          }
+          this.actions.onChangeFixedPower(power);
+
+          // change workSpeed
+          this.actions.onChangeWorkSpeed(workSpeed);
+
+          // change jogSpeed
+          this.actions.onChangeJogSpeed(jogSpeed);
+        }
+      );
+    },
     onToggleExpand: () => {
       this.setState((state) => ({ expanded: !state.expanded }));
     },
@@ -58,8 +159,11 @@ class GcodeParameters extends PureComponent {
     },
   };
 
+  componentDidMount() {}
+
   render() {
-    const { printOrder, selectedModelID, selectedModelHideFlag } = this.props;
+    const { printOrder, selectedModelID, selectedModelHideFlag, mode } =
+      this.props;
     const actions = this.actions;
     const {
       jogSpeed = 0,
@@ -74,6 +178,10 @@ class GcodeParameters extends PureComponent {
     } = this.props.gcodeConfig;
     const selectedNotHide = selectedModelID && !selectedModelHideFlag;
 
+    // const isBW = mode === 'bw';
+    const isGreyscale = mode === 'greyscale';
+    // const isVector = mode === 'vector';
+
     return (
       <>
         <ParametersHead
@@ -83,6 +191,45 @@ class GcodeParameters extends PureComponent {
         />
         {this.state.expanded && (
           <>
+            <ParameterItem
+              popover={{
+                title: 'Material',
+                content: 'The material to engrave on',
+              }}
+            >
+              <ParameterItemLabel>Material</ParameterItemLabel>
+              <ParameterItemValue>
+                <StyledSelect
+                  style={{ zIndex: 5, width: 130 }}
+                  name="line_direction"
+                  placeholder="Select an direction"
+                  value={this.state.currentMaterialId}
+                  onChange={this.actions.onChangeMaterial}
+                >
+                  {materials.map(({ id, name, power, workSpeed }) => {
+                    return (
+                      <Option key={id} value={id}>
+                        <Popover
+                          placement="leftTop"
+                          content={
+                            <div>
+                              <p>
+                                <span>Power: {power}%</span>
+                              </p>
+                              <p>
+                                <span> WorkSpeed: {workSpeed} </span>
+                              </p>
+                            </div>
+                          }
+                        >
+                          {name}
+                        </Popover>
+                      </Option>
+                    );
+                  })}
+                </StyledSelect>
+              </ParameterItemValue>
+            </ParameterItem>
             <ParameterItem
               popover={{
                 title: 'Print Order',
@@ -108,7 +255,7 @@ class GcodeParameters extends PureComponent {
                 />
               </ParameterItemValue>
             </ParameterItem>
-            {jogSpeed !== ABSENT_VALUE && (
+            {!isGreyscale && jogSpeed !== ABSENT_VALUE && (
               <ParameterItem
                 popover={{
                   title: 'Jog Speed',
@@ -152,7 +299,7 @@ class GcodeParameters extends PureComponent {
                 </ParameterItemValue>
               </ParameterItem>
             )}
-            {dwellTime !== ABSENT_VALUE && (
+            {false && dwellTime !== ABSENT_VALUE && (
               <ParameterItem
                 popover={{
                   title: 'Dwell Time',
@@ -312,7 +459,7 @@ GcodeParameters.propTypes = {
     plungeSpeed: PropTypes.string,
     dwellTime: PropTypes.string,
   }),
-
+  mode: PropTypes.string, // 'bw' | 'greyscale' | 'vector'
   updateSelectedModelGcodeConfig: PropTypes.func.isRequired,
   updateSelectedModelPrintOrder: PropTypes.func.isRequired,
 };
