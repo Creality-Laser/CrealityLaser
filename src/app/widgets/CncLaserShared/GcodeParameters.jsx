@@ -214,15 +214,21 @@ class GcodeParameters extends PureComponent {
                           content={
                             <div>
                               <p>
-                                <span>Power: {power}%</span>
+                                <span>Power: </span>
+                                <span style={{ fontWeight: 600 }}>{power}</span>
+                                <span>&nbsp;%</span>
                               </p>
                               <p>
-                                <span> WorkSpeed: {workSpeed} </span>
+                                <span>WorkSpeed: </span>
+                                <span style={{ fontWeight: 600 }}>
+                                  {workSpeed}
+                                </span>
+                                <span>&nbsp;mm/min</span>
                               </p>
                             </div>
                           }
                         >
-                          {name}
+                          <div style={{ width: '100%' }}>{name}</div>
                         </Popover>
                       </Option>
                     );
