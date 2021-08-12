@@ -237,9 +237,19 @@ class Visualizer extends Component {
             toolPathModelGroup={this.props.toolPathModelGroup.object}
             printableArea={this.printableArea}
             cameraInitialPosition={
-              new THREE.Vector3(40, 0, Math.min(this.props.size.z + 100, 300))
+              new THREE.Vector3(
+                this.props.size.x / 1.2,
+                this.props.size.y / 2,
+                Math.min(this.props.size.z + 100, 500)
+              )
             }
-            cameraInitialTarget={new THREE.Vector3(40, 0, 0)}
+            cameraInitialTarget={
+              new THREE.Vector3(
+                this.props.size.x / 1.2,
+                this.props.size.y / 2,
+                0
+              )
+            }
             onSelectModel={this.actions.onSelectModel}
             onUnselectAllModels={this.actions.onUnselectAllModels}
             onModelAfterTransform={this.actions.onModelAfterTransform}
