@@ -3,7 +3,11 @@ import {
   Object3D,
   Group,
   CylinderBufferGeometry,
+  LineBasicMaterial,
+  BufferGeometry,
   Mesh,
+  Line,
+  Vector3,
 } from 'three';
 import each from 'lodash/each';
 import colornames from 'colornames';
@@ -82,6 +86,20 @@ class PrintablePlate extends Object3D {
       );
       arrowY.position.set(0, axisYLength + 2, 0);
       group.add(arrowY);
+    }
+
+    {
+      //print range
+      const material = new LineBasicMaterial({ color: colornames('gray 44') });
+      const points = [];
+      points.push(new Vector3(0, 0, 0));
+      points.push(new Vector3(0, this.size.y, 0));
+      points.push(new Vector3(this.size.x, this.size.y, 0));
+      points.push(new Vector3(this.size.x, 0, 0));
+      points.push(new Vector3(0, 0, 0));
+      const geometry = new BufferGeometry().setFromPoints(points);
+      const rangeLine = new Line(geometry, material);
+      group.add(rangeLine);
     }
 
     {
