@@ -125,7 +125,7 @@ class PrintablePlate extends Object3D {
       group.add(axisYLabel);
 
       const textSize = 10 / 3;
-      for (let x = -axisXLength; x <= axisXLength; x += gridSpacing) {
+      for (let x = 0; x <= axisXLength; x += gridSpacing) {
         if (x !== 0) {
           const textLabel = new TextSprite({
             x,
@@ -141,7 +141,7 @@ class PrintablePlate extends Object3D {
           group.add(textLabel);
         }
       }
-      for (let y = -axisYLength; y <= axisYLength; y += gridSpacing) {
+      for (let y = 0; y <= axisYLength; y += gridSpacing) {
         if (y !== 0) {
           const textLabel = new TextSprite({
             x: -4,
