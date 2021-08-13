@@ -5,7 +5,7 @@ import widget from './widget';
 import text from './text';
 import keyboardShortcut from './keyboardShortcut';
 import workspace from './workspace';
-import machine from './machine';
+import machine from './machine/index';
 
 export default combineReducers({
   laser,

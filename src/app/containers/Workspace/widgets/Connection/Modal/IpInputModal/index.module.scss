@@ -1,0 +1,47 @@
+.modal-new-divider {
+  border-color: #ddd;
+  margin: 0;
+}
+
+.modal-new-content-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 42px 20px 16px;
+}
+
+.modal-new-content-input-label {
+  color: #333;
+  margin-right: 10px;
+}
+.modal-new-content-input {
+  width: 100%;
+  border-radius: 4px;
+  transition: all 0.3s;
+  border-style: solid;
+  border-color: #ddd;
+  border-width: 1px;
+  padding: 2px 10px;
+
+  &:focus {
+    outline: none;
+    border-color: $btn-hover-color-color;
+  }
+}
+
+.modal-new-content-operator-row {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  padding: 20px 30px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+}
+
+.title-icon {
+  display: inline-block;
+  font-size: 22px !important;
+  margin-right: 10px;
+}

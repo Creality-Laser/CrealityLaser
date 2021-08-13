@@ -1,0 +1,345 @@
+@import '../../../../../styles/variables.scss';
+
+.display-panel-wrapper {
+}
+
+.display-panel-table {
+  width: 330px;
+  border: 1px solid #ddd;
+  border-collapse: separate !important;
+  border-radius: 4px;
+
+  thead tr th {
+    background-color: #96b2ff;
+    color: $white;
+    border-right: 1px solid #ddd;
+    text-align: center;
+    &:last-child {
+      border-right: none;
+    }
+  }
+  tbody tr td {
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+.display-panel-table-disabled {
+  thead tr th {
+    background-color: #eee;
+    color: #333;
+  }
+}
+
+.dropdown-wrapper {
+  position: relative;
+}
+
+.dropdown-header {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 16px;
+  padding: 0 2px;
+  border-radius: 8px;
+  background: $btn-hover-color-color;
+  color: $white;
+  transform: all 0.3s;
+
+  &:hover {
+    background: $main-hover-color;
+  }
+}
+.dropdown-header-disabled {
+  cursor: not-allowed;
+  background-color: #ddd;
+  color: #fff;
+
+  &:hover {
+    background-color: #ddd;
+    color: #fff;
+  }
+}
+.dropdown-header-label {
+  font-size: 12px;
+}
+.dropdown-icon {
+  display: inline-block;
+  font-size: 12px;
+  transform: scale(0.5) rotate(90deg);
+  transition: all 0.3s;
+}
+
+.dropdown-icon-up {
+  transform: scale(0.5) rotate(-90deg);
+}
+
+.dropdown-panel-wrapper {
+  position: absolute;
+  top: calc(100% + 3px);
+  right: 0;
+  width: 210px;
+  z-index: 1;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.16);
+  border-radius: 3px;
+}
+.dropdown-item {
+  cursor: pointer;
+  font-size: 10px;
+  color: #333;
+  padding: 3px 8px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #e8f0ff;
+  }
+}
+
+.dropdown-item-disabled {
+  cursor: not-allowed;
+  color: #999;
+  background-color: #eee;
+  &:hover {
+    background-color: #eee;
+  }
+}
+
+.keypad-wrapper {
+  display: flex;
+  align-items: center;
+  margin-top: 13px;
+}
+
+.jogpad-wrapper {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.jogpad-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.jogpad-col1 {
+  width: 55px;
+}
+.jogpad-col2 {
+  width: 55px;
+}
+
+.jogpad-col3 {
+  width: 180px;
+}
+
+.jogpad-col-label {
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.jogpad-scale-wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-items: center;
+}
+
+.jogpad-scale-item {
+  cursor: pointer;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+  line-height: 24px;
+  background-color: #e8f0ff;
+  text-align: center;
+  border-bottom: 1px solid #bfd2ff;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: #bfd2ff;
+  }
+
+  &:first-child {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
+  &:last-child {
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom: none;
+  }
+}
+
+.jogpad-scale-item-actived {
+  background-color: #bfd2ff;
+}
+
+.jogpad-btns-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.jogpad-btn {
+  cursor: pointer;
+  background-color: #e8f0ff;
+  color: $btn-hover-color-color;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: #bfd2ff;
+  }
+}
+
+.jogpad-btn-triangle {
+  position: relative;
+
+  &:hover .jogpad-btn-triangle-background svg path {
+    fill: #bfd2ff;
+  }
+}
+
+.jogpad-btn-triangle-background,
+.jogpad-btn-triangle-background-left,
+.jogpad-btn-triangle-background-right,
+.jogpad-btn-triangle-background-bottom {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+
+  svg path {
+    transition: all 0.3s;
+  }
+}
+
+.jogpad-btn-triangle-background-left {
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+.jogpad-btn-triangle-background-right {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.jogpad-btn-triangle-background-bottom {
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.jogpad-btn-triangle-label {
+  padding: 3px;
+}
+
+.jogpad-btn-circle,
+.jogpad-btn-circle-bigger,
+.jogpad-btn-circle-biggest {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.jogpad-btn-circle {
+  width: 34px;
+  height: 34px;
+}
+
+.jogpad-btn-circle-bigger {
+  width: 40px;
+  height: 40px;
+}
+
+.jogpad-btn-circle-biggest {
+  width: 44px;
+  height: 44px;
+}
+
+.jogpad-btn-icon {
+  display: inline-block;
+  font-size: 12px;
+  transform: scale(0.6);
+}
+.jogpad-btn-icon-left-top {
+}
+
+.jogpad-btn-icon-right-top {
+  display: inline-block;
+  transform: scale(0.6) rotate(90deg);
+}
+
+.jogpad-btn-icon-left-bottom {
+  display: inline-block;
+  transform: scale(0.6) rotate(-90deg);
+}
+
+.jogpad-btn-icon-right-bottom {
+  display: inline-block;
+  transform: scale(0.6) rotate(180deg);
+}
+
+.jogpad-btn-disabled {
+  cursor: not-allowed;
+  background-color: #ddd;
+  color: #999;
+
+  &:hover {
+    background-color: #ddd;
+    color: #999;
+  }
+}
+
+.jogpad-btn-disabled .jogpad-btn-triangle-background svg path {
+  fill: #ddd;
+}
+
+.jogpad-btn-disabled:hover .jogpad-btn-triangle-background svg path {
+  fill: #ddd;
+}
+
+.custom-distance-row {
+  margin-top: 12px;
+  margin-left: 6px;
+  display: flex;
+  align-items: center;
+}
+.custom-distance-row-label {
+  color: #333;
+  margin-left: 6px;
+  margin-right: 15px;
+}
+.custom-distance-row-input-group {
+  display: flex;
+}
+
+.custom-distance-row-input {
+  width: 60px;
+  height: 20px;
+  line-height: 20px;
+  margin: 0 6px;
+  border-radius: 4px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ddd;
+  padding: 0 6px;
+
+  &:focus {
+    outline: none;
+    border-color: $main-hover-color;
+  }
+}
+
+.custom-distance-row-input-disabled {
+  background-color: #eee;
+  color: #999;
+}

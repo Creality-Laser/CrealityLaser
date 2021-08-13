@@ -1,0 +1,30 @@
+.content-wrapper {
+  padding: 28px 0 20px;
+  background-color: $white;
+  border-radius: 0px 0px 20px 20px;
+}
+.content-inner-wrapper {
+  padding: 0 20px;
+  max-height: calc(100vh - 455px);
+  overflow-y: auto;
+}
+/* width */
+.content-inner-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+.content-inner-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+.content-inner-wrapper::-webkit-scrollbar-thumb {
+  background: #e8f0ff;
+  border-radius: 3px;
+}
+
+/* Handle on hover */
+.content-inner-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #bfd2ff;
+}

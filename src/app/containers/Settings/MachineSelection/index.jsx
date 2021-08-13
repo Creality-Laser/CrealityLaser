@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { MACHINE_SERIES } from '../../../constants';
-import { actions as machineActions } from '../../../flux/machine';
+import { actions as machineActions } from '../../../flux/machine/index';
 import styles from './index.module.scss';
 
 const { Option } = Select;

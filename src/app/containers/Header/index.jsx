@@ -19,6 +19,11 @@ function Header() {
           <h1 className={styles.app_title}>CV Laser</h1>
         </Link>
       </section>
+      <section className={styles.left}>
+        <Link to="/workspace">
+          <h1 className={styles.app_title}>Workspace</h1>
+        </Link>
+      </section>
       <section className={styles.right}>
         <Link to="/settings" className={styles.logo_wrapper}>
           <SettingFilled style={{ fontSize: '22px', color: 'white' }} />

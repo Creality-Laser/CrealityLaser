@@ -42,6 +42,8 @@ module.exports = {
     'react/self-closing-comp': 'off',
     'react/no-array-index-key': 'off',
     'spaced-comment': 'off',
+    'jsx-a11y/click-events-have-key-events': 'off',
+    'jsx-a11y/no-static-element-interactions': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

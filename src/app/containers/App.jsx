@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import useListenLanguageChangeAndChangeLanguage from '../hooks/useListenLanguageChangeAndChangeLanguage';
-import { actions as machineActions } from '../flux/machine';
+import { actions as machineActions } from '../flux/machine/index';
 import { actions as laserActions } from '../flux/laser';
 import { actions as editorActions } from '../flux/editor';
 import { actions as textActions } from '../flux/text';
@@ -12,6 +12,7 @@ import { actions as keyboardShortcutActions } from '../flux/keyboardShortcut';
 import Header from './Header/index';
 import Laser from './Laser';
 import Settings from './Settings';
+import Workspace from './Workspace';
 import './App.global.less';
 
 function App(props) {
@@ -68,6 +69,8 @@ function App(props) {
     );
   }
 
+  const isShowWorkspace = true;
+
   return (
     <>
       <Header />
@@ -79,6 +82,12 @@ function App(props) {
           <div>Oops! No match here...</div>
         </Route>
       </Switch> */}
+      <Workspace
+        isShowWorkspace={isShowWorkspace}
+        style={{
+          display: location.pathname !== '/workspace' ? 'none' : 'block',
+        }}
+      />
       <Laser
         style={{
           display: location.pathname !== '/laser' ? 'none' : '',
@@ -127,6 +136,7 @@ export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
 function isRouterPathAllowed(pathname) {
   const allowedPaths = [
     '/laser',
+    '/workspace',
     '/settings',
     '/developTools',
     '/caselibrary',

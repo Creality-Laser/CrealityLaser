@@ -1,0 +1,89 @@
+@import '../../../../styles/variables.scss';
+
+.content-wrapper {
+  padding: 30px 20px 20px;
+  background-color: $white;
+  border-radius: 0px 0px 20px 20px;
+}
+
+// separator without margin on top and bottom
+.separator {
+  display: block;
+  margin: 10px 0;
+  padding: 0;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid $border-color;
+
+  &.separator-underline {
+    margin: 0 0 10px;
+  }
+}
+
+.connection-state {
+  width: 100%;
+  &.connection-state-name {
+    font-size: $font-size-lead;
+  }
+  &.connection-state-icon {
+    float: right;
+    font-size: $font-size-lead;
+    margin-right: 12px;
+    i {
+      vertical-align: middle;
+    }
+  }
+}
+
+.connection-state-head {
+  vertical-align: middle;
+  &.connection-state-head-name {
+    margin-left: 10px;
+    color: $grey-color;
+    vertical-align: middle;
+  }
+  &.connection-state-head-icon {
+    i {
+      font-size: $font-size-base;
+      vertical-align: middle;
+    }
+  }
+}
+
+.port-select-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fresh-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: $white;
+  border: none;
+  padding: 0;
+  background-color: $btn-hover-color-color;
+  border-color: $btn-hover-color-color;
+
+  &:hover {
+    background-color: $main-hover-color;
+    border-color: $main-hover-color;
+  }
+}
+
+.fresh-btn-icon {
+}
+
+.fresh-btn-icon-spin {
+  animation: iconSpin 2s ease-in infinite forwards;
+}
+
+@keyframes iconSpin {
+  100% {
+    transform: rotate(1turn);
+  }
+}
