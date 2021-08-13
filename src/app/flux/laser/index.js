@@ -59,7 +59,7 @@ const INITIAL_STATE = {
   },
 
   previewFailed: false,
-  autoPreviewEnabled: true,
+  autoPreviewEnabled: false,
 
   // rendering
   renderingTimestamp: 0,
