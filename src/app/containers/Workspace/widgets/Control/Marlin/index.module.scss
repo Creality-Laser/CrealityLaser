@@ -1,0 +1,106 @@
+@import '../../../../../styles/variables.scss';
+
+.wrapper {
+  margin-top: 20px;
+}
+
+.divider {
+  border-color: #bfd2ff;
+  margin-bottom: 12px;
+  margin-left: -20px;
+  margin-right: -20px;
+}
+
+.header {
+  margin-bottom: 10px;
+}
+
+.label {
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(51, 51, 51, 1);
+  line-height: 19px;
+}
+
+.content-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.content-item-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.input-wrapper {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  margin: 0 6px;
+}
+
+.input-unit {
+  position: absolute;
+  right: 5px;
+  top: 3px;
+}
+
+.jog-distance-control {
+  :global {
+    .input-group {
+      .input-group-btn:not(:first-child):not(:last-child) {
+        .btn {
+          border-radius: 0;
+        }
+        .btn:last-child {
+          border-right: none;
+          margin-right: -1px;
+        }
+      }
+    }
+  }
+}
+
+.content-item-finetune-btn,
+.content-item-finetune-value-btn {
+  display: inline-block;
+  border: none;
+  height: 24px;
+  line-height: 24px;
+}
+.content-item-finetune-btn {
+  width: 80px;
+  background: $btn-hover-color-color;
+  border-color: $btn-hover-color-color;
+  color: $white;
+  border-radius: 24px;
+
+  &:hover {
+    background: $main-hover-color;
+    border-color: $main-hover-color;
+  }
+}
+
+.content-item-finetune-value-btn {
+  width: 50px;
+  background-color: #e8f0ff;
+  color: #193bde;
+  transition: all 0.3s;
+  border-right: 1px solid #bfd2ff;
+
+  &:hover {
+    background-color: #bfd2ff;
+  }
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+.content-item-finetune-value-btn-active {
+  background-color: #bfd2ff;
+  color: #193bde;
+}

@@ -29,6 +29,9 @@ export const actions = {
    */
   updateTabContainer: (tab, container, value) => (dispatch, getState) => {
     const { widgetState } = getState().widget;
+
+    console.log(widgetState, '============ widgetState ==========');
+
     const state = widgetState.updateTabContainer(tab, container, value);
     state && dispatch(actions.updateState(state));
   },

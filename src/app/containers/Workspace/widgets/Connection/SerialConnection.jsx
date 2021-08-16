@@ -16,6 +16,8 @@ import LaserState from './LaserState';
 import MachineSelectModal from '../../components/modals/modal-machine-select-new';
 import styles from './index.module.scss';
 
+const { Option } = Select;
+
 const i18n = {
   _: (str) => str,
 };
@@ -299,9 +301,26 @@ class SerialConnection extends PureComponent {
         >
           <div className={styles.portSelectRow}>
             <Select
+              style={{ maxWidth: '230px' }}
+              onChange={this.actions.onChangePortOption}
+              disabled={!canChangePort}
+              placeholder={i18n._('Choose a port')}
+              value={port}
+            >
+              {map(ports, (o) => ({
+                value: o.port,
+                label: o.port,
+                manufacturer: o.manufacturer,
+              })).map((option) => (
+                <Option key={option.value} value={option.value}>
+                  {option.label}
+                </Option>
+              ))}
+            </Select>
+            {/* <Select
               wrapperStyle={{ maxWidth: '230px' }}
               disabled={!canChangePort}
-              noResultsText={i18n._('No ports available')}
+              // noResultsText={i18n._('No ports available')}
               onChange={this.actions.onChangePortOption}
               optionRenderer={this.renderPortOption}
               options={map(ports, (o) => ({
@@ -312,7 +331,7 @@ class SerialConnection extends PureComponent {
               placeholder={i18n._('Choose a port')}
               value={port}
               valueRenderer={this.renderPortValue}
-            />
+            /> */}
             <button
               type="button"
               className={styles.freshBtn}
@@ -354,7 +373,7 @@ class SerialConnection extends PureComponent {
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {!isConnected && (
             <Button
-              wrapperStyle={{ width: '60px', height: '24px' }}
+              style={{ width: '60px', height: '24px' }}
               type="primary"
               disabled={!canOpenPort}
               onClick={this.actions.onOpenPort}
@@ -364,7 +383,7 @@ class SerialConnection extends PureComponent {
           )}
           {isConnected && (
             <Button
-              wrapperStyle={{ width: '60px', height: '24px' }}
+              style={{ width: '60px', height: '24px' }}
               type="danger-linear"
               onClick={this.actions.onClosePort}
             >

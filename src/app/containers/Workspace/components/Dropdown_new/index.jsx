@@ -29,15 +29,14 @@ class Dropdown extends PureComponent {
           type="button"
         >
           <span className={styles.label}>{label}</span>
-          <button
-            type="button"
+          <span
             className={classNames(
               styles.faBtn,
               isDropped ? styles.faBtnRotate : ''
             )}
           >
             <span className={`iconfont ${styles.faBtnIcon}`}>&#xe69b;</span>
-          </button>
+          </span>
         </button>
         <div
           className={`${styles.contentWrapper} ${

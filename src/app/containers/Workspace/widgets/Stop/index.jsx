@@ -37,7 +37,7 @@ class Stop extends PureComponent {
         <Button
           type="danger"
           disabled={halted || isDisabled}
-          wrapperStyle={{
+          style={{
             width: '80px',
             height: '30px',
             minWidth: '80px',
@@ -77,7 +77,7 @@ class Stop extends PureComponent {
               <Button
                 onClick={reloadPage}
                 type="primary"
-                wrapperStyle={{ width: '80px', height: '30px' }}
+                style={{ width: '80px', height: '30px' }}
               >
                 {i18n._('Reload')}
               </Button>

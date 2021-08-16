@@ -257,7 +257,7 @@ class Macro extends PureComponent {
             <hr className={styles.divider} />
             <Button
               type="primary"
-              wrapperStyle={{ width: '130px' }}
+              style={{ width: '130px' }}
               onClick={() => this.actions.openModal(MODAL_ADD_MACRO, {})}
             >
               New Macro
@@ -331,7 +331,7 @@ class Macro extends PureComponent {
             <div className={styles.modalNewContentOperatorRow}>
               <Button
                 onClick={this.actions.closeModal}
-                wrapperStyle={{
+                style={{
                   width: '80px',
                   height: '30px',
                   marginRight: '30px',
@@ -347,7 +347,7 @@ class Macro extends PureComponent {
                   });
                 }}
                 type="primary"
-                wrapperStyle={{ width: '80px', height: '30px' }}
+                style={{ width: '80px', height: '30px' }}
                 disabled={
                   !newMacroFields.name ||
                   !newMacroFields.content ||
@@ -433,7 +433,7 @@ class Macro extends PureComponent {
               <span className={styles.modalEditContentOperatorRowLeft}>
                 <Button
                   type="danger-linear"
-                  wrapperStyle={{ width: '80px', height: '30px' }}
+                  style={{ width: '80px', height: '30px' }}
                   onClick={() =>
                     this.setState({ isDelMacroModalVisible: true })
                   }
@@ -444,7 +444,7 @@ class Macro extends PureComponent {
               <span className={styles.modalEditContentOperatorRowRight}>
                 <Button
                   onClick={this.actions.closeModal}
-                  wrapperStyle={{
+                  style={{
                     width: '80px',
                     height: '30px',
                     marginRight: '30px',
@@ -465,7 +465,7 @@ class Macro extends PureComponent {
                       });
                   }}
                   type="primary"
-                  wrapperStyle={{ width: '80px', height: '30px' }}
+                  style={{ width: '80px', height: '30px' }}
                   disabled={
                     !modalParams.name ||
                     !modalParams.content ||
@@ -507,7 +507,7 @@ class Macro extends PureComponent {
             <div className={styles.modalDelMacroOperaterRow}>
               <Button
                 onClick={() => this.setState({ isDelMacroModalVisible: false })}
-                wrapperStyle={{
+                style={{
                   height: '30px',
                   width: '80px',
                   marginRight: '30px',
@@ -517,7 +517,7 @@ class Macro extends PureComponent {
               </Button>
               <Button
                 type="primary"
-                wrapperStyle={{ height: '30px', width: '80px' }}
+                style={{ height: '30px', width: '80px' }}
                 onClick={() => {
                   this.actions.deleteMacro(modalParams.id);
                   this.setState({ isDelMacroModalVisible: false }, () => {

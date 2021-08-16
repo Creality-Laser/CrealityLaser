@@ -33,13 +33,13 @@ import { actions as workspaceActions } from '../workspace';
 
 const INITIAL_STATE = {
   // Machine Info
-  series: MACHINE_SERIES.test.value,
+  series: MACHINE_SERIES.CV20.value,
   headType: null,
   canReselectMachine: false,
 
   isCustom: false,
-  size: MACHINE_SERIES.test.setting.size,
-  laserSize: MACHINE_SERIES.test.setting.laserSize,
+  size: MACHINE_SERIES.CV20.setting.size,
+  laserSize: MACHINE_SERIES.CV20.setting.laserSize,
 
   // Serial port
   port: controller.port || '',

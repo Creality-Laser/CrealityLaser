@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import path from 'path';
 import request from 'superagent';
-import { Modal, Button, CheckBox } from 'antd';
+import { Modal, Button, Checkbox } from 'antd';
 
 import Dropdown from '../../components/Dropdown_new';
 import { pathWithRandomSuffix } from '../../../../../shared/lib/random-utils';
@@ -15,12 +15,15 @@ import styles from './index.module.scss';
 import {
   CONNECTION_TYPE_WIFI,
   DATA_PREFIX,
-  IMAGE_WIFI_CONNECTED,
-  IMAGE_WIFI_CONNECT_WAITING,
-  IMAGE_WIFI_ERROR,
+  // IMAGE_WIFI_CONNECTED,
+  // IMAGE_WIFI_CONNECT_WAITING,
+  // IMAGE_WIFI_ERROR,
   MACHINE_HEAD_TYPE,
 } from '../../../../constants';
 import { actions as workspaceActions } from '../../../../flux/workspace';
+import IMAGE_WIFI_CONNECTED from './images/connection/ic_complete_64x64.png';
+import IMAGE_WIFI_CONNECT_WAITING from './images/connection/ic_waiting-64x64.png';
+import IMAGE_WIFI_ERROR from './images/connection/ic_error_64x64.png';
 
 // import controller from '../../lib/controller';
 
@@ -83,10 +86,11 @@ class GcodeFileLoader extends PureComponent {
       this.fileInput.current.click();
     },
 
-    onChangeShouldPreview: () => {
-      this.setState((state) => ({
-        loadToWorkspaceOnLoad: !state.loadToWorkspaceOnLoad,
-      }));
+    onChangeShouldPreview: (e) => {
+      const isChecked = e.target.checked;
+      this.setState({
+        loadToWorkspaceOnLoad: isChecked,
+      });
     },
 
     loadGcodeToWorkspace: () => {
@@ -284,7 +288,7 @@ class GcodeFileLoader extends PureComponent {
             <Button
               type="primary"
               onClick={actions.onClickToUpload}
-              wrapperStyle={{ height: '30px' }}
+              style={{ height: '30px' }}
             >
               {i18n._('Open G-code File')}
             </Button>
@@ -295,10 +299,10 @@ class GcodeFileLoader extends PureComponent {
               <span style={{ paddingLeft: '4px' }}>
                 {i18n._('Preview in workspace')}
               </span>
-              <CheckBox
-                isChecked={loadToWorkspaceOnLoad}
+              <Checkbox
+                checked={loadToWorkspaceOnLoad}
                 onChange={actions.onChangeShouldPreview}
-                wrapperStyle={{ width: '20px', height: '20px' }}
+                style={{ width: '20px', height: '20px' }}
               />
             </div>
             {gcodeFiles && gcodeFiles.length > 0 && (
@@ -419,7 +423,7 @@ class GcodeFileLoader extends PureComponent {
               type="primary"
               disabled={!hasFile}
               onClick={actions.loadGcodeToWorkspace}
-              wrapperStyle={{ height: '30px' }}
+              style={{ height: '30px' }}
             >
               {i18n._('Load G-code to Workspace')}
             </Button>
@@ -434,7 +438,7 @@ class GcodeFileLoader extends PureComponent {
                 )
               }
               onClick={actions.sendFile}
-              wrapperStyle={{ height: '30px', marginTop: '10px' }}
+              style={{ height: '30px', marginTop: '10px' }}
             >
               {i18n._('Send to IVI via Wi-Fi')}
             </Button>

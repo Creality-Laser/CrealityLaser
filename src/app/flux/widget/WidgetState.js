@@ -14,13 +14,13 @@ const DEFAULT_STATE = {
     default: {
       widgets: ['visualizer'],
     },
-    left: {
+    primary: {
       show: true,
       widgets: ['connection', 'console', 'marlin', 'laser-test-focus'],
     },
-    right: {
+    secondary: {
       show: true,
-      widgets: ['wifi-transport', 'enclosure', 'control', 'macro', 'gcode'],
+      widgets: ['wifi-transport', 'control', 'macro', 'gcode'],
     },
   },
   '3dp': {
@@ -305,16 +305,16 @@ class WidgetState {
     const workspace = widgetState.defaultState.workspace;
     const workspaceAllWidgets = []
       .concat(workspace.default.widgets)
-      .concat(workspace.left.widgets)
-      .concat(workspace.right.widgets);
+      .concat(workspace.primary.widgets)
+      .concat(workspace.secondary.widgets);
     const defaultAllWidgets = []
       .concat(DEFAULT_STATE.workspace.default.widgets)
-      .concat(DEFAULT_STATE.workspace.left.widgets)
-      .concat(DEFAULT_STATE.workspace.right.widgets);
+      .concat(DEFAULT_STATE.workspace.primary.widgets)
+      .concat(DEFAULT_STATE.workspace.secondary.widgets);
     if (!arrayEqual(workspaceAllWidgets, defaultAllWidgets)) {
       workspace.default.widgets = DEFAULT_STATE.workspace.default.widgets;
-      workspace.left.widgets = DEFAULT_STATE.workspace.left.widgets;
-      workspace.right.widgets = DEFAULT_STATE.workspace.right.widgets;
+      workspace.primary.widgets = DEFAULT_STATE.workspace.primary.widgets;
+      workspace.secondary.widgets = DEFAULT_STATE.workspace.secondary.widgets;
     }
 
     // Check 3D printing tab

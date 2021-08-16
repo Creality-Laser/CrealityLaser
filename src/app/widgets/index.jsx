@@ -5,12 +5,15 @@ import LaserOutputWidget from './LaserOutput';
 // import LaserSetBackground from './LaserSetBackground';
 import CncLaserObjectList from './CncLaserObjectList';
 
+import VisualizerWidget from './WorkspaceVisualizer';
+
 const getWidgetByName = (name) => {
   const Widget = {
     'laser-params': LaserParamsWidget,
     'laser-output': LaserOutputWidget,
     // 'laser-set-background': LaserSetBackground,
     'cnc-laser-object-list': CncLaserObjectList,
+    visualizer: VisualizerWidget,
   }[name];
   if (!Widget) {
     throw new Error(`Unknown Widget ${name}`);

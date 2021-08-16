@@ -1,0 +1,133 @@
+@import '../../../../styles/variables.scss';
+
+.widget-header {
+  position: relative;
+}
+
+.widget-header-absolute {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.widget-content {
+  position: relative;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.widget-content-absolute {
+  position: absolute;
+  top: 34px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.terminal-content {
+  position: relative;
+}
+
+.terminal-content-absolute {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.minimized-wrapper {
+  position: fixed;
+  top: 40%;
+  left: 30px;
+  border-radius: 50%;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.32);
+}
+
+.minimized-icon {
+  font-size: 22px !important;
+}
+
+.normal-wrapper {
+  position: fixed;
+  top: 40%;
+  left: 0;
+  width: 350px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.normal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  padding: 12px;
+  background-color: $white;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.normal-header-label {
+}
+.normal-header-btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.normal-header-btn-item {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-left: 8px;
+  border-radius: 50%;
+  background-color: $sub-main-color;
+  color: $btn-hover-color-color;
+}
+.normal-header-btn-item-icon {
+  display: inline-block;
+  font-size: 12px;
+  transform: scale(0.8);
+}
+
+.strikethrough-icon {
+  display: inline-block;
+  transform: scale(0.6);
+}
+.normal-content {
+  height: 330px;
+}
+
+.hide {
+  display: none;
+}
+
+.max-wrapper {
+  position: fixed;
+  top: 108px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: #000;
+  z-index: 600;
+}
+
+.max-content {
+  height: 600px;
+}
+
+.maximized-ternimal-wrapper {
+  height: calc(100vh - 108px - 40px - 40px);
+}

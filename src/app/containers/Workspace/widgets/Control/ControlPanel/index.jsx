@@ -78,29 +78,6 @@ const normalizeToRange = (n, min, max) => {
 };
 
 class ControlPanel extends PureComponent {
-  static propTypes = {
-    widgetId: PropTypes.string.isRequired,
-
-    headType: PropTypes.string,
-    dataSource: PropTypes.string.isRequired,
-    workflowState: PropTypes.string.isRequired,
-    workflowStatus: PropTypes.string.isRequired,
-    workPosition: PropTypes.object.isRequired,
-    originOffset: PropTypes.object.isRequired,
-    executeGcode: PropTypes.func,
-    executeGcodeAutoHome: PropTypes.func,
-    isConnected: PropTypes.bool.isRequired,
-    boundingBox: PropTypes.object,
-
-    axes: PropTypes.array.isRequired,
-    speed: PropTypes.number.isRequired,
-    keypad: PropTypes.bool.isRequired,
-    selectedDistance: PropTypes.string.isRequired,
-    customDistance: PropTypes.number.isRequired,
-
-    updateWidgetState: PropTypes.func.isRequired,
-  };
-
   state = this.getInitialState();
 
   actions = {
@@ -111,10 +88,11 @@ class ControlPanel extends PureComponent {
     onCreateJogSpeedOption: (option) => {
       const jogSpeed = Math.min(6000, Number(option.value) || 0);
       const newOption = { label: jogSpeed, value: jogSpeed };
-      this.setState({
+
+      this.setState((state) => ({
         jogSpeed,
-        jogSpeedOptions: [...this.state.jogSpeedOptions, newOption],
-      });
+        jogSpeedOptions: [...state.jogSpeedOptions, newOption],
+      }));
     },
     getJogDistance: () => {
       const { units } = this.state;
@@ -163,7 +141,7 @@ class ControlPanel extends PureComponent {
         DISTANCE_MIN,
         DISTANCE_MAX
       );
-      this.setState({ customDistance: customDistance });
+      this.setState({ customDistance });
     },
     increaseCustomDistance: () => {
       const { units, customDistance } = this.state;
@@ -328,7 +306,7 @@ class ControlPanel extends PureComponent {
     this.addShuttleControlEvents();
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.workflowState !== this.props.workflowState) {
       const { keypadJogging, selectedAxis } = this.state;
 
@@ -344,20 +322,20 @@ class ControlPanel extends PureComponent {
       });
     }
     if (nextProps.workPosition !== this.props.workPosition) {
-      this.setState({
+      this.setState((state) => ({
         workPosition: {
-          ...this.state.workPosition,
+          ...state.workPosition,
           ...nextProps.workPosition,
         },
-      });
+      }));
     }
     if (nextProps.originOffset !== this.props.originOffset) {
-      this.setState({
+      this.setState((state) => ({
         originOffset: {
-          ...this.state.originOffset,
+          ...state.originOffset,
           ...nextProps.originOffset,
         },
-      });
+      }));
     }
     if (nextProps.boundingBox !== this.props.boundingBox) {
       if (nextProps.boundingBox === null) {
@@ -394,11 +372,11 @@ class ControlPanel extends PureComponent {
     } = this.state;
 
     this.props.updateWidgetState(this.props.widgetId, {
-      axes: axes,
+      axes,
       jog: {
         speed: jogSpeed,
         keypad: keypadJogging,
-        selectedDistance: selectedDistance,
+        selectedDistance,
       },
     });
 
@@ -529,6 +507,28 @@ class ControlPanel extends PureComponent {
     );
   }
 }
+
+ControlPanel.propTypes = {
+  widgetId: PropTypes.string.isRequired,
+
+  headType: PropTypes.string,
+  dataSource: PropTypes.string.isRequired,
+  workflowState: PropTypes.string.isRequired,
+  workflowStatus: PropTypes.string.isRequired,
+  workPosition: PropTypes.object.isRequired,
+  originOffset: PropTypes.object.isRequired,
+  executeGcode: PropTypes.func,
+  executeGcodeAutoHome: PropTypes.func,
+  isConnected: PropTypes.bool.isRequired,
+  boundingBox: PropTypes.object,
+
+  axes: PropTypes.array.isRequired,
+  speed: PropTypes.number.isRequired,
+  keypad: PropTypes.bool.isRequired,
+  selectedDistance: PropTypes.string.isRequired,
+  customDistance: PropTypes.number.isRequired,
+  updateWidgetState: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = (state, ownProps) => {
   const machine = state.machine;

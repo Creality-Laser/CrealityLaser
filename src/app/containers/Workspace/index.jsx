@@ -262,7 +262,7 @@ class Workspace extends PureComponent {
         style={style}
         className={classNames(className, styles.workspace, this.state.mounted)}
       >
-        {!connected && (
+        {/* {!connected && (
           <Modal disableOverlay showCloseButton={false}>
             <Modal.Body>
               <div style={{ display: 'flex' }}>
@@ -283,7 +283,8 @@ class Workspace extends PureComponent {
               </Button>
             </Modal.Footer>
           </Modal>
-        )}
+        )} */}
+        {!connected && 'Dont connected'}
         <Dropzone
           disabled={
             isDraggingWidget || controller.workflowState !== WORKFLOW_STATE_IDLE
