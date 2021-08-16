@@ -14,7 +14,7 @@ const addHeaderToFile = (
   tmpFilePath,
   filePath,
   thumbnail,
-  runBorderGcode,
+  //runBorderGcode,
   estimatedTime,
   fileTotalLines
 ) => {
@@ -30,7 +30,7 @@ const addHeaderToFile = (
     rs.on('open', () => {
       ws.write(header);
       ws.write(useG90);
-      ws.write(runBorderGcode);
+      //ws.write(runBorderGcode);
       rs.pipe(ws);
     });
     rs.on('error', (err) => {
@@ -182,7 +182,7 @@ export const generateGcode = (modelInfos, onProgress) => {
     '\n';
   headerStart = headerStart.replace(/fileTotalLines/g, fileTotalLines);
 
-  const runBorderGcode = genRunBorderGcode(boundingBox);
+  //const runBorderGcode = genRunBorderGcode(boundingBox);
 
   writeStream.end();
 
@@ -195,7 +195,7 @@ export const generateGcode = (modelInfos, onProgress) => {
         outputFilePathTmp,
         outputFilePath,
         thumbnail,
-        runBorderGcode,
+        //runBorderGcode,
         estimatedTime,
         fileTotalLines
       );
