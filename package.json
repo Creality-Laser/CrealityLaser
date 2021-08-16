@@ -14,7 +14,9 @@
     "start": "node -r @babel/register ./.erb/scripts/CheckPortInUse.js && yarn start:renderer",
     "start:main": "cross-env NODE_ENV=development electron -r ./.erb/scripts/BabelRegister ./src/main.dev.ts",
     "start:renderer": "cross-env NODE_ENV=development webpack serve --config ./.erb/configs/webpack.config.renderer.dev.babel.js",
-    "test": "jest"
+    "test": "jest",
+    "clean": "rm -rf release/*",
+    "package:win64": "yarn clean && yarn package --win --x64"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -32,7 +34,7 @@
   },
   "build": {
     "productName": "CV-Laser",
-    "appId": "org.erb.ElectronReact",
+    "appId": "com.creality.CVLaser",
     "files": [
       "dist/",
       "node_modules/",
@@ -69,7 +71,14 @@
     "win": {
       "target": [
         "nsis"
-      ]
+      ],
+      "artifactName": "${productName} ${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true
     },
     "linux": {
       "target": [
