@@ -38,23 +38,34 @@ class GcodeParser {
         z: 0,
       },
     };
+
+    let greyscaleRowCount = 0;
+
     for (let i = 0; i < fakeGcodes.length; i++) {
       this.parseLine(fakeGcodes[i] && fakeGcodes[i].trim());
       const lineObject = this.data[i];
-      if (lineObject.G === 4) {
-        this.estimatedTime += dwellTime * 0.001;
-      }
-      if (lineObject.X !== undefined && lineObject.G !== undefined) {
-        switch (lineObject.G) {
-          case 0:
-            this.estimatedTime +=
-              (this.getLineLength(startPoint, lineObject) * 60.0) / jogSpeed;
-            break;
-          case 1:
-            this.estimatedTime +=
-              (this.getLineLength(startPoint, lineObject) * 60.0) / workSpeed;
-            break;
-          default:
+
+      if (mode !== 'greyscale') {
+        if (lineObject.G === 4) {
+          this.estimatedTime += dwellTime * 0.001;
+        }
+        if (lineObject.X !== undefined && lineObject.G !== undefined) {
+          switch (lineObject.G) {
+            case 0:
+              this.estimatedTime +=
+                (this.getLineLength(startPoint, lineObject) * 60.0) / jogSpeed;
+              break;
+            case 1:
+              this.estimatedTime +=
+                (this.getLineLength(startPoint, lineObject) * 60.0) / workSpeed;
+              break;
+            default:
+          }
+        }
+      } else {
+        // in greyscale mode each X represent new row
+        if (lineObject.X) {
+          greyscaleRowCount++;
         }
       }
       lineObject.X !== undefined && (startPoint.X = lineObject.X);
@@ -66,6 +77,14 @@ class GcodeParser {
     boundingBox.min.x += positionX;
     boundingBox.max.y += positionY;
     boundingBox.min.y += positionY;
+
+    // greyscale mode estimatedTime
+    // estimatedTime = distance * workSpeed
+    if (mode === 'greyscale') {
+      const rowDistance = Math.abs(boundingBox.max.y - boundingBox.min.y);
+      this.estimatedTime =
+        ((greyscaleRowCount * rowDistance) / workSpeed) * 60.0;
+    }
 
     return {
       headType,

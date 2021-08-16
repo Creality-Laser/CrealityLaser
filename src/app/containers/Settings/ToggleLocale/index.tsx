@@ -18,7 +18,7 @@ export default function ToggleLocale() {
   return (
     <Select
       value={i18n.language}
-      style={{ width: 120 }}
+      style={{ width: 160 }}
       onChange={handleLanguageChange}
     >
       {languages.map(({ label, value: languageCode }) => (
