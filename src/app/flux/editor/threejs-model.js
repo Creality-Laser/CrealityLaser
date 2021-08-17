@@ -2,20 +2,21 @@ import { baseActions } from './base';
 import { EPSILON } from '../../constants';
 
 export const threejsModelActions = {
-  generateThreejsModel: (headType, options) => (dispatch, getState) => {
-    const { modelGroup, toolPathModelGroup } = getState()[headType];
+  generateThreejsModel:
+    (headType, options, machineSize) => (dispatch, getState) => {
+      const { modelGroup, toolPathModelGroup } = getState()[headType];
 
-    const modelState = modelGroup.generateModel(options);
-    const toolPathModelState =
-      toolPathModelGroup.generateToolPathModel(options);
+      const modelState = modelGroup.generateModel(options, machineSize);
+      const toolPathModelState =
+        toolPathModelGroup.generateToolPathModel(options);
 
-    dispatch(
-      baseActions.updateState(headType, {
-        ...modelState,
-        ...toolPathModelState,
-      })
-    );
-  },
+      dispatch(
+        baseActions.updateState(headType, {
+          ...modelState,
+          ...toolPathModelState,
+        })
+      );
+    },
 
   selectModel: (headType, modelID) => (dispatch, getState) => {
     const { modelGroup, toolPathModelGroup } = getState()[headType];

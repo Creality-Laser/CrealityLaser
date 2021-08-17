@@ -193,7 +193,7 @@ class SVGCanvas extends PureComponent {
 
     this.svgContainer.append(this.svgContent);
 
-    const comment = document.createComment('Created by Snapmakerjs');
+    const comment = document.createComment('Created by CVLaser');
     this.svgContent.append(comment);
 
     this.svgContentGroup = new SVGContentGroup({

@@ -41,7 +41,7 @@ const DEFAULT_TRANSFORMATION = {
 class Model {
   modeConfigs = {};
 
-  constructor(modelInfo) {
+  constructor(modelInfo, machineSize = { x: 0, y: 0 }) {
     const {
       modelID = uuid.v4(),
       limitSize,
@@ -96,6 +96,8 @@ class Model {
       this.transformation.height = height;
     }
 
+    this.transformation.positionX = Math.ceil(width / 2);
+    this.transformation.positionY = machineSize.y - Math.ceil(height / 2);
     this.modelObject3D = null;
     this.processObject3D = null;
 

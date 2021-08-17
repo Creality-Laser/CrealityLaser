@@ -39,7 +39,7 @@ const getUserConfig = (name: string) => {
         data = JSON.parse(fs.readFileSync(userData.path[name], 'utf8') || '{}');
       }
     } else {
-      data = JSON.parse(localStorage.getItem(`Snapmaker-${name}`) || '{}');
+      data = JSON.parse(localStorage.getItem(`CVLaser-${name}`) || '{}');
     }
 
     if (typeof data === 'object') {
@@ -76,7 +76,7 @@ const getLocalStore = (name: string) => {
           const fs = window.require('fs'); // Use window.require to require fs module in Electron
           fs.writeFileSync(userData.path[name], value);
         }
-        localStorage.setItem(`Snapmaker-${name}`, value);
+        localStorage.setItem(`CVLaser-${name}`, value);
       } catch (e) {
         log.error(e);
       }

@@ -2,7 +2,7 @@
   "name": "cv_laser",
   "version": "0.0.1",
   "productName": "CV-Laser",
-  "description": "Electron application boilerplate based on React, React Router, Webpack, React Fast Refresh for rapid application development",
+  "description": "Creality laser carving app",
   "scripts": {
     "build": "concurrently \"yarn build:main\" \"yarn build:renderer\"",
     "build:main": "cross-env NODE_ENV=production webpack --config ./.erb/configs/webpack.config.main.prod.babel.js",
@@ -14,7 +14,9 @@
     "start": "node -r @babel/register ./.erb/scripts/CheckPortInUse.js && yarn start:renderer",
     "start:main": "cross-env NODE_ENV=development electron -r ./.erb/scripts/BabelRegister ./src/main.dev.ts",
     "start:renderer": "cross-env NODE_ENV=development webpack serve --config ./.erb/configs/webpack.config.renderer.dev.babel.js",
-    "test": "jest"
+    "test": "jest",
+    "clean": "rm -rf release/*",
+    "package:win64": "yarn clean && yarn package --win --x64"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -32,7 +34,7 @@
   },
   "build": {
     "productName": "CV-Laser",
-    "appId": "org.erb.ElectronReact",
+    "appId": "com.creality.CVLaser",
     "files": [
       "dist/",
       "node_modules/",
@@ -69,7 +71,14 @@
     "win": {
       "target": [
         "nsis"
-      ]
+      ],
+      "artifactName": "${productName} ${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true
     },
     "linux": {
       "target": [
@@ -96,26 +105,20 @@
     "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
   },
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://electron-react-boilerplate.js.org"
+    "name": "Creality Laser",
+    "url": "https://github.com/Creality-Laser/CrealityLaser"
   },
   "contributors": [
     {
-      "name": "Amila Welihinda",
-      "email": "amilajack@gmail.com",
-      "url": "https://github.com/amilajack"
+      "name": "Huo Yong Fei",
+      "email": "Huoyongfei@creality.com"
     },
     {
-      "name": "John Tran",
-      "email": "jptran318@gmail.com",
-      "url": "https://github.com/jooohhn"
+      "name": "Frank Pian",
+      "email": "bianyongfang@creality.com"
     }
   ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues"
-  },
+  "license": "GPLV3",
   "keywords": [
     "electron",
     "boilerplate",
