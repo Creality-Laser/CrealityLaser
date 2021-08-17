@@ -1,3 +1,5 @@
+@import '../../styles/variables.scss';
+
 $widget-background-color: #fafafa;
 
 .widget {
@@ -18,7 +20,7 @@ $widget-background-color: #fafafa;
     // border: 1px solid #ccc;
     border: none;
     background-color: $widget-background-color;
-    background-color: #4b90f2;
+    background-color: $primary-color;
     color: #222;
   }
 

@@ -1,7 +1,9 @@
+@import '../../styles/variables.scss';
+
 .wrapper {
   padding: 0 10px;
   height: 50px;
-  background-color: #4b90f2;
+  background-color: $primary-color;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -24,7 +26,6 @@
 
 .logo {
   margin-right: 10px;
-  border-radius: 50%;
 }
 
 .app_title {

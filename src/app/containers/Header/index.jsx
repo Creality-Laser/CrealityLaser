@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { SettingFilled } from '@ant-design/icons';
 import styles from './index.module.scss';
-import icon from '../../../../assets/icon.svg';
+import icon from '../../../../assets/icon-white.png';
 
 function Header() {
   return (
