@@ -304,6 +304,7 @@ export const actions = {
               hasModel: true,
             })
           );
+          dispatch(actions.recordSnapshot(headType));
           if (autoPreviewEnabled) {
             dispatch(actions.togglePage(headType, PAGE_PROCESS));
           }
@@ -463,7 +464,7 @@ export const actions = {
             ...toolPathModelState,
           })
         );
-        // dispatch(baseActions.recordSnapshot(headType));
+        dispatch(baseActions.recordSnapshot(headType));
         dispatch(baseActions.render(headType));
       });
     },
@@ -561,7 +562,7 @@ export const actions = {
       dispatch(actions.toggleToolPathVisible(headType));
 
       dispatch(baseActions.updateConfig(headType, config));
-      // dispatch(baseActions.recordSnapshot(headType));
+      dispatch(baseActions.recordSnapshot(headType));
       dispatch(baseActions.resetCalculatedState(headType));
       dispatch(baseActions.render(headType));
     });
@@ -590,7 +591,7 @@ export const actions = {
     modelGroup.duplicateSelectedModel(modelID);
     toolPathModelGroup.duplicateSelectedModel(modelID);
 
-    // dispatch(actions.recordSnapshot(headType));
+    dispatch(actions.recordSnapshot(headType));
     dispatch(actions.manualPreview(headType));
     dispatch(baseActions.render(headType));
   },
@@ -637,7 +638,7 @@ export const actions = {
           })
         );
       }
-      // dispatch(actions.recordSnapshot(headType));
+      dispatch(actions.recordSnapshot(headType));
       dispatch(baseActions.render(headType));
     } catch (error) {
       console.log(`removeSelectedModel error: ${error}`);
@@ -728,7 +729,7 @@ export const actions = {
           baseActions.updateTransformation(headType, modelState.transformation)
         );
         dispatch(actions.previewModel(headType));
-        // dispatch(actions.recordSnapshot(headType));
+        dispatch(actions.recordSnapshot(headType));
       }
     }
   },
@@ -789,7 +790,7 @@ export const actions = {
           })
         );
         dispatch(baseActions.resetCalculatedState(headType));
-        // dispatch(baseActions.recordSnapshot(headType));
+        dispatch(baseActions.recordSnapshot(headType));
         dispatch(baseActions.render(headType));
       });
     },
@@ -1244,10 +1245,8 @@ export const actions = {
       snapshots.toolPathModels
     );
 
-    toolPathModelGroup.updateAllNeedPreview(true);
-
     dispatch(
-      baseActions.updateState(headType, {
+      actions.updateState(headType, {
         ...modelState,
         ...toolPathModelState,
         undoSnapshots,
@@ -1256,8 +1255,9 @@ export const actions = {
         canRedo: redoSnapshots.length > 0,
       })
     );
+    // dispatch(actions.showAllModelsObj3D(from));
     dispatch(actions.manualPreview(headType));
-    dispatch(baseActions.render(headType));
+    dispatch(actions.render(headType));
   },
 
   recordSnapshot: (headType) => (dispatch, getState) => {
