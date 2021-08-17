@@ -126,20 +126,20 @@ class PrintablePlate extends Object3D {
 
       const textSize = 10 / 3;
       for (let x = 0; x <= axisXLength; x += gridSpacing) {
-        if (x !== 0) {
-          const textLabel = new TextSprite({
-            x,
-            y: -4,
-            z: 0,
-            size: textSize,
-            text: x,
-            textAlign: 'center',
-            textBaseline: 'bottom',
-            color: RED,
-            opacity: 0.5,
-          });
-          group.add(textLabel);
-        }
+        // if (x !== 0) {
+        const textLabel = new TextSprite({
+          x,
+          y: -4,
+          z: 0,
+          size: textSize,
+          text: x,
+          textAlign: 'center',
+          textBaseline: 'bottom',
+          color: RED,
+          opacity: 0.5,
+        });
+        group.add(textLabel);
+        // }
       }
       for (let y = 0; y <= axisYLength; y += gridSpacing) {
         if (y !== 0) {
