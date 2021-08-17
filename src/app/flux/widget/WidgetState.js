@@ -190,7 +190,7 @@ const DEFAULT_STATE = {
       fullscreen: false,
     },
     'laser-output': {
-      autoPreview: true,
+      autoPreview: false,
     },
     'cnc-output': {
       autoPreview: true,

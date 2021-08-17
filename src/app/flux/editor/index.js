@@ -201,7 +201,7 @@ export const actions = {
     ) =>
     (dispatch, getState) => {
       const { size } = getState().machine;
-      // const { toolParams } = getState()[headType];
+      const { autoPreviewEnabled } = getState()[headType];
       const toolParams = null;
 
       sourceType = sourceType || getSourceType(originalName);
@@ -304,6 +304,9 @@ export const actions = {
               hasModel: true,
             })
           );
+          if (autoPreviewEnabled) {
+            dispatch(actions.togglePage(headType, PAGE_PROCESS));
+          }
 
           dispatch(baseActions.render(headType));
         })
@@ -960,7 +963,7 @@ export const actions = {
           true
         )
       );
-      // dispatch(actions.togglePage(headType, PAGE_PROCESS));
+      dispatch(actions.togglePage(headType, PAGE_PROCESS));
       dispatch(
         baseActions.updateState(headType, {
           previewFailed: false,
