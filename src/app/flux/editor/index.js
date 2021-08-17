@@ -464,7 +464,7 @@ export const actions = {
             ...toolPathModelState,
           })
         );
-        dispatch(baseActions.recordSnapshot(headType));
+        dispatch(actions.recordSnapshot(headType));
         dispatch(baseActions.render(headType));
       });
     },
@@ -562,7 +562,7 @@ export const actions = {
       dispatch(actions.toggleToolPathVisible(headType));
 
       dispatch(baseActions.updateConfig(headType, config));
-      dispatch(baseActions.recordSnapshot(headType));
+      dispatch(actions.recordSnapshot(headType));
       dispatch(baseActions.resetCalculatedState(headType));
       dispatch(baseActions.render(headType));
     });
@@ -790,7 +790,7 @@ export const actions = {
           })
         );
         dispatch(baseActions.resetCalculatedState(headType));
-        dispatch(baseActions.recordSnapshot(headType));
+        dispatch(actions.recordSnapshot(headType));
         dispatch(baseActions.render(headType));
       });
     },
