@@ -15,6 +15,8 @@ import { actions as widgetActions } from '../../flux/widget';
 import WrapPopover from '../components/params/WrapPopover';
 
 class Output extends PureComponent {
+  currentLanguage = '';
+
   thumbnail = React.createRef();
 
   actions = {
@@ -82,10 +84,22 @@ class Output extends PureComponent {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.previewFailed && !this.props.previewFailed) {
+      const { t } = this.props;
       Modal.error({
-        title: 'Failed to preview',
-        content: 'Failed to preview, please modify parameters and try again.',
+        title: t('Failed to preview'),
+        content: t(
+          'Failed to preview, please modify parameters and try again.'
+        ),
       });
+    }
+
+    const {
+      t,
+      i18n: { language: nextLanguage },
+    } = nextProps;
+    if (!this.currentLanguage || this.currentLanguage !== nextLanguage) {
+      this.props.setTitle(t('Actions'));
+      this.currentLanguage = nextLanguage;
     }
   }
 
@@ -188,6 +202,7 @@ class Output extends PureComponent {
 }
 
 Output.propTypes = {
+  i18n: PropTypes.object,
   t: PropTypes.func,
   setTitle: PropTypes.func.isRequired,
   minimized: PropTypes.bool.isRequired,

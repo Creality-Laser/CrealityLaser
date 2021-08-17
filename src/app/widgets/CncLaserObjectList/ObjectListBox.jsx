@@ -16,6 +16,8 @@ class ObjectListBox extends PureComponent {
   //     selectedModelID: ''
   // };
 
+  currentLanguage = '';
+
   thumbnail = React.createRef();
 
   contextMenuRef = React.createRef();
@@ -47,10 +49,22 @@ class ObjectListBox extends PureComponent {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.previewFailed && !this.props.previewFailed) {
+      const { t } = nextProps;
       Modal.error({
-        title: 'Failed to preview',
-        content: 'Failed to preview, please modify parameters and try again.',
+        title: t('Failed to preview'),
+        content: t(
+          'Failed to preview, please modify parameters and try again.'
+        ),
       });
+    }
+
+    const {
+      t,
+      i18n: { language: nextLanguage },
+    } = nextProps;
+    if (!this.currentLanguage || this.currentLanguage !== nextLanguage) {
+      this.props.setTitle(t('Object List'));
+      this.currentLanguage = nextLanguage;
     }
   }
 
@@ -134,6 +148,7 @@ class ObjectListBox extends PureComponent {
 }
 
 ObjectListBox.propTypes = {
+  i18n: PropTypes.object,
   t: PropTypes.func,
   setTitle: PropTypes.func.isRequired,
   selectModelByID: PropTypes.func.isRequired,

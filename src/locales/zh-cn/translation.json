@@ -155,5 +155,7 @@
   "Drop an image file here.": "拖拽图片文件到这里",
   "Settings": "设置",
   "Toggle Locale": "切换语言",
-  "No model is selected": "当前没有选中模型"
+  "No model is selected": "当前没有选中模型",
+  "Failed to preview": "预览失败",
+  "Failed to preview, please modify parameters and try again.": "预览失败，请修改配置参数后重试。"
 }

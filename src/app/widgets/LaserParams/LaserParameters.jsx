@@ -59,6 +59,8 @@ class LaserParameters extends PureComponent {
     showModal: false,
   };
 
+  currentLanguage = '';
+
   actions = {
     onClickToUpload: (mode) => {
       this.setState(
@@ -154,6 +156,17 @@ class LaserParameters extends PureComponent {
     super(props);
     const { t } = props;
     this.props.setTitle(t('Configurations'));
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const {
+      t,
+      i18n: { language: nextLanguage },
+    } = nextProps;
+    if (!this.currentLanguage || this.currentLanguage !== nextLanguage) {
+      this.props.setTitle(t('Configurations'));
+      this.currentLanguage = nextLanguage;
+    }
   }
 
   render() {
@@ -306,6 +319,7 @@ class LaserParameters extends PureComponent {
 }
 
 LaserParameters.propTypes = {
+  i18n: PropTypes.object,
   t: PropTypes.func,
   setTitle: PropTypes.func.isRequired,
 
