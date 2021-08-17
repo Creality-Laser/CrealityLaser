@@ -1,6 +1,6 @@
 {
   "name": "cv_laser",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha",
   "productName": "CV-Laser",
   "description": "Creality laser carving app",
   "scripts": {
@@ -96,13 +96,9 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate"
+      "owner": "CrealityLaser",
+      "repo": "CrealityLaser"
     }
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
   },
   "author": {
     "name": "Creality Laser",
@@ -130,7 +126,7 @@
     "hot",
     "reload"
   ],
-  "homepage": "https://github.com/electron-react-boilerplate/electron-react-boilerplate#readme",
+  "homepage": "https://github.com/Creality-Laser/CrealityLaser",
   "jest": {
     "testURL": "http://localhost/",
     "moduleNameMapper": {
