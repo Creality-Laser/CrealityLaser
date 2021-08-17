@@ -1,5 +1,7 @@
 import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
+
 import ContextMenu from '../../../../components/ContextMenu';
 
 const CanvasContextMenu = forwardRef((props, ref) => {
@@ -13,6 +15,8 @@ const CanvasContextMenu = forwardRef((props, ref) => {
     removeSelectedModel,
   } = props;
 
+  const { t } = useTranslation();
+
   return (
     <>
       <ContextMenu
@@ -21,92 +25,92 @@ const CanvasContextMenu = forwardRef((props, ref) => {
         menuItems={[
           {
             type: 'item',
-            label: 'Duplicate Selected Model',
+            label: t('Duplicate Selected Model'),
             disabled: !isModelSelected,
             onClick: duplicateSelectedModel,
           },
           {
             type: 'item',
-            label: 'Bring to Front',
+            label: t('Bring to Front'),
             disabled: !isModelSelected,
             onClick: bringSelectedModelToFront,
           },
           {
             type: 'item',
-            label: 'Send to Back',
+            label: t('Send to Back'),
             disabled: !isModelSelected,
             onClick: sendSelectedModelToBack,
           },
           {
             type: 'subMenu',
-            label: 'Reference Position',
+            label: t('Reference Position'),
             disabled: !isModelSelected,
             items: [
               {
                 type: 'item',
-                label: 'Top Left',
+                label: t('Top Left'),
                 onClick: () => onSetSelectedModelPosition('Top Left'),
               },
               {
                 type: 'item',
-                label: 'Top Middle',
+                label: t('Top Middle'),
                 onClick: () => onSetSelectedModelPosition('Top Middle'),
               },
               {
                 type: 'item',
-                label: 'Top Right',
+                label: t('Top Right'),
                 onClick: () => onSetSelectedModelPosition('Top Right'),
               },
               {
                 type: 'item',
-                label: 'Center Left',
+                label: t('Center Left'),
                 onClick: () => onSetSelectedModelPosition('Center Left'),
               },
               {
                 type: 'item',
-                label: 'Center',
+                label: t('Center'),
                 onClick: () => onSetSelectedModelPosition('Center'),
               },
               {
                 type: 'item',
-                label: 'Center Right',
+                label: t('Center Right'),
                 onClick: () => onSetSelectedModelPosition('Center Right'),
               },
               {
                 type: 'item',
-                label: 'Bottom Left',
+                label: t('Bottom Left'),
                 onClick: () => onSetSelectedModelPosition('Bottom Left'),
               },
               {
                 type: 'item',
-                label: 'Bottom Middle',
+                label: t('Bottom Middle'),
                 onClick: () => onSetSelectedModelPosition('Bottom Middle'),
               },
               {
                 type: 'item',
-                label: 'Bottom Right',
+                label: t('Bottom Right'),
                 onClick: () => onSetSelectedModelPosition('Bottom Right'),
               },
             ],
           },
           {
             type: 'subMenu',
-            label: 'Flip',
+            label: t('Flip'),
             disabled: !isModelSelected,
             items: [
               {
                 type: 'item',
-                label: 'Vertical',
+                label: t('Vertical'),
                 onClick: () => onFlipSelectedModel('Vertical'),
               },
               {
                 type: 'item',
-                label: 'Horizontal',
+                label: t('Horizontal'),
                 onClick: () => onFlipSelectedModel('Horizontal'),
               },
               {
                 type: 'item',
-                label: 'Reset',
+                label: t('Reset'),
                 onClick: () => onFlipSelectedModel('Reset'),
               },
             ],
@@ -116,7 +120,7 @@ const CanvasContextMenu = forwardRef((props, ref) => {
           },
           {
             type: 'item',
-            label: 'Delete Selected Model',
+            label: t('Delete Selected Model'),
             disabled: !isModelSelected,
             onClick: removeSelectedModel,
           },

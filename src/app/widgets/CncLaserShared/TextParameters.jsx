@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from 'antd';
+import { withTranslation } from 'react-i18next';
+
 import ParametersHead from '../components/params/ParametersHead';
 import ParameterItem, {
   ParameterItemLabel,
@@ -76,14 +78,14 @@ class TextParameters extends PureComponent {
   };
 
   render() {
-    const { config, fontOptions, disabled } = this.props;
+    const { config, fontOptions, disabled, t } = this.props;
     const { text, size, font, lineHeight, alignment } = config;
     const actions = this.actions;
 
     return (
       <div>
         <ParametersHead
-          title="Text"
+          title={t('Text')}
           expanded={this.state.expanded}
           onToggleExpand={this.actions.onToggleExpand}
         />
@@ -91,12 +93,13 @@ class TextParameters extends PureComponent {
           <>
             <ParameterItem
               popover={{
-                title: 'Text',
-                content:
-                  'Enter the text you want to engrave. The maximum length of the text is 125 mm. When the text is too long, it will be shrunk automatically. Start a new line manually according to your needs.',
+                title: t('Text'),
+                content: t(
+                  `Enter the text you want to engrave. The maximum length of the text is 125 mm. When the text is too long, it will be shrunk automatically. Start a new line manually according to your needs.`
+                ),
               }}
             >
-              <ParameterItemLabel>Text</ParameterItemLabel>
+              <ParameterItemLabel>{t('Text')}</ParameterItemLabel>
               <ParameterItemValue>
                 <textarea
                   disabled={disabled}
@@ -109,12 +112,13 @@ class TextParameters extends PureComponent {
             </ParameterItem>
             <ParameterItem
               popover={{
-                title: 'Font',
-                content:
-                  'Select a word font or upload a font from your computer. WOFF, TTF, OTF fonts are supported.',
+                title: t('Font'),
+                content: t(
+                  `Select a word font or upload a font from your computer. WOFF, TTF, OTF fonts are supported.`
+                ),
               }}
             >
-              <ParameterItemLabel>Font</ParameterItemLabel>
+              <ParameterItemLabel>{t('Font')}</ParameterItemLabel>
               <ParameterItemValue>
                 <input
                   disabled={disabled}
@@ -127,7 +131,7 @@ class TextParameters extends PureComponent {
                 />
                 <StyledSelect
                   disabled={disabled}
-                  placeholder="Choose font"
+                  placeholder={t('Choose font')}
                   value={font}
                   onChange={(value) => actions.onChangeFont({ value })}
                 >
@@ -135,7 +139,7 @@ class TextParameters extends PureComponent {
                     <Option key={value} value={value}>
                       {index === 0 ? (
                         <span>
-                          <AddIcon /> Add Font
+                          <AddIcon /> {t('Add Font')}
                         </span>
                       ) : (
                         label
@@ -147,11 +151,11 @@ class TextParameters extends PureComponent {
             </ParameterItem>
             <ParameterItem
               popover={{
-                title: 'Font Size',
-                content: 'Enter the font size in pt (points).',
+                title: t('Font Size'),
+                content: t('Enter the font size in pt (points).'),
               }}
             >
-              <ParameterItemLabel>Font Size</ParameterItemLabel>
+              <ParameterItemLabel>{t('Font Size')}</ParameterItemLabel>
               <ParameterItemValue>
                 <StyledInputNumber
                   disabled={disabled}
@@ -163,12 +167,13 @@ class TextParameters extends PureComponent {
             </ParameterItem>
             <ParameterItem
               popover={{
-                title: 'Line Height',
-                content:
-                  'Set the distance between each line in the text. The value you enter is the multiple of the font size.',
+                title: t('Line Height'),
+                content: t(
+                  `Set the distance between each line in the text. The value you enter is the multiple of the font size.`
+                ),
               }}
             >
-              <ParameterItemLabel>Line Height</ParameterItemLabel>
+              <ParameterItemLabel>{t('Line Height')}</ParameterItemLabel>
               <ParameterItemValue>
                 <StyledSelect
                   disabled={disabled}
@@ -190,12 +195,13 @@ class TextParameters extends PureComponent {
             </ParameterItem>
             <ParameterItem
               popover={{
-                title: 'Alignment',
-                content:
-                  'Align the text in different lines to either the left or right or in the center horizontally.',
+                title: t('Alignment'),
+                content: t(
+                  `Align the text in different lines to either the left or right or in the center horizontally.`
+                ),
               }}
             >
-              <ParameterItemLabel>Alignment</ParameterItemLabel>
+              <ParameterItemLabel>{t('Alignment')}</ParameterItemLabel>
               <ParameterItemValue>
                 <Button
                   disabled={disabled}
@@ -204,7 +210,7 @@ class TextParameters extends PureComponent {
                   }}
                   size="small"
                 >
-                  left
+                  {t('left')}
                 </Button>
                 <Button
                   disabled={disabled}
@@ -213,7 +219,7 @@ class TextParameters extends PureComponent {
                   }}
                   size="small"
                 >
-                  center
+                  {t('center')}
                 </Button>
                 <Button
                   disabled={disabled}
@@ -222,7 +228,7 @@ class TextParameters extends PureComponent {
                   }}
                   size="small"
                 >
-                  right
+                  {t('right')}
                 </Button>
               </ParameterItemValue>
             </ParameterItem>
@@ -234,6 +240,7 @@ class TextParameters extends PureComponent {
 }
 
 TextParameters.propTypes = {
+  t: PropTypes.func,
   fontOptions: PropTypes.array,
   disabled: PropTypes.bool,
   config: PropTypes.shape({
@@ -268,4 +275,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TextParameters);
+export default withTranslation()(
+  connect(mapStateToProps, mapDispatchToProps)(TextParameters)
+);

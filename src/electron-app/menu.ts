@@ -230,11 +230,11 @@ export default class MenuBuilder {
         label: i18n.t('menu:&File'),
         submenu: [
           {
-            label: '&Open',
+            label: i18n.t('menu:&Open'),
             accelerator: 'Ctrl+O',
           },
           {
-            label: '&Close',
+            label: i18n.t('menu:&Close'),
             accelerator: 'Ctrl+W',
             click: () => {
               this.mainWindow.close();
@@ -249,15 +249,18 @@ export default class MenuBuilder {
           process.env.DEBUG_PROD === 'true'
             ? [
                 {
-                  label: '&Reload',
+                  label: i18n.t('menu:&Reload'),
                   accelerator: 'Ctrl+R',
                   click: () => {
                     this.mainWindow.webContents.reload();
                   },
                 },
-                { role: 'forcereload' },
                 {
-                  label: 'Toggle &Full Screen',
+                  label: i18n.t('menu:&Force Reload'),
+                  role: 'forcereload',
+                },
+                {
+                  label: i18n.t('menu:Toggle &Full Screen'),
                   accelerator: 'F11',
                   click: () => {
                     this.mainWindow.setFullScreen(
@@ -266,7 +269,7 @@ export default class MenuBuilder {
                   },
                 },
                 {
-                  label: 'Toggle &Developer Tools',
+                  label: i18n.t('menu:Toggle &Developer Tools'),
                   accelerator: 'Alt+Ctrl+I',
                   click: () => {
                     this.mainWindow.webContents.toggleDevTools();
@@ -275,14 +278,14 @@ export default class MenuBuilder {
               ]
             : [
                 {
-                  label: '&Reload',
+                  label: i18n.t('menu:&Reload'),
                   accelerator: 'Ctrl+R',
                   click: () => {
                     this.mainWindow.webContents.reload();
                   },
                 },
                 {
-                  label: 'Toggle &Full Screen',
+                  label: i18n.t('menu:Toggle &Full Screen'),
                   accelerator: 'F11',
                   click: () => {
                     this.mainWindow.setFullScreen(
@@ -291,7 +294,7 @@ export default class MenuBuilder {
                   },
                 },
                 {
-                  label: 'Toggle &Developer Tools',
+                  label: i18n.t('menu:Toggle &Developer Tools'),
                   accelerator: 'Alt+Ctrl+I',
                   click: () => {
                     this.mainWindow.webContents.toggleDevTools();
@@ -300,16 +303,16 @@ export default class MenuBuilder {
               ],
       },
       {
-        label: 'Help',
+        label: i18n.t('menu:Help'),
         submenu: [
           {
-            label: 'Learn More',
+            label: i18n.t('menu:Learn More'),
             click() {
               shell.openExternal('https://electronjs.org');
             },
           },
           {
-            label: 'Documentation',
+            label: i18n.t('menu:Documentation'),
             click() {
               shell.openExternal(
                 'https://github.com/electron/electron/tree/master/docs#readme'
@@ -317,13 +320,13 @@ export default class MenuBuilder {
             },
           },
           {
-            label: 'Community Discussions',
+            label: i18n.t('menu:Community Discussions'),
             click() {
               shell.openExternal('https://www.electronjs.org/community');
             },
           },
           {
-            label: 'Search Issues',
+            label: i18n.t('menu:Search Issues'),
             click() {
               shell.openExternal('https://github.com/electron/electron/issues');
             },

@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Sortable from 'react-sortablejs';
 import { Modal } from 'antd';
+import { withTranslation } from 'react-i18next';
+
 import LaserVisualizer from '../../widgets/LaserVisualizer';
 import Widget from '../../widgets';
 import Dropzone from '../../components/Dropzone';
@@ -21,6 +23,8 @@ class Laser extends Component {
   actions = {
     // todo: show UI then select process mode
     onDropAccepted: (file) => {
+      const { t } = this.props;
+
       let mode = 'bw';
       if (
         path.extname(file.name).toLowerCase() === '.svg' ||
@@ -30,15 +34,19 @@ class Laser extends Component {
       }
       this.props.uploadImage(file, mode, () => {
         Modal.error({
-          title: 'Parse Error',
-          body: 'Failed to parse image file',
+          title: t('Parse Error'),
+          body: t('Failed to parse image file'),
         });
       });
     },
     onDropRejected: () => {
+      const { t } = this.props;
+
       Modal.warning({
-        title: 'Warning',
-        body: 'Only {{accept}} files are supported.',
+        title: t('Warning'),
+        body: t('Only several images files are supported.', {
+          imageFormats: ACCEPT,
+        }),
       });
     },
     onDragWidgetStart: () => {
@@ -54,6 +62,7 @@ class Laser extends Component {
   };
 
   render() {
+    const { t } = this.props;
     const style = this.props.style;
     const state = this.state;
     const widgets = this.props.widgets;
@@ -62,7 +71,7 @@ class Laser extends Component {
       <Dropzone
         disabled={state.isDraggingWidget}
         accept={ACCEPT}
-        dragEnterMsg="Drop an image file here."
+        dragEnterMsg={t('Drop an image file here.')}
         onDropAccepted={this.actions.onDropAccepted}
         onDropRejected={this.actions.onDropRejected}
       >
@@ -104,6 +113,7 @@ class Laser extends Component {
 }
 
 Laser.propTypes = {
+  t: PropTypes.func,
   widgets: PropTypes.array.isRequired,
   style: PropTypes.object,
   uploadImage: PropTypes.func.isRequired,
@@ -128,4 +138,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 // https://stackoverflow.com/questions/47657365/can-i-mapdispatchtoprops-without-mapstatetoprops-in-redux
-export default connect(mapStateToProps, mapDispatchToProps)(Laser);
+export default withTranslation()(
+  connect(mapStateToProps, mapDispatchToProps)(Laser)
+);

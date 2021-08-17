@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Checkbox } from 'antd';
+import { withTranslation } from 'react-i18next';
+
 import ParameterItem, {
   ParameterItemLabel,
   ParameterItemValue,
@@ -32,7 +34,7 @@ class ConfigRasterVector extends PureComponent {
   };
 
   render() {
-    const { vectorThreshold, invert, turdSize, disabled } = this.props;
+    const { vectorThreshold, invert, turdSize, disabled, t } = this.props;
 
     return (
       <div>
@@ -41,11 +43,11 @@ class ConfigRasterVector extends PureComponent {
             <div>
               <ParameterItem
                 popover={{
-                  title: 'Invert',
-                  content: 'Inverts black to white and vise versa.',
+                  title: t('Invert'),
+                  content: t('Inverts black to white and vise versa.'),
                 }}
               >
-                <ParameterItemLabel>Invert</ParameterItemLabel>
+                <ParameterItemLabel>{t('Invert')}</ParameterItemLabel>
                 <ParameterItemValue>
                   <Checkbox
                     disabled={disabled}
@@ -56,12 +58,13 @@ class ConfigRasterVector extends PureComponent {
               </ParameterItem>
               <ParameterItem
                 popover={{
-                  title: 'B&W',
-                  content:
-                    'Set the proportion of the black color based on the original color of the image.',
+                  title: t('B&W'),
+                  content: t(
+                    'Set the proportion of the black color based on the original color of the image.'
+                  ),
                 }}
               >
-                <ParameterItemLabel>B&W</ParameterItemLabel>
+                <ParameterItemLabel>{t('B&W')}</ParameterItemLabel>
                 <ParameterItemValue>
                   <StyledSlider
                     disabled={disabled}
@@ -84,12 +87,13 @@ class ConfigRasterVector extends PureComponent {
               </ParameterItem>
               <ParameterItem
                 popover={{
-                  title: 'Impurity Size',
-                  content:
-                    'Determines the minimum size of impurity which allows to be showed.',
+                  title: t('Impurity Size'),
+                  content: t(
+                    'Determines the minimum size of impurity which allows to be showed.'
+                  ),
                 }}
               >
-                <ParameterItemLabel>Impurity Size</ParameterItemLabel>
+                <ParameterItemLabel>{t('Impurity Size')}</ParameterItemLabel>
                 <StyledInputNumber
                   disabled={disabled}
                   value={turdSize}
@@ -108,6 +112,7 @@ class ConfigRasterVector extends PureComponent {
 }
 
 ConfigRasterVector.propTypes = {
+  t: PropTypes.func,
   vectorThreshold: PropTypes.number,
   invert: PropTypes.bool,
   turdSize: PropTypes.number,
@@ -133,4 +138,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConfigRasterVector);
+export default withTranslation()(
+  connect(mapStateToProps, mapDispatchToProps)(ConfigRasterVector)
+);

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 
 import ParametersHead from '../../components/params/ParametersHead';
 import ParameterItem, {
@@ -46,12 +47,12 @@ class GcodeConfigGreyscale extends PureComponent {
   };
 
   render() {
-    const { density, movementMode, disabled } = this.props;
+    const { density, movementMode, disabled, t } = this.props;
 
     return (
       <div>
         <ParametersHead
-          title="Greyscale"
+          title={t('Greyscale')}
           expanded={this.state.expanded}
           onToggleExpand={this.actions.onToggleExpand}
         />
@@ -59,7 +60,7 @@ class GcodeConfigGreyscale extends PureComponent {
           <>
             <div>
               <ParameterItem>
-                <ParameterItemLabel>Movement Mode</ParameterItemLabel>
+                <ParameterItemLabel>{t('Movement Mode')}</ParameterItemLabel>
                 <ParameterItemValue>
                   <StyledSelect
                     disabled={disabled}
@@ -72,20 +73,23 @@ class GcodeConfigGreyscale extends PureComponent {
                     }
                   >
                     <Option value="greyscale-line">
-                      Line (Normal Quality)
+                      {t('Line (Normal Quality)')}
                     </Option>
-                    <Option value="greyscale-dot">Dot (High Quality)</Option>
+                    <Option value="greyscale-dot">
+                      {t('Dot (High Quality)')}
+                    </Option>
                   </StyledSelect>
                 </ParameterItemValue>
               </ParameterItem>
               <ParameterItem
                 popover={{
-                  title: 'Density',
-                  content:
-                    'Determines how fine and smooth the engraved picture will be. The bigger this value is, the better quality you will get. The range is 1-10 dot/mm and 10 is recommended.',
+                  title: t('Density'),
+                  content: t(
+                    'Determines how fine and smooth the engraved picture will be. The bigger this value is, the better quality you will get. The range is 1-10 dot/mm and 10 is recommended.'
+                  ),
                 }}
               >
-                <ParameterItemLabel>Density</ParameterItemLabel>
+                <ParameterItemLabel>{t('Density')}</ParameterItemLabel>
                 <ParameterItemValue>
                   <StyledInputNumber
                     disabled={disabled}
@@ -108,6 +112,7 @@ class GcodeConfigGreyscale extends PureComponent {
 }
 
 GcodeConfigGreyscale.propTypes = {
+  t: PropTypes.func,
   density: PropTypes.number.isRequired,
   movementMode: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
@@ -131,7 +136,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GcodeConfigGreyscale);
+export default withTranslation()(
+  connect(mapStateToProps, mapDispatchToProps)(GcodeConfigGreyscale)
+);

@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Checkbox } from 'antd';
+import { withTranslation } from 'react-i18next';
+
 import ParametersHead from '../components/params/ParametersHead';
 import ParameterItem, {
   ParameterItemLabel,
@@ -32,7 +34,7 @@ class ImageProcessMode extends PureComponent {
   };
 
   render() {
-    const { sourceType, mode, showOrigin, disabled } = this.props;
+    const { sourceType, mode, showOrigin, disabled, t } = this.props;
     const actions = this.actions;
     const isBW = sourceType === 'raster' && mode === 'bw';
     const isGreyscale = sourceType === 'raster' && mode === 'greyscale';
@@ -41,7 +43,7 @@ class ImageProcessMode extends PureComponent {
     return (
       <>
         <ParametersHead
-          title="Process Mode"
+          title={t('Process Mode')}
           expanded={this.state.expanded}
           onToggleExpand={this.actions.onToggleExpand}
         />
@@ -50,21 +52,21 @@ class ImageProcessMode extends PureComponent {
           <>
             <div className={styles.mode_select_items_wrapper}>
               <ProcessModeSelectItem
-                label="B&W"
+                label={t('B&W')}
                 disabled={disabled}
                 modeBgImage={bwBgImg}
                 isSelected={this.props.mode === 'bw'}
                 onClick={() => actions.changeSelectedModelMode('bw')}
               />
               <ProcessModeSelectItem
-                label="GREYSCALE"
+                label={t('GREYSCALE')}
                 disabled={disabled}
                 modeBgImage={greyscaleBgImg}
                 isSelected={this.props.mode === 'greyscale'}
                 onClick={() => actions.changeSelectedModelMode('greyscale')}
               />
               <ProcessModeSelectItem
-                label="VECTOR"
+                label={t('VECTOR')}
                 disabled={disabled}
                 modeBgImage={vectorBgImg}
                 isSelected={this.props.mode === 'vector'}
@@ -72,7 +74,9 @@ class ImageProcessMode extends PureComponent {
               />
             </div>
             <ParameterItem>
-              <ParameterItemLabel>Show Original Image</ParameterItemLabel>
+              <ParameterItemLabel>
+                {t('Show Original Image')}
+              </ParameterItemLabel>
               <ParameterItemValue>
                 <Checkbox
                   checked={showOrigin}
@@ -91,6 +95,7 @@ class ImageProcessMode extends PureComponent {
 }
 
 ImageProcessMode.propTypes = {
+  t: PropTypes.func,
   sourceType: PropTypes.string.isRequired,
   mode: PropTypes.string.isRequired,
   showOrigin: PropTypes.bool,
@@ -100,7 +105,7 @@ ImageProcessMode.propTypes = {
   changeSelectedModelShowOrigin: PropTypes.func.isRequired,
 };
 
-export default ImageProcessMode;
+export default withTranslation()(ImageProcessMode);
 
 function ProcessModeSelectItem({
   label,

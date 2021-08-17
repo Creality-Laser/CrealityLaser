@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Checkbox } from 'antd';
+import { withTranslation } from 'react-i18next';
 
 import ParametersHead from '../../components/params/ParametersHead';
 import ParameterItem, {
@@ -39,12 +40,12 @@ class GcodeConfigSvgVector extends PureComponent {
   };
 
   render() {
-    const { optimizePath, fillEnabled, fillDensity, disabled } = this.props;
+    const { optimizePath, fillEnabled, fillDensity, disabled, t } = this.props;
 
     return (
       <div>
         <ParametersHead
-          title="Vector"
+          title={t('Vector')}
           expanded={this.state.expanded}
           onToggleExpand={this.actions.onToggleExpand}
         />
@@ -52,12 +53,13 @@ class GcodeConfigSvgVector extends PureComponent {
           <>
             <ParameterItem
               popover={{
-                title: 'Optimize Path',
-                content:
-                  'Optimizes the path based on the proximity of the lines in the image.',
+                title: t('Optimize Path'),
+                content: t(
+                  'Optimizes the path based on the proximity of the lines in the image.'
+                ),
               }}
             >
-              <ParameterItemLabel>Optimize Path</ParameterItemLabel>
+              <ParameterItemLabel>{t('Optimize Path')}</ParameterItemLabel>
               <ParameterItemValue>
                 <Checkbox
                   disabled={disabled}
@@ -67,19 +69,20 @@ class GcodeConfigSvgVector extends PureComponent {
               </ParameterItemValue>
             </ParameterItem>
             <OptionalDropdownParam
-              label="Fill"
+              label={t('Fill')}
               isDropdown={fillEnabled}
               onDropdownChange={this.actions.onToggleFill}
               disabled={disabled}
             >
               <ParameterItem
                 popover={{
-                  title: 'Fill Density',
-                  content:
-                    'Set the degree to which an area is filled with laser dots. The highest density is 20 dot/mm. When it is set to 0, the SVG image will be engraved without fill.',
+                  title: t('Fill Density'),
+                  content: t(
+                    `Set the degree to which an area is filled with laser dots. The highest density is 20 dot/mm. When it is set to 0, the SVG image will be engraved without fill.`
+                  ),
                 }}
               >
-                <ParameterItemLabel>Fill Density</ParameterItemLabel>
+                <ParameterItemLabel>{t('Fill Density')}</ParameterItemLabel>
                 <ParameterItemValue>
                   <StyledSlider
                     disabled={disabled}
@@ -107,6 +110,7 @@ class GcodeConfigSvgVector extends PureComponent {
 }
 
 GcodeConfigSvgVector.propTypes = {
+  t: PropTypes.func,
   optimizePath: PropTypes.bool,
   fillEnabled: PropTypes.bool.isRequired,
   fillDensity: PropTypes.number.isRequired,
@@ -131,7 +135,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GcodeConfigSvgVector);
+export default withTranslation()(
+  connect(mapStateToProps, mapDispatchToProps)(GcodeConfigSvgVector)
+);

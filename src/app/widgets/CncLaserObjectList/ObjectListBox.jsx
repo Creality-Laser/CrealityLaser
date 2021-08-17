@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { Modal, Popover } from 'antd';
+import { withTranslation } from 'react-i18next';
 
 import styles from './index.module.scss';
 import { actions as editorActions } from '../../flux/editor';
@@ -38,7 +39,8 @@ class ObjectListBox extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.props.setTitle('Object List');
+    const { t } = this.props;
+    this.props.setTitle(t('Object List'));
   }
 
   componentDidMount() {}
@@ -53,15 +55,18 @@ class ObjectListBox extends PureComponent {
   }
 
   render() {
-    const { modelGroup, modelGroupSelectedModel } = this.props;
+    const { modelGroup, modelGroupSelectedModel, t } = this.props;
     const selectedModel = modelGroupSelectedModel;
+
     return (
       <>
         <div className={classNames(styles.object_list_box)}>
           {modelGroup.models && modelGroup.models.length === 0 && (
             <div className={styles.no_content}>
               <EmptyIcon />
-              <span className={styles.no_content_text}>Please add File</span>
+              <span className={styles.no_content_text}>
+                {t('Please add File')}
+              </span>
             </div>
           )}
           {modelGroup.models.map((model) => {
@@ -79,7 +84,7 @@ class ObjectListBox extends PureComponent {
             return (
               <Popover
                 key={model.modelName}
-                title="object item"
+                title={t('object item')}
                 content={model.modelName}
                 placement="left"
               >
@@ -129,6 +134,7 @@ class ObjectListBox extends PureComponent {
 }
 
 ObjectListBox.propTypes = {
+  t: PropTypes.func,
   setTitle: PropTypes.func.isRequired,
   selectModelByID: PropTypes.func.isRequired,
   minimized: PropTypes.bool.isRequired,
@@ -189,7 +195,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ObjectListBox);
+export default withTranslation()(
+  connect(mapStateToProps, mapDispatchToProps)(ObjectListBox)
+);
 
 const EmptyIcon = () => (
   <svg

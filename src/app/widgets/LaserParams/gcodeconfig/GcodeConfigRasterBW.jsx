@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 
 import ParametersHead from '../../components/params/ParametersHead';
 import ParameterItem, {
@@ -30,12 +31,12 @@ class GcodeConfigRasterBW extends PureComponent {
   };
 
   render() {
-    const { density, direction, disabled } = this.props;
+    const { density, direction, disabled, t } = this.props;
 
     return (
       <div>
         <ParametersHead
-          title="B&W"
+          title={t('B&W')}
           expanded={this.state.expanded}
           onToggleExpand={this.actions.onToggleExpand}
         />
@@ -43,11 +44,11 @@ class GcodeConfigRasterBW extends PureComponent {
           <>
             <ParameterItem
               popover={{
-                title: 'Line Direction',
-                content: 'Select the direction of the engraving path.',
+                title: t('Line Direction'),
+                content: t('Select the direction of the engraving path.'),
               }}
             >
-              <ParameterItemLabel>Line Direction</ParameterItemLabel>
+              <ParameterItemLabel>{t('Line Direction')}</ParameterItemLabel>
               <ParameterItemValue>
                 <StyledSelect
                   disabled={disabled}
@@ -57,21 +58,22 @@ class GcodeConfigRasterBW extends PureComponent {
                   value={direction}
                   onChange={(value) => this.actions.onChangeDirection(value)}
                 >
-                  <Option value="Horizontal">Horizontal</Option>
-                  <Option value="Vertical">Vertical</Option>
-                  <Option value="Diagonal">Diagonal</Option>
-                  <Option value="Diagonal2">Diagonal2</Option>
+                  <Option value="Horizontal">{t('Horizontal')}</Option>
+                  <Option value="Vertical">{t('Vertical')}</Option>
+                  <Option value="Diagonal">{t('Diagonal')}</Option>
+                  <Option value="Diagonal2">{t('Diagonal2')}</Option>
                 </StyledSelect>
               </ParameterItemValue>
             </ParameterItem>
             <ParameterItem
               popover={{
                 title: 'Density',
-                content:
-                  'Determines how fine and smooth the engraved picture will be.The bigger this value is, the better quality you will get. The range is 1-10 dot/mm and 10 is recommended.',
+                content: t(
+                  `Determines how fine and smooth the engraved picture will be.The bigger this value is, the better quality you will get. The range is 1-10 dot/mm and 10 is recommended.`
+                ),
               }}
             >
-              <ParameterItemLabel>Density</ParameterItemLabel>
+              <ParameterItemLabel>{t('Density')}</ParameterItemLabel>
               <ParameterItemValue>
                 <StyledInputNumber
                   disabled={disabled}
@@ -93,6 +95,7 @@ class GcodeConfigRasterBW extends PureComponent {
 }
 
 GcodeConfigRasterBW.propTypes = {
+  t: PropTypes.func,
   density: PropTypes.number,
   direction: PropTypes.string,
   disabled: PropTypes.bool,
@@ -116,7 +119,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GcodeConfigRasterBW);
+export default withTranslation()(
+  connect(mapStateToProps, mapDispatchToProps)(GcodeConfigRasterBW)
+);

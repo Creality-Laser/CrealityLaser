@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Modal } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
+import { withTranslation } from 'react-i18next';
 
 import SvgTrace from '../CncLaserShared/SvgTrace';
 import TextParameters from '../CncLaserShared/TextParameters';
@@ -85,10 +86,12 @@ class LaserParameters extends PureComponent {
       });
     },
     onChangeFile: (event) => {
+      const { t } = this.props;
       const file = event.target.files[0];
 
       const uploadMode = this.state.uploadMode;
       this.props.togglePage(PAGE_EDITOR);
+
       if (uploadMode === 'trace') {
         this.setState({
           mode: uploadMode,
@@ -110,8 +113,8 @@ class LaserParameters extends PureComponent {
         }
         this.props.uploadImage(file, uploadMode, () => {
           Modal.error({
-            title: 'Parse Error',
-            content: `Failed to parse image file ${file.name}.`,
+            title: t('Parse Error'),
+            content: t('Failed to parse image file,', { fileName: file.name }),
           });
         });
       }
@@ -149,12 +152,14 @@ class LaserParameters extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.props.setTitle('Configurations');
+    const { t } = props;
+    this.props.setTitle(t('Configurations'));
   }
 
   render() {
     const { accept } = this.state;
     const {
+      t,
       selectedModelID,
       selectedModelHideFlag,
       modelGroup,
@@ -275,19 +280,24 @@ class LaserParameters extends PureComponent {
             updateSelectedModelGcodeConfig={updateSelectedModelGcodeConfig}
             mode={mode}
             paramsDescs={{
-              jogSpeed:
-                'Determines how fast the machine moves when it’s not engraving.',
-              workSpeed:
-                'Determines how fast the machine moves when it’s engraving.',
-              dwellTime:
-                'Determines how long the laser keeps on when it’s engraving a dot.',
+              jogSpeed: t(
+                'Determines how fast the machine moves when it’s not engraving.'
+              ),
+              workSpeed: t(
+                'Determines how fast the machine moves when it’s engraving.'
+              ),
+              dwellTime: t(
+                'Determines how long the laser keeps on when it’s engraving a dot.'
+              ),
             }}
           />
         )}
         {!selectedModelID && (
           <div className={styles.no_content}>
             <SettingOutlined style={{ fontSize: '22px' }} />
-            <span className={styles.no_content_text}>No model is selected</span>
+            <span className={styles.no_content_text}>
+              {t('No model is selected')}
+            </span>
           </div>
         )}
       </>
@@ -296,6 +306,7 @@ class LaserParameters extends PureComponent {
 }
 
 LaserParameters.propTypes = {
+  t: PropTypes.func,
   setTitle: PropTypes.func.isRequired,
 
   page: PropTypes.string.isRequired,
@@ -390,4 +401,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LaserParameters);
+export default withTranslation()(
+  connect(mapStateToProps, mapDispatchToProps)(LaserParameters)
+);

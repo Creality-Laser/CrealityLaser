@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Select } from 'antd';
+import { withTranslation } from 'react-i18next';
+
 import { toFixed } from '../../lib/numeric-utils';
 import ParametersHead from '../components/params/ParametersHead';
 import ParameterItem, {
@@ -49,7 +51,7 @@ class Transformation extends PureComponent {
   };
 
   render() {
-    const { size, selectedModelID, selectedModelHideFlag, sourceType } =
+    const { size, selectedModelID, selectedModelHideFlag, sourceType, t } =
       this.props;
     const {
       rotationZ = 0,
@@ -66,7 +68,7 @@ class Transformation extends PureComponent {
     return (
       <>
         <ParametersHead
-          title="Transformation"
+          title={t('Transformation')}
           expanded={this.state.expanded}
           onToggleExpand={this.actions.onToggleExpand}
         />
@@ -74,11 +76,14 @@ class Transformation extends PureComponent {
           <>
             <ParameterItem
               popover={{
-                title: 'Size',
-                content: `Enter the size of the engraved picture. The size cannot be larger than ${size.x} x ${size.y} mm or the size of your material.`,
+                title: t('Size'),
+                content: t(
+                  `Enter the size of the engraved picture. The size cannot be larger than size.x x size.y mm or the size of your material.`,
+                  { sizeX: size.x, sizeY: size.y }
+                ),
               }}
             >
-              <ParameterItemLabel>Size (mm)</ParameterItemLabel>
+              <ParameterItemLabel>{t('Size (mm)')}</ParameterItemLabel>
               <ParameterItemValue>
                 <StyledInputNumber
                   style={{ width: '90px' }}
@@ -116,11 +121,11 @@ class Transformation extends PureComponent {
             </ParameterItem>
             <ParameterItem
               popover={{
-                title: 'Rotate',
-                content: 'Rotate the image to the angle you need.',
+                title: t('Rotate'),
+                content: t('Rotate the image to the angle you need.'),
               }}
             >
-              <ParameterItemLabel>Rotate</ParameterItemLabel>
+              <ParameterItemLabel>{t('Rotate')}</ParameterItemLabel>
               <ParameterItemValue>
                 <StyledSlider
                   disabled={!selectedNotHide}
@@ -144,12 +149,13 @@ class Transformation extends PureComponent {
             </ParameterItem>
             <ParameterItem
               popover={{
-                title: 'Move X (mm)',
-                content:
-                  'Set the coordinate of the selected image or text in the X direction. You can also drag the image directly.',
+                title: t('Move X (mm)'),
+                content: t(
+                  `Set the coordinate of the selected image or text in the X direction. You can also drag the image directly.`
+                ),
               }}
             >
-              <ParameterItemLabel>Move X (mm)</ParameterItemLabel>
+              <ParameterItemLabel>{t('Move X (mm)')}</ParameterItemLabel>
               <ParameterItemValue>
                 <StyledSlider
                   disabled={!selectedNotHide}
@@ -173,12 +179,13 @@ class Transformation extends PureComponent {
             </ParameterItem>
             <ParameterItem
               popover={{
-                title: 'Move Y (mm)',
-                content:
-                  'Set the coordinate of the selected image or text in the Y direction. You can also drag the image directly.',
+                title: t('Move Y (mm)'),
+                content: t(
+                  `Set the coordinate of the selected image or text in the Y direction. You can also drag the image directly.`
+                ),
               }}
             >
-              <ParameterItemLabel>Move Y (mm)</ParameterItemLabel>
+              <ParameterItemLabel>{t('Move Y (mm)')}</ParameterItemLabel>
               <ParameterItemValue>
                 <StyledSlider
                   disabled={!selectedNotHide}
@@ -203,12 +210,13 @@ class Transformation extends PureComponent {
             {sourceType === 'raster' && (
               <ParameterItem
                 popover={{
-                  title: 'Flip Model',
-                  content:
-                    'Flip the selected Model vertically, horizontally or in both directions.',
+                  title: t('Flip Model'),
+                  content: t(
+                    `Flip the selected Model vertically, horizontally or in both directions.`
+                  ),
                 }}
               >
-                <ParameterItemLabel>Flip Model</ParameterItemLabel>
+                <ParameterItemLabel>{t('Flip Model')}</ParameterItemLabel>
                 <ParameterItemValue>
                   <StyledSelect
                     disabled={!selectedNotHide}
@@ -218,10 +226,10 @@ class Transformation extends PureComponent {
                       actions.onModelAfterTransform();
                     }}
                   >
-                    <Option value={0}>None</Option>
-                    <Option value={1}>Vertical</Option>
-                    <Option value={2}>Horizontal</Option>
-                    <Option value={3}>Both</Option>
+                    <Option value={0}>{t('None Flip')}</Option>
+                    <Option value={1}>{t('Vertical')}</Option>
+                    <Option value={2}>{t('Horizontal')}</Option>
+                    <Option value={3}>{t('Both')}</Option>
                   </StyledSelect>
                   {/* <Select
                     disabled={!selectedNotHide}
@@ -251,6 +259,7 @@ class Transformation extends PureComponent {
 }
 
 Transformation.propTypes = {
+  t: PropTypes.func,
   selectedModelID: PropTypes.string,
   selectedModelHideFlag: PropTypes.bool,
   sourceType: PropTypes.string.isRequired,
@@ -282,4 +291,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Transformation);
+export default withTranslation()(connect(mapStateToProps)(Transformation));

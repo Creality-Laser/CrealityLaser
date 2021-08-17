@@ -4,6 +4,7 @@ import FileSaver from 'file-saver';
 import request from 'superagent';
 import { connect } from 'react-redux';
 import { Modal, Button, Checkbox } from 'antd';
+import { withTranslation } from 'react-i18next';
 
 import { actions as workspaceActions } from '../../flux/workspace';
 import { actions as editorActions } from '../../flux/editor';
@@ -71,7 +72,8 @@ class Output extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.props.setTitle('Actions');
+    const { t } = props;
+    this.props.setTitle(t('Actions'));
   }
 
   componentDidMount() {
@@ -90,6 +92,7 @@ class Output extends PureComponent {
   render() {
     const actions = this.actions;
     const {
+      t,
       workflowState,
       isAllModelsPreviewed,
       isGcodeGenerating,
@@ -109,19 +112,21 @@ class Output extends PureComponent {
             style={{ display: 'block', width: '100%' }}
           >
             {/* {isProcess ? 'Preview' : 'Process'} */}
-            Preview
+            {t('Preview')}
           </Button>
           {/* {isProcess && ( */}
           {true && (
             <div>
               <WrapPopover
-                popoverTitle="Auto Preview"
-                popoverContent="When enabled, the software will show the preview
-                    automatically after the settings are changed. You can
-                    disable it if Auto Preview takes too much time."
+                popoverTitle={t('Auto Preview')}
+                popoverContent={t(
+                  `When enabled, the software will show the preview automatically after the settings are changed. You can disable it if Auto Preview takes too much time.`
+                )}
               >
                 <div className="sm-parameter-row">
-                  <span className="sm-parameter-row__label">Auto Preview</span>
+                  <span className="sm-parameter-row__label">
+                    {t('Auto Preview')}
+                  </span>
                   <Checkbox
                     className="sm-parameter-row__checkbox"
                     disabled={isEditor}
@@ -140,7 +145,7 @@ class Output extends PureComponent {
                   !hasModel || !isAllModelsPreviewed || isGcodeGenerating
                 }
               >
-                Generate G-code
+                {t('Generate G-code')}
               </Button>
               {/* <button
                 type="button"
@@ -154,7 +159,7 @@ class Output extends PureComponent {
                 }
                 style={{ display: 'block', width: '100%', marginTop: '10px' }}
               >
-                Load G-code to Workspace
+                {t('Load G-code to Workspace')}
               </button> */}
               <Button
                 onClick={actions.onExport}
@@ -166,7 +171,7 @@ class Output extends PureComponent {
                 }
                 style={{ display: 'block', width: '100%', marginTop: '10px' }}
               >
-                Export G-code to file
+                {t('Export G-code to file')}
               </Button>
             </div>
           )}
@@ -183,6 +188,7 @@ class Output extends PureComponent {
 }
 
 Output.propTypes = {
+  t: PropTypes.func,
   setTitle: PropTypes.func.isRequired,
   minimized: PropTypes.bool.isRequired,
 
@@ -253,4 +259,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Output);
+export default withTranslation()(
+  connect(mapStateToProps, mapDispatchToProps)(Output)
+);

@@ -2,6 +2,7 @@ import React, { useRef, useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Button, Input, message } from 'antd';
 import path from 'path';
+import { useTranslation } from 'react-i18next';
 // import { PAGE_EDITOR } from '../../../../constants';
 import styles from './index.module.scss';
 
@@ -16,6 +17,8 @@ export default function AddImage(props) {
     genQrcode,
     genQrcodeModel,
   } = props;
+
+  const { t } = useTranslation();
 
   const [showQrcodeModal, setShowQrcodeModal] = useState(false);
   const [qrcodeText, setQrcodeText] = useState('');
@@ -52,12 +55,12 @@ export default function AddImage(props) {
       }
       uploadImage(file, uploadMode, () => {
         Modal.error({
-          title: 'Parse Error',
-          content: `Failed to parse image file ${file.name}.`,
+          title: t('Parse Error'),
+          content: t(`Failed to parse image file,`, { fileName: file.name }),
         });
       });
     },
-    [uploadImage, setAutoPreview]
+    [uploadImage, setAutoPreview, t]
     // [(togglePage, uploadImage, setAutoPreview)]
   );
 
@@ -83,7 +86,7 @@ export default function AddImage(props) {
 
     await genQrcodeModel(qrcodeInfo)
       .catch(() => {
-        message.error('Generate Qrcode Model Error');
+        message.error(t('Generate Qrcode Model Error'));
       })
       .finally(() => {
         setGenQrcodeModalOkLoading(false);
@@ -97,7 +100,7 @@ export default function AddImage(props) {
         setCurrentQrcode(qrcodeInfo);
       })
       .catch(() => {
-        message.error('Generate Qrcode Error');
+        message.error(t('Generate Qrcode Error'));
       });
   };
 
@@ -118,7 +121,7 @@ export default function AddImage(props) {
         title="Add image file to workspace"
         onClick={onClickToUpload}
       >
-        Add File
+        {t('Add File', 'Add File')}
       </Button>
       <Button
         shape="round"
@@ -128,7 +131,7 @@ export default function AddImage(props) {
           insertDefaultTextVector();
         }}
       >
-        Add Text
+        {t('Add Text', 'Add Text')}
       </Button>
       <Button
         shape="round"
@@ -140,14 +143,16 @@ export default function AddImage(props) {
           setShowQrcodeModal(true);
         }}
       >
-        Qrcode
+        {t('Qrcode', 'Qrcode')}
       </Button>
       <Modal
         visible={showQrcodeModal}
-        title="Generate Qrcode"
+        title={t('Generate Qrcode', 'Generate Qrcode')}
         onCancel={() => setShowQrcodeModal(false)}
         onOk={handleGenQrcodeModel}
         destroyOnClose
+        okText={t('OK')}
+        cancelText={t('Cancel')}
         okButtonProps={{
           disabled: !qrcodeText,
         }}
@@ -162,7 +167,7 @@ export default function AddImage(props) {
               setQrcodeText(() => value);
             }}
             autoFocus
-            placeholder="Please input some text"
+            placeholder={t('Please input some text', 'Please input some text')}
             autoSize={{ minRows: 10 }}
           />
           <div className={styles.qrcode_modal_content_preview_wrapper}>
@@ -171,14 +176,14 @@ export default function AddImage(props) {
                 <img
                   className={styles.qrcode_modal_content_preview_img}
                   src={currentQrcode.path}
-                  alt="qrcode img"
+                  alt={t('qrcode img', 'qrcode img')}
                 />
               )}
               {!currentQrcode && (
                 <span
                   className={styles.qrcode_modal_content_preview_placeholder}
                 >
-                  Preview Area
+                  {t('Preview Area', 'Preview Area')}
                 </span>
               )}
             </div>
@@ -187,7 +192,7 @@ export default function AddImage(props) {
               style={{ width: '100%' }}
               onClick={handlePreviewQrcode}
             >
-              Preview
+              {t('Preview', 'Preview')}
             </Button>
           </div>
         </div>

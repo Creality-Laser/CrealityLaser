@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Checkbox } from 'antd';
+import { withTranslation } from 'react-i18next';
+
 import ParameterItem, {
   ParameterItemLabel,
   ParameterItemValue,
@@ -29,7 +31,7 @@ class ConfigRasterBW extends PureComponent {
   };
 
   render() {
-    const { invert, bwThreshold, disabled } = this.props;
+    const { invert, bwThreshold, disabled, t } = this.props;
 
     return (
       <div>
@@ -37,11 +39,11 @@ class ConfigRasterBW extends PureComponent {
           <>
             <ParameterItem
               popover={{
-                title: 'Invert',
-                content: 'Inverts black to white and vise versa.',
+                title: t('Invert'),
+                content: t('Inverts black to white and vise versa.'),
               }}
             >
-              <ParameterItemLabel>Invert</ParameterItemLabel>
+              <ParameterItemLabel>{t('Invert')}</ParameterItemLabel>
               <ParameterItemValue>
                 <Checkbox
                   disabled={disabled}
@@ -52,12 +54,13 @@ class ConfigRasterBW extends PureComponent {
             </ParameterItem>
             <ParameterItem
               popover={{
-                title: 'B&W',
-                content:
-                  'Set the proportion of the black color based on the original color of the image.',
+                title: t('B&W threshold'),
+                content: t(
+                  `Set the proportion of the black color based on the original color of the image.`
+                ),
               }}
             >
-              <ParameterItemLabel>B&W</ParameterItemLabel>
+              <ParameterItemLabel>{t('B&W threshold')}</ParameterItemLabel>
               <ParameterItemValue>
                 <StyledSlider
                   disabled={disabled}
@@ -83,6 +86,7 @@ class ConfigRasterBW extends PureComponent {
 }
 
 ConfigRasterBW.propTypes = {
+  t: PropTypes.func,
   invert: PropTypes.bool,
   bwThreshold: PropTypes.number,
   disabled: PropTypes.bool,
@@ -106,4 +110,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConfigRasterBW);
+export default withTranslation()(
+  connect(mapStateToProps, mapDispatchToProps)(ConfigRasterBW)
+);

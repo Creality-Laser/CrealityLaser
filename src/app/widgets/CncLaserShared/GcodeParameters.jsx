@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Popover } from 'antd';
+import { withTranslation } from 'react-i18next';
 
 import { ABSENT_VALUE } from '../../constants';
 import ParametersHead from '../components/params/ParametersHead';
@@ -12,73 +13,6 @@ import StyledInputNumber from '../components/params/StyledInputNumber';
 import StyledSelect, { Option } from '../components/params/StyledSelect';
 import StyledSlider from '../components/params/StyledSlider';
 import OptionalDropdownParam from '../components/params/OptionalDropdownParam';
-
-// workSpeed: 1800 - 100%
-const materials = [
-  {
-    id: '',
-    name: 'None',
-    power: 0,
-    workSpeed: 0,
-    jogSpeed: 3000,
-  },
-  {
-    id: 'lindenWood_2mm',
-    name: '椴木板-2mm',
-    power: 30,
-    workSpeed: 900,
-    jogSpeed: 3000,
-  },
-  {
-    id: 'skewer_2mm',
-    name: '竹签-2mm',
-    power: 25,
-    workSpeed: 720,
-    jogSpeed: 3000,
-  },
-  {
-    id: 'leather_1mm',
-    name: '皮革-1mm',
-    power: 20,
-    workSpeed: 720,
-    jogSpeed: 3000,
-  },
-  {
-    id: 'kraft paper',
-    name: '牛皮纸',
-    power: 70,
-    workSpeed: 540,
-    jogSpeed: 3000,
-  },
-  {
-    id: 'paperboard_green',
-    name: '卡纸-绿色',
-    power: 80,
-    workSpeed: 360,
-    jogSpeed: 3000,
-  },
-  {
-    id: 'feltPaper_blue',
-    name: '毛毡纸-蓝色',
-    power: 95,
-    workSpeed: 90,
-    jogSpeed: 3000,
-  },
-  {
-    id: 'feltPaper_green',
-    name: '毛毡纸-绿色',
-    power: 50,
-    workSpeed: 180,
-    jogSpeed: 3000,
-  },
-  {
-    id: 'feltPaper_yellow',
-    name: '毛毡纸-黄色',
-    power: 50,
-    workSpeed: 180,
-    jogSpeed: 3000,
-  },
-];
 
 class GcodeParameters extends PureComponent {
   state = {
@@ -101,6 +35,7 @@ class GcodeParameters extends PureComponent {
           if (isSelectedMaterialNone) {
             return;
           }
+          const materials = this.getMaterials();
           const currentMaterial = materials.find(({ id }) => id === materialId);
           const { power, workSpeed, jogSpeed } = currentMaterial;
 
@@ -161,8 +96,79 @@ class GcodeParameters extends PureComponent {
 
   componentDidMount() {}
 
+  getMaterials = () => {
+    const { t } = this.props;
+
+    // workSpeed: 1800 - 100%
+    return [
+      {
+        id: '',
+        name: t('Unknown'),
+        power: 0,
+        workSpeed: 0,
+        jogSpeed: 3000,
+      },
+      {
+        id: 'lindenWood_2mm',
+        name: `${t('lindenWood')}-2mm`,
+        power: 30,
+        workSpeed: 900,
+        jogSpeed: 3000,
+      },
+      {
+        id: 'skewer_2mm',
+        name: `${t('skewer')}-2mm`,
+        power: 25,
+        workSpeed: 720,
+        jogSpeed: 3000,
+      },
+      {
+        id: 'leather_1mm',
+        name: `${t('leather')}-1mm`,
+        power: 20,
+        workSpeed: 720,
+        jogSpeed: 3000,
+      },
+      {
+        id: 'kraft paper',
+        name: t('kraft paper'),
+        power: 70,
+        workSpeed: 540,
+        jogSpeed: 3000,
+      },
+      {
+        id: 'paperboard_green',
+        name: t('paperboard_green'),
+        power: 80,
+        workSpeed: 360,
+        jogSpeed: 3000,
+      },
+      {
+        id: 'feltPaper_blue',
+        name: t('feltPaper_blue'),
+        power: 95,
+        workSpeed: 90,
+        jogSpeed: 3000,
+      },
+      {
+        id: 'feltPaper_green',
+        name: t('feltPaper_green'),
+        power: 50,
+        workSpeed: 180,
+        jogSpeed: 3000,
+      },
+      {
+        id: 'feltPaper_yellow',
+        name: t('feltPaper_yellow'),
+        power: 50,
+        workSpeed: 180,
+        jogSpeed: 3000,
+      },
+    ];
+  };
+
   render() {
-    const { printOrder, selectedModelID, selectedModelHideFlag, mode } =
+    const { printOrder, selectedModelID, selectedModelHideFlag, mode, t } =
       this.props;
     const actions = this.actions;
     const {
@@ -185,7 +191,7 @@ class GcodeParameters extends PureComponent {
     return (
       <>
         <ParametersHead
-          title="Working Parameters"
+          title={t('Working Parameters')}
           expanded={this.state.expanded}
           onToggleExpand={this.actions.onToggleExpand}
         />
@@ -193,20 +199,20 @@ class GcodeParameters extends PureComponent {
           <>
             <ParameterItem
               popover={{
-                title: 'Material',
-                content: 'The material to engrave on',
+                title: t('Material'),
+                content: t('The material to engrave on'),
               }}
             >
-              <ParameterItemLabel>Material</ParameterItemLabel>
+              <ParameterItemLabel>{t('Material')}</ParameterItemLabel>
               <ParameterItemValue>
                 <StyledSelect
                   style={{ zIndex: 5, width: 130 }}
-                  name="line_direction"
-                  placeholder="Select an direction"
+                  name="material"
+                  placeholder="Select an Material"
                   value={this.state.currentMaterialId}
                   onChange={this.actions.onChangeMaterial}
                 >
-                  {materials.map(({ id, name, power, workSpeed }) => {
+                  {this.getMaterials().map(({ id, name, power, workSpeed }) => {
                     return (
                       <Option key={id} value={id}>
                         <Popover
@@ -214,12 +220,12 @@ class GcodeParameters extends PureComponent {
                           content={
                             <div>
                               <p>
-                                <span>Power: </span>
+                                <span>{t('Power')}: </span>
                                 <span style={{ fontWeight: 600 }}>{power}</span>
                                 <span>&nbsp;%</span>
                               </p>
                               <p>
-                                <span>WorkSpeed: </span>
+                                <span>{t('WorkSpeed')}: </span>
                                 <span style={{ fontWeight: 600 }}>
                                   {workSpeed}
                                 </span>
@@ -238,12 +244,13 @@ class GcodeParameters extends PureComponent {
             </ParameterItem>
             <ParameterItem
               popover={{
-                title: 'Print Order',
-                content:
-                  'When engraving multiple images, this parameter determines the print order of the selected image. When the orders are the same, the image uploaded first will be engraved first.',
+                title: t('Print Order'),
+                content: t(
+                  `When engraving multiple images, this parameter determines the print order of the selected image. When the orders are the same, the image uploaded first will be engraved first.`
+                ),
               }}
             >
-              <ParameterItemLabel>Print Order</ParameterItemLabel>
+              <ParameterItemLabel>{t('Print Order')}</ParameterItemLabel>
               <ParameterItemValue>
                 <StyledSlider
                   value={printOrder}
@@ -264,11 +271,11 @@ class GcodeParameters extends PureComponent {
             {!isGreyscale && jogSpeed !== ABSENT_VALUE && (
               <ParameterItem
                 popover={{
-                  title: 'Jog Speed',
+                  title: t('Jog Speed'),
                   content: this.props.paramsDescs.jogSpeed,
                 }}
               >
-                <ParameterItemLabel>Jog Speed</ParameterItemLabel>
+                <ParameterItemLabel>{t('Jog Speed')}</ParameterItemLabel>
                 <ParameterItemValue>
                   <StyledInputNumber
                     value={jogSpeed}
@@ -286,11 +293,11 @@ class GcodeParameters extends PureComponent {
             {workSpeed !== ABSENT_VALUE && (
               <ParameterItem
                 popover={{
-                  title: 'Work Speed',
+                  title: t('Work Speed'),
                   content: this.props.paramsDescs.workSpeed,
                 }}
               >
-                <ParameterItemLabel>Work Speed</ParameterItemLabel>
+                <ParameterItemLabel>{t('Work Speed')}</ParameterItemLabel>
                 <ParameterItemValue>
                   <StyledInputNumber
                     value={workSpeed}
@@ -308,11 +315,11 @@ class GcodeParameters extends PureComponent {
             {false && dwellTime !== ABSENT_VALUE && (
               <ParameterItem
                 popover={{
-                  title: 'Dwell Time',
+                  title: t('Dwell Time'),
                   content: this.props.paramsDescs.dwellTime,
                 }}
               >
-                <ParameterItemLabel>Dwell Time</ParameterItemLabel>
+                <ParameterItemLabel>{t('Dwell Time')}</ParameterItemLabel>
                 <ParameterItemValue>
                   <StyledInputNumber
                     value={dwellTime}
@@ -330,11 +337,11 @@ class GcodeParameters extends PureComponent {
             {plungeSpeed !== ABSENT_VALUE && (
               <ParameterItem
                 popover={{
-                  title: 'Plunge Speed',
+                  title: t('Plunge Speed'),
                   content: this.props.paramsDescs.plungeSpeed,
                 }}
               >
-                <ParameterItemLabel>Plunge Speed</ParameterItemLabel>
+                <ParameterItemLabel>{t('Plunge Speed')}</ParameterItemLabel>
                 <ParameterItemValue>
                   <StyledInputNumber
                     value={plungeSpeed}
@@ -350,11 +357,12 @@ class GcodeParameters extends PureComponent {
               </ParameterItem>
             )}
             <OptionalDropdownParam
-              label="Multi-pass"
+              label={t('Multi-pass')}
               popover={{
-                title: 'Multi-pass',
-                content:
-                  "When enabled, the printer will run the G-code multiple times automatically according to the below settings. This feature helps you cut materials that can't be cut with only one pass.",
+                title: t('Multi-pass'),
+                content: t(
+                  `When enabled, the printer will run the G-code multiple times automatically according to the below settings. This feature helps you cut materials that can't be cut with only one pass.`
+                ),
               }}
               isDropdown={multiPassEnabled}
               onDropdownChange={actions.onToggleMultiPassEnabled}
@@ -362,12 +370,13 @@ class GcodeParameters extends PureComponent {
             >
               <ParameterItem
                 popover={{
-                  title: 'Passes',
-                  content:
-                    'Determines how many times the printer will run the G-code automatically.',
+                  title: t('Passes'),
+                  content: t(
+                    `Determines how many times the printer will run the G-code automatically.`
+                  ),
                 }}
               >
-                <ParameterItemLabel>Passes</ParameterItemLabel>
+                <ParameterItemLabel>{t('Passes')}</ParameterItemLabel>
                 <ParameterItemValue>
                   <StyledInputNumber
                     min={2}
@@ -379,32 +388,36 @@ class GcodeParameters extends PureComponent {
                   />
                 </ParameterItemValue>
               </ParameterItem>
-              <ParameterItem
-                popover={{
-                  title: 'Pass Depth',
-                  content:
-                    'Determines how much the laser module will be lowered after each pass.',
-                }}
-              >
-                <ParameterItemLabel>Pass Depth</ParameterItemLabel>
-                <ParameterItemValue>
-                  <StyledInputNumber
-                    min={0}
-                    max={10}
-                    value={multiPassDepth}
-                    disabled={!selectedNotHide}
-                    onChange={actions.onChangeMultiDepth}
-                    addonAfter="mm"
-                  />
-                </ParameterItemValue>
-              </ParameterItem>
+              {false && (
+                <ParameterItem
+                  popover={{
+                    title: t('Pass Depth'),
+                    content: t(
+                      'Determines how much the laser module will be lowered after each pass.'
+                    ),
+                  }}
+                >
+                  <ParameterItemLabel>{t('Pass Depth')}</ParameterItemLabel>
+                  <ParameterItemValue>
+                    <StyledInputNumber
+                      min={0}
+                      max={10}
+                      value={multiPassDepth}
+                      disabled={!selectedNotHide}
+                      onChange={actions.onChangeMultiDepth}
+                      addonAfter="mm"
+                    />
+                  </ParameterItemValue>
+                </ParameterItem>
+              )}
             </OptionalDropdownParam>
             <OptionalDropdownParam
-              label="Fixed Power"
+              label={t('Fixed Power')}
               popover={{
-                title: 'Fixed Power',
-                content:
-                  'When enabled, the power used to engrave this image will be set in the G-code, so it is not affected by the power you set in Workspace. When engraving multiple images, you can set the power for each image separately.',
+                title: t('Fixed Power'),
+                content: t(
+                  `When enabled, the power used to engrave this image will be set in the G-code, so it is not affected by the power you set in Workspace. When engraving multiple images, you can set the power for each image separately.`
+                ),
               }}
               isDropdown={fixedPowerEnabled}
               onDropdownChange={actions.onToggleFixedPowerEnabled}
@@ -412,11 +425,11 @@ class GcodeParameters extends PureComponent {
             >
               <ParameterItem
                 popover={{
-                  title: 'Power',
-                  content: 'Power to use when laser is working.',
+                  title: t('Power'),
+                  content: t('Power to use when laser is working.'),
                 }}
               >
-                <ParameterItemLabel>Power (%)</ParameterItemLabel>
+                <ParameterItemLabel>{`${t('Power')} (%)`}</ParameterItemLabel>
                 <ParameterItemValue>
                   <StyledSlider
                     value={fixedPower}
@@ -444,6 +457,7 @@ class GcodeParameters extends PureComponent {
 }
 
 GcodeParameters.propTypes = {
+  t: PropTypes.func,
   selectedModelID: PropTypes.string,
   selectedModelHideFlag: PropTypes.bool,
   printOrder: PropTypes.number.isRequired,
@@ -470,4 +484,4 @@ GcodeParameters.propTypes = {
   updateSelectedModelPrintOrder: PropTypes.func.isRequired,
 };
 
-export default GcodeParameters;
+export default withTranslation()(GcodeParameters);

@@ -2,6 +2,8 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { Progress } from 'antd';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
+
 import { CNC_LASER_STAGE } from '../../../../flux/editor';
 import styles from './index.module.scss';
 
@@ -21,6 +23,7 @@ function ProgressInfo(props) {
   const { stage, progress, gcodeFile } = props;
 
   const [showProgressBar, setShowProgressBar] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const shouldShowProgressBarStages = [
@@ -42,27 +45,31 @@ function ProgressInfo(props) {
       case CNC_LASER_STAGE.EMPTY:
         return '';
       case CNC_LASER_STAGE.GENERATING_TOOLPATH:
-        return `Generating tool path... ${(100.0 * progress).toFixed(2)}%`;
+        return `${t('Generating tool path...', {
+          progress: `${(100.0 * progress).toFixed(2)}%`,
+        })}`;
       case CNC_LASER_STAGE.GENERATE_TOOLPATH_SUCCESS:
-        return 'Generated tool path successfully.';
+        return t('Generated tool path successfully.');
       case CNC_LASER_STAGE.GENERATE_TOOLPATH_FAILED:
-        return 'Failed to generate tool path.';
+        return t('Failed to generate tool path.');
       case CNC_LASER_STAGE.PREVIEWING:
-        return 'Previewing tool path...';
+        return t('Previewing tool path...');
       case CNC_LASER_STAGE.PREVIEW_SUCCESS:
-        return 'Previewed tool path successfully';
+        return t('Previewed tool path successfully');
       case CNC_LASER_STAGE.PREVIEW_FAILED:
-        return 'Failed to preview tool path.';
+        return t('Failed to preview tool path.');
       case CNC_LASER_STAGE.GENERATING_GCODE:
-        return `Generating G-code... ${(100.0 * progress).toFixed(2)}%`;
+        return `${t('Generating G-code...', {
+          progress: `${(100.0 * progress).toFixed(2)}%`,
+        })}`;
       case CNC_LASER_STAGE.GENERATE_GCODE_SUCCESS:
-        return 'Generated G-code successfully.';
+        return t('Generated G-code successfully.');
       case CNC_LASER_STAGE.GENERATE_GCODE_FAILED:
-        return 'Failed to generate G-code.';
+        return t('Failed to generate G-code.');
       default:
         return '';
     }
-  }, [stage, progress]);
+  }, [stage, t, progress]);
 
   const notice = getNotice();
 

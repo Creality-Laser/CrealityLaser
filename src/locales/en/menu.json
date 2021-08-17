@@ -5,6 +5,17 @@
   "Hide CV Laser": "Hide CV Laser",
   "Hide Others": "Hide Others",
   "&File": "File",
+  "&Open": "Open",
+  "&Close": "Close",
   "&View": "View",
-  "language": "Language"
+  "&Reload": "Reload",
+  "&Force Reload": "Force Reload",
+  "Toggle &Full Screen": "Toggle &Full Screen",
+  "Toggle &Developer Tools": "Toggle &Developer Tools",
+  "language": "Language",
+  "Help": "Help",
+  "Learn More": "Learn More",
+  "Documentation": "Documentation",
+  "Community Discussions": "Community Discussions",
+  "Search Issues": "Search Issues"
 }

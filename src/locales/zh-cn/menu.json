@@ -5,6 +5,17 @@
   "Hide CV Laser": "隐藏 CV Laser",
   "Hide Others": "隐藏其他",
   "&File": "文件",
+  "&Open": "打开",
+  "&Close": "关闭",
   "&View": "视图",
-  "language": "语言"
+  "&Reload": "重新加载",
+  "&Force Reload": "强制重新加载",
+  "Toggle &Full Screen": "切换全屏",
+  "Toggle &Developer Tools": "切换开发者工具",
+  "language": "语言",
+  "Help": "帮助",
+  "Learn More": "获取更多",
+  "Documentation": "文档",
+  "Community Discussions": "社区交流",
+  "Search Issues": "搜索 Issues"
 }

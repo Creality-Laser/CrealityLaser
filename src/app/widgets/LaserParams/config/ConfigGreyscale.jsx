@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Checkbox, Select } from 'antd';
+import { withTranslation } from 'react-i18next';
 
 import ParameterItem, {
   ParameterItemLabel,
@@ -42,7 +43,7 @@ class ConfigGreyscale extends PureComponent {
   };
 
   render() {
-    const { invert, contrast, brightness, whiteClip, algorithm, disabled } =
+    const { invert, contrast, brightness, whiteClip, algorithm, disabled, t } =
       this.props;
 
     return (
@@ -52,11 +53,11 @@ class ConfigGreyscale extends PureComponent {
             <div>
               <ParameterItem
                 popover={{
-                  title: 'Invert',
-                  content: 'Inverts black to white and vise versa.',
+                  title: t('Invert'),
+                  content: t('Inverts black to white and vise versa.'),
                 }}
               >
-                <ParameterItemLabel>Invert</ParameterItemLabel>
+                <ParameterItemLabel>{t('Invert')}</ParameterItemLabel>
                 <ParameterItemValue>
                   <Checkbox
                     disabled={disabled}
@@ -67,12 +68,13 @@ class ConfigGreyscale extends PureComponent {
               </ParameterItem>
               <ParameterItem
                 popover={{
-                  title: 'Contrast',
-                  content:
-                    'The difference between the lightest color and the darkest color.',
+                  title: t('Contrast'),
+                  content: t(
+                    'The difference between the lightest color and the darkest color.'
+                  ),
                 }}
               >
-                <ParameterItemLabel>Contrast</ParameterItemLabel>
+                <ParameterItemLabel>{t('Contrast')}</ParameterItemLabel>
                 <ParameterItemValue>
                   <StyledSlider
                     disabled={disabled}
@@ -92,12 +94,13 @@ class ConfigGreyscale extends PureComponent {
               </ParameterItem>
               <ParameterItem
                 popover={{
-                  title: 'Brightness',
-                  content:
-                    'The engraved picture is brighter when this value is bigger.',
+                  title: t('Brightness'),
+                  content: t(
+                    'The engraved picture is brighter when this value is bigger.'
+                  ),
                 }}
               >
-                <ParameterItemLabel>Brightness</ParameterItemLabel>
+                <ParameterItemLabel>{t('Brightness')}</ParameterItemLabel>
                 <ParameterItemValue>
                   <StyledSlider
                     disabled={disabled}
@@ -117,12 +120,13 @@ class ConfigGreyscale extends PureComponent {
               </ParameterItem>
               <ParameterItem
                 popover={{
-                  title: 'White Clip',
-                  content:
-                    'Set the threshold to turn the color that is not pure white into pure white.',
+                  title: t('White Clip'),
+                  content: t(
+                    'Set the threshold to turn the color that is not pure white into pure white.'
+                  ),
                 }}
               >
-                <ParameterItemLabel>White Clip</ParameterItemLabel>
+                <ParameterItemLabel>{t('White Clip')}</ParameterItemLabel>
                 <ParameterItemValue>
                   <StyledSlider
                     disabled={disabled}
@@ -142,11 +146,11 @@ class ConfigGreyscale extends PureComponent {
               </ParameterItem>
               <ParameterItem
                 popover={{
-                  title: 'Algorithm',
+                  title: t('Algorithm'),
                   content: 'Choose an algorithm for image processing.',
                 }}
               >
-                <ParameterItemLabel>Algorithm</ParameterItemLabel>
+                <ParameterItemLabel>{t('Algorithm')}</ParameterItemLabel>
                 <ParameterItemValue>
                   <StyledSelect
                     disabled={disabled}
@@ -182,6 +186,7 @@ class ConfigGreyscale extends PureComponent {
 }
 
 ConfigGreyscale.propTypes = {
+  t: PropTypes.func,
   invert: PropTypes.bool,
   contrast: PropTypes.number.isRequired,
   brightness: PropTypes.number.isRequired,
@@ -211,4 +216,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConfigGreyscale);
+export default withTranslation()(
+  connect(mapStateToProps, mapDispatchToProps)(ConfigGreyscale)
+);

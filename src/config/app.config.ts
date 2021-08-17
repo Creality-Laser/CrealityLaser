@@ -6,7 +6,7 @@ const config = {
     { label: 'English', value: 'en' },
   ],
   fallbackLng: 'en',
-  defaultLanguage: 'en',
+  defaultLanguage: 'zhCn',
 };
 
 export default config;
