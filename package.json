@@ -50,7 +50,6 @@
       ],
       "type": "distribution",
       "hardenedRuntime": true,
-      "sign": false,
       "entitlements": "assets/entitlements.mac.plist",
       "entitlementsInherit": "assets/entitlements.mac.plist",
       "gatekeeperAssess": false
