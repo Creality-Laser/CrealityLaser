@@ -16,7 +16,8 @@
     "start:renderer": "cross-env NODE_ENV=development webpack serve --config ./.erb/configs/webpack.config.renderer.dev.babel.js",
     "test": "jest",
     "clean": "rm -rf release/*",
-    "package:win64": "yarn clean && yarn package --win --x64"
+    "package:win64": "yarn clean && yarn package --win --x64",
+    "package_publish:win64": "yarn clean && rm -rf src/dist && yarn build && electron-builder build --publish always --win --x64"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
