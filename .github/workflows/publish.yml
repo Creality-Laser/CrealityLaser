@@ -1,19 +1,12 @@
 name: Publish
 
-on:
-  push:
-    tags:
-      - '*'
-    branches:
-      - master
-
 jobs:
   publish:
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [ macos-latest ]
+        os: [macos-latest]
 
     steps:
       - name: Checkout git repo
