@@ -6,12 +6,10 @@ name: Package winx64
 on:
   push:
     tags:
-      - 'v*.*.*'
-      - 'v*.*.*-*'
+      - '*'
 
 jobs:
   release:
-
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -20,12 +18,12 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v1
-        
+
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v1
         with:
           node-version: 14
-          
+
       - name: Build/release Electron app
         env:
           GH_TOKEN: ${{ secrets.FRANK_PUBLISH }}
