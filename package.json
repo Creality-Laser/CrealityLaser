@@ -1,6 +1,6 @@
 {
   "name": "cv_laser",
-  "version": "1.0.0-alpha",
+  "version": "1.0.3-alpha",
   "productName": "CV-Laser",
   "description": "Creality laser carving app",
   "scripts": {
