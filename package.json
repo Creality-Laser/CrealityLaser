@@ -96,7 +96,7 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "CrealityLaser",
+      "owner": "Creality-Laser",
       "repo": "CrealityLaser"
     }
   },
