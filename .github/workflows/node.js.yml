@@ -28,7 +28,7 @@ jobs:
           
       - name: Build/release Electron app
         env:
-          GH_TOKEN: ${{ secrets.github_token }}
+          GH_TOKEN: ${{ secrets.FRANK_PUBLISH }}
         run: |
           yarn install
           yarn package:win64
