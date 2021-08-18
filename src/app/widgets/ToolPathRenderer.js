@@ -8,8 +8,11 @@ const UNIFORMS = {
 const CNC_LASER_VERT_SHADER = [
   'varying float v_g_code;',
   'attribute float a_g_code;',
+  'attribute vec3 custom_color;',
+  'varying vec3 vColor;',
   'void main(){',
   '    v_g_code = a_g_code;',
+  '    vColor = custom_color;',
   '    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);',
   '}',
 ].join('');
@@ -17,11 +20,12 @@ const CNC_LASER_VERT_SHADER = [
 const CNC_LASER_FRAG_SHADER = [
   'uniform vec4 u_g1_color;',
   'varying float v_g_code;',
+  'varying vec3 vColor;',
   'void main(){',
   '    if(v_g_code == 0.0){',
   '        discard;',
   '    }',
-  '    gl_FragColor = u_g1_color;',
+  '    gl_FragColor = vec4(vColor, 1);',
   '}',
 ].join('');
 
@@ -57,7 +61,7 @@ class ToolPathRenderer {
     }
     if (headType === 'laser') {
       if (mode === 'greyscale' && movementMode === 'greyscale-dot') {
-        return this.parseToPoints(data);
+        return this.parseToLine(data);
       } else {
         return this.parseToLine(data);
       }
@@ -69,12 +73,14 @@ class ToolPathRenderer {
   parseToLine(data) {
     const positions = [];
     const gCodes = [];
+    const colors = [];
 
     let state = {
       G: 0,
       X: 0,
       Y: 0,
       Z: 0,
+      S: 0,
     };
     for (let i = 0; i < data.length; i++) {
       const item = data[i];
@@ -83,32 +89,52 @@ class ToolPathRenderer {
       item.X !== undefined && (newState.X = item.X);
       item.Y !== undefined && (newState.Y = item.Y);
       item.Z !== undefined && (newState.Z = item.Z);
+      item.S !== undefined && (newState.S = item.S);
 
       if (state.G === 1 && newState.G === 0) {
         positions.push(state.X);
         positions.push(state.Y);
         positions.push(state.Z);
         gCodes.push(newState.G);
+        colors.push(motionColor.G0.r);
+        colors.push(motionColor.G0.g);
+        colors.push(motionColor.G0.b);
       }
 
       if (
         state.G !== newState.G ||
         state.X !== newState.X ||
         state.Y !== newState.Y ||
-        state.Z !== newState.Z
+        state.Z !== newState.Z ||
+        state.S !== newState.S
       ) {
         state = newState;
         positions.push(state.X);
         positions.push(state.Y);
         positions.push(state.Z);
         gCodes.push(state.G);
+        if (state.G === 0) {
+          colors.push(motionColor.G0.r);
+          colors.push(motionColor.G0.g);
+          colors.push(motionColor.G0.b);
+        } else if (state.G === 1) {
+          colors.push(motionColor.G1(state.S).r);
+          colors.push(motionColor.G1(state.S).g);
+          colors.push(motionColor.G1(state.S).b);
+        } else {
+          colors.push(motionColor.unknown.r);
+          colors.push(motionColor.unknown.g);
+          colors.push(motionColor.unknown.b);
+        }
       }
     }
     const bufferGeometry = new THREE.BufferGeometry();
     const positionAttribute = new THREE.Float32BufferAttribute(positions, 3);
     const gCodeAttribute = new THREE.Float32BufferAttribute(gCodes, 1);
+    const colorsAttribute = new THREE.Float32BufferAttribute(colors, 3);
     bufferGeometry.addAttribute('position', positionAttribute);
     bufferGeometry.addAttribute('a_g_code', gCodeAttribute);
+    bufferGeometry.addAttribute('custom_color', colorsAttribute);
     const material = new THREE.ShaderMaterial({
       uniforms: UNIFORMS,
       vertexShader: CNC_LASER_VERT_SHADER,
