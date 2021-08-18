@@ -177,7 +177,7 @@ export const generateGcode = (modelInfos, onProgress) => {
     // `;min_z(mm): ${boundingBox.min.z}\n` +
     `;work_speed(mm/minute): ${gcodeConfig.workSpeed}\n` +
     `;jog_speed(mm/minute): ${gcodeConfig.jogSpeed}\n` +
-    `;power(%): ${power}\n` +
+    `;power: ${power}\n` +
     ';Header End\n' +
     '\n';
   headerStart = headerStart.replace(/fileTotalLines/g, fileTotalLines);

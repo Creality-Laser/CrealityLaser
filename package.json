@@ -1,8 +1,8 @@
 {
   "name": "cv_laser",
-  "version": "1.0.3-alpha",
-  "productName": "CV-Laser",
-  "description": "Creality laser carving app",
+  "version": "1.0.4-alpha",
+  "productName": "Creality-Laser",
+  "description": "Creality laser carving app.",
   "scripts": {
     "build": "concurrently \"yarn build:main\" \"yarn build:renderer\"",
     "build:main": "cross-env NODE_ENV=production webpack --config ./.erb/configs/webpack.config.main.prod.babel.js",

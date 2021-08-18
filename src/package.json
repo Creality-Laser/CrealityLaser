@@ -1,13 +1,12 @@
 {
   "name": "cv_laser",
-  "version": "1.0.3-alpha",
-  "productName": "CV-Laser",
-  "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
+  "version": "1.0.4-alpha",
+  "productName": "Creality-Laser",
+  "description": "Creality laser carving app.",
   "main": "./main.prod.js",
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://github.com/electron-react-boilerplate"
+    "name": "Creality Laser",
+    "url": "https://github.com/Creality-Laser/CrealityLaser"
   },
   "scripts": {
     "electron-rebuild": "node -r ../.erb/scripts/BabelRegister.js ../.erb/scripts/ElectronRebuild.js",

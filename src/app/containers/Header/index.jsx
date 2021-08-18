@@ -13,10 +13,10 @@ function Header() {
             className={styles.logo}
             width="30px"
             role="presentation"
-            alt="CV Laser logo"
+            alt="Creality Laser logo"
             src={icon}
           />
-          <h1 className={styles.app_title}>CV Laser</h1>
+          <h1 className={styles.app_title}>Creality Laser</h1>
         </Link>
       </section>
       <section className={styles.right}>

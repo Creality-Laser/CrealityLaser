@@ -607,6 +607,10 @@ class LaserToolPathGenerator extends EventEmitter {
     content.push(`G1 F${workSpeed}`);
     content.push(`M4 S0`);
 
+    // fix many continuous bare 'S0' in gcode.
+    // if prev row has no content, then no another 'S0'
+    let prevWhichRowHasContent = 0;
+
     if (!gcodeConfig.direction || gcodeConfig.direction === 'Horizontal') {
       const direction = {
         x: 1,
@@ -621,8 +625,16 @@ class LaserToolPathGenerator extends EventEmitter {
           isReverse ? i >= 0 : i < width;
           i += len * sign
         ) {
+          const isNewRow =
+            (isReverse && i === width - 1) || (!isReverse && i === 0);
+          const isPrevRowHasContent = prevWhichRowHasContent + 1 === j;
+          if (isNewRow && isPrevRowHasContent) {
+            content.push(`S0`);
+          }
+
           const idx = i * 4 + j * width * 4;
           if (img.bitmap.data[idx] <= bwThreshold) {
+            prevWhichRowHasContent = j;
             const start = {
               x: i,
               y: j,
@@ -644,8 +656,6 @@ class LaserToolPathGenerator extends EventEmitter {
           }
         }
 
-        content.push(`S0`);
-
         const p = j / height;
         if (p - progress > 0.05) {
           progress = p;
@@ -666,8 +676,16 @@ class LaserToolPathGenerator extends EventEmitter {
           isReverse ? j >= 0 : j < height;
           j += len * sign
         ) {
+          const isNewRow =
+            (isReverse && j === height - 1) || (!isReverse && j === 0);
+          const isPrevRowHasContent = prevWhichRowHasContent + 1 === i;
+          if (isNewRow && isPrevRowHasContent) {
+            content.push(`S0`);
+          }
+
           const idx = i * 4 + j * width * 4;
           if (img.bitmap.data[idx] <= bwThreshold) {
+            prevWhichRowHasContent = i;
             const start = {
               x: i,
               y: j,
@@ -953,13 +971,15 @@ class LaserToolPathGenerator extends EventEmitter {
     });
 
     let firstTurnOn = true;
+    const powerStrength = Math.floor(
+      ((fixedPowerEnabled ? fixedPower : 100) * 1000) / 100
+    );
     function turnOnLaser() {
-      if (firstTurnOn && fixedPowerEnabled) {
+      if (firstTurnOn) {
         firstTurnOn = false;
-        const powerStrength = Math.floor((fixedPower * 255) / 100);
-        return `M3 P${fixedPower} S${powerStrength}`;
+        return `M4 S${powerStrength}`;
       }
-      return 'M3';
+      return 'M4';
     }
 
     // second pass generate gcode
