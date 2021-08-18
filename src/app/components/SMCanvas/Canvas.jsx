@@ -260,7 +260,14 @@ class Canvas extends Component {
   autoFocus(model) {
     this.camera.position.copy(this.cameraInitialPosition);
 
-    const target = model ? model.position.clone() : this.initialTarget;
+    // const target = model ? model.position.clone() : this.cameraInitialPosition;
+    const target = model
+      ? model.position.clone()
+      : new Vector3(
+          this.cameraInitialPosition.x,
+          this.cameraInitialPosition.y,
+          0
+        );
     this.controls.setTarget(target);
 
     const object = {

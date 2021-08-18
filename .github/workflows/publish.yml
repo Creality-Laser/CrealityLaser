@@ -1,17 +1,12 @@
 name: Publish
 
-on:
-  push:
-    branches:
-      - master
-
 jobs:
   publish:
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [ macos-latest ]
+        os: [macos-latest]
 
     steps:
       - name: Checkout git repo
@@ -52,4 +47,4 @@ jobs:
           # This is used for uploading release assets to github
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          yarn postinstall && yarn build && yarn electron-builder --publish always --win --mac --linux
+          yarn postinstall && yarn build && yarn electron-builder --publish onTag --win --mac --linux
