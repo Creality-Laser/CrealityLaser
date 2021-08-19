@@ -162,13 +162,13 @@ export const generateGcode = (modelInfos, onProgress) => {
     // `;thumbnail: ${thumbnail}\n` +
     `;renderMethod: ${renderMethod}\n` +
     ';file_total_lines: fileTotalLines\n' +
-    `;estimated_time(s): ${estimatedTime}\n` +
-    `;MAXX: ${boundingBox.max.x}\n` +
-    `;MAXY: ${boundingBox.max.y}\n` +
-    `;MAXZ: ${boundingBox.max.z}\n` +
-    `;MINX: ${boundingBox.min.x}\n` +
-    `;MINY: ${boundingBox.min.y}\n` +
-    `;MINZ: ${boundingBox.min.z}\n` +
+    `;estimated_time(s): ${estimatedTime && estimatedTime.toFixed(2)}\n` +
+    `;MAXX: ${boundingBox.max.x.toFixed(2)}\n` +
+    `;MAXY: ${boundingBox.max.y.toFixed(2)}\n` +
+    `;MAXZ: ${boundingBox.max.z.toFixed(2)}\n` +
+    `;MINX: ${boundingBox.min.x.toFixed(2)}\n` +
+    `;MINY: ${boundingBox.min.y.toFixed(2)}\n` +
+    `;MINZ: ${boundingBox.min.z.toFixed(2)}\n` +
     // `;max_x(mm): ${boundingBox.max.x}\n` +
     // `;max_y(mm): ${boundingBox.max.y}\n` +
     // `;max_z(mm): ${boundingBox.max.z}\n` +
