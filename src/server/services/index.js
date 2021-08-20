@@ -1,7 +1,7 @@
 import SocketServer from '../lib/SocketManager';
 import TaskManager from './task-manager';
 
-// import socketSerial from './socket/socket-serial';
+import socketSerial from './socket/socket-serial';
 // import socketSlice from './socket/socket-slice';
 import wifiServerManager from './socket/WifiServerManager';
 
@@ -22,7 +22,7 @@ function startServices(server) {
 
   socketServer.on('disconnection', (socket) => {
     wifiServerManager.onDisconnection(socket);
-    // socketSerial.onDisconnection(socket);
+    socketSerial.onDisconnection(socket);
   });
 
   // slice
@@ -32,11 +32,11 @@ function startServices(server) {
   socketServer.registerEvent('http:discover', wifiServerManager.refreshDevices);
 
   // communication: serial port
-  // socketServer.registerEvent('serialport:list', socketSerial.serialportList);
-  // socketServer.registerEvent('serialport:open', socketSerial.serialportOpen);
-  // socketServer.registerEvent('serialport:close', socketSerial.serialportClose);
-  // socketServer.registerEvent('command', socketSerial.command);
-  // socketServer.registerEvent('writeln', socketSerial.writeln);
+  socketServer.registerEvent('serialport:list', socketSerial.serialportList);
+  socketServer.registerEvent('serialport:open', socketSerial.serialportOpen);
+  socketServer.registerEvent('serialport:close', socketSerial.serialportClose);
+  socketServer.registerEvent('command', socketSerial.command);
+  socketServer.registerEvent('writeln', socketSerial.writeln);
 
   // task manager
   socketServer.registerEvent(
@@ -145,7 +145,10 @@ function registerApis(app) {
   // app.post(urljoin(settings.route, 'api/commands'), api.commands.create);
   // app.get(urljoin(settings.route, 'api/commands/:id'), api.commands.read);
   // app.put(urljoin(settings.route, 'api/commands/:id'), api.commands.update);
-  // app.delete(urljoin(settings.route, 'api/commands/:id'), api.commands.__delete);
+  // app.delete(
+  //   urljoin(settings.route, 'api/commands/:id'),
+  //   api.commands.__delete
+  // );
   // app.post(urljoin(settings.route, 'api/commands/run/:id'), api.commands.run);
 
   // Events
@@ -163,11 +166,11 @@ function registerApis(app) {
   // app.delete(urljoin(settings.route, 'api/users/:id'), api.users.__delete);
 
   // Macros
-  // app.get(urljoin(settings.route, 'api/macros'), api.macros.fetch);
-  // app.post(urljoin(settings.route, 'api/macros'), api.macros.create);
-  // app.get(urljoin(settings.route, 'api/macros/:id'), api.macros.read);
-  // app.put(urljoin(settings.route, 'api/macros/:id'), api.macros.update);
-  // app.delete(urljoin(settings.route, 'api/macros/:id'), api.macros.remove);
+  app.get(urljoin(settings.route, 'api/macros'), api.macros.fetch);
+  app.post(urljoin(settings.route, 'api/macros'), api.macros.create);
+  app.get(urljoin(settings.route, 'api/macros/:id'), api.macros.read);
+  app.put(urljoin(settings.route, 'api/macros/:id'), api.macros.update);
+  app.delete(urljoin(settings.route, 'api/macros/:id'), api.macros.remove);
 
   // Watch
   app.get(urljoin(settings.route, 'api/watch/files'), api.watch.getFiles);

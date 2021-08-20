@@ -29,8 +29,8 @@ import { actions as widgetActions } from '../../flux/widget';
 import Connection from './widgets/Connection';
 import GcodeFileLoader from './widgets/GcodeFileLoader';
 import Macro from './widgets/Macro';
-import Stop from './widgets/Stop';
-import GcodeInfo from './widgets/GcodeInfo';
+// import Stop from './widgets/Stop';
+// import GcodeInfo from './widgets/GcodeInfo';
 import Control from './widgets/Control';
 import Console from './widgets/Console';
 
@@ -294,19 +294,19 @@ class Workspace extends PureComponent {
           onDropAccepted={actions.onDropAccepted}
           onDropRejected={actions.onDropRejected}
         >
-          <div className={styles.workspaceTable}>
-            <div className={styles.workspaceHeader}>
+          <div className={styles.workspace_table}>
+            <div className={styles.workspace_header}>
               <Connection widgetId="connection" />
               <GcodeFileLoader />
               <Macro isDisabled={isCurrentConnectedByWiFi} />
               <Control isDisabled={isCurrentConnectedByWiFi} />
-              <Stop isDisabled={isCurrentConnectedByWiFi} />
+              {/* <Stop isDisabled={isCurrentConnectedByWiFi} /> */}
             </div>
-            <div className={styles.workspaceTableRow}>
+            <div className={styles.workspace_table_row}>
               {false && (
                 <div
                   ref={this.primaryContainer}
-                  className={classNames(styles.primaryContainer, {
+                  className={classNames(styles.primary_container, {
                     [styles.hidden]: hidePrimaryContainer,
                   })}
                 >
@@ -324,7 +324,7 @@ class Workspace extends PureComponent {
               {false && (
                 <div
                   ref={this.primaryToggler}
-                  className={classNames(styles.primaryToggler)}
+                  className={classNames(styles.primary_toggler)}
                 >
                   <button
                     type="button"
@@ -349,7 +349,7 @@ class Workspace extends PureComponent {
 
               <div
                 ref={this.defaultContainer}
-                className={classNames(styles.defaultContainer, styles.fixed)}
+                className={classNames(styles.default_container, styles.fixed)}
               >
                 <DefaultWidgets
                   defaultWidgets={defaultWidgets}
@@ -359,7 +359,7 @@ class Workspace extends PureComponent {
               {false && (
                 <div
                   ref={this.secondaryToggler}
-                  className={classNames(styles.secondaryToggler)}
+                  className={classNames(styles.secondary_toggler)}
                 >
                   <button
                     type="button"
@@ -384,7 +384,7 @@ class Workspace extends PureComponent {
               {false && (
                 <div
                   ref={this.secondaryContainer}
-                  className={classNames(styles.secondaryContainer, {
+                  className={classNames(styles.secondary_container, {
                     [styles.hidden]: hideSecondaryContainer,
                   })}
                 >
@@ -400,7 +400,7 @@ class Workspace extends PureComponent {
                 </div>
               )}
             </div>
-            <GcodeInfo />
+            {/* <GcodeInfo /> */}
             <Console
               minimized
               widgetId="console"

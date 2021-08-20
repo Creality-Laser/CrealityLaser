@@ -35,8 +35,8 @@ class Output extends PureComponent {
       }
       this.props.renderGcodeFile(gcodeFile);
 
-      document.location.href = '/#/workspace';
-      window.scrollTo(0, 0);
+      // document.location.href = '/#/workspace';
+      // window.scrollTo(0, 0);
     },
     onExport: () => {
       const { gcodeFile } = this.props;
@@ -144,7 +144,6 @@ class Output extends PureComponent {
               </Button>
               {/* <button
                 type="button"
-                className="sm-btn-large sm-btn-default"
                 onClick={actions.onLoadGcode}
                 disabled={
                   !hasModel ||

@@ -1,43 +1,43 @@
 @import '../../styles/variables.scss';
 
 .workspace {
-  .workspace-table {
+  .workspace_table {
     display: table;
     width: 100%;
     height: calc(100vh - $navbar-height);
   }
 
-  .workspace-header {
+  .workspace_header {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: 48px;
-    width: 100%;
+    min-width: 100%;
     // min-width: 1200px
     padding: 0 120px 0 5%;
-    background: $sub-main-color;
+    // background: $sub-main-color;
   }
-  .workspace-table-row {
+  .workspace_table_row {
     // display: table-row;
     display: block;
   }
 
-  .primary-container,
-  .secondary-container,
-  .primary-toggler,
-  .secondary-toggler,
-  .default-container {
+  .primary_container,
+  .secondary_container,
+  .primary_toggler,
+  .secondary_toggler,
+  .default_container {
     display: table-cell;
     position: relative;
   }
-  .primary-container {
+  .primary_container {
     border-right: 1px solid #ccc;
   }
-  .secondary-container {
+  .secondary_container {
     border-left: 1px solid #ccc;
   }
-  .primary-container {
+  .primary_container {
     vertical-align: top;
     background-color: #f6f7f8;
     width: 360px;
@@ -62,7 +62,7 @@
       }
     }
   }
-  .secondary-container {
+  .secondary_container {
     z-index: 20;
     vertical-align: top;
     background-color: #f6f7f8;
@@ -88,8 +88,8 @@
       }
     }
   }
-  .primary-toggler,
-  .secondary-toggler {
+  .primary_toggler,
+  .secondary_toggler {
     z-index: 10;
     width: 12px;
     position: fixed;
@@ -109,18 +109,18 @@
       position: absolute;
     }
   }
-  .primary-toggler button {
+  .primary_toggler button {
     border-top: 1px solid #ccc;
     border-right: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
   }
-  .secondary-toggler button {
+  .secondary_toggler button {
     border-top: 1px solid #ccc;
     border-left: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
   }
 
-  .default-container {
+  .default_container {
     min-width: 360px;
 
     &.fixed {

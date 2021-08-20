@@ -15,6 +15,7 @@
   border-radius: 24px;
   padding: 7px 20px;
   transition: all 0.3s;
+  border: 1px solid $gray-light;
 
   &:hover {
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.32);
@@ -34,7 +35,7 @@
   white-space: nowrap;
 }
 
-.content-wrapper {
+.contentWrapper {
   z-index: 10;
   position: absolute;
   top: 10px;
@@ -47,13 +48,13 @@
   transition: height 0.3s, opacity 0.2s;
 }
 
-.content-wrapper-packup {
+.contentWrapperPackup {
   display: none;
   opacity: 0;
   height: 0;
 }
 
-.fa-btn {
+.faBtn {
   border: none;
   padding: 0;
   cursor: pointer;
@@ -70,17 +71,17 @@
   }
 }
 
-.fa-btn-icon {
+.faBtnIcon {
   display: inline-block;
   font-size: 12px;
   transform: scale(0.7);
 }
 
-.fa-btn-rotate {
+.faBtnRotate {
   transform: rotate(180deg);
 }
 
-.wrapper-disabled {
+.wrapperDisabled {
   cursor: not-allowed;
   .bar:hover {
     cursor: not-allowed;
@@ -90,10 +91,10 @@
     cursor: not-allowed;
     color: #ddd;
   }
-  .fa-btn {
+  .faBtn {
     cursor: not-allowed;
   }
-  .fa-btn-icon {
+  .faBtnIcon {
     color: #ddd;
   }
 }

@@ -48,6 +48,12 @@ class SerialPortClient {
     'serialport:close': [],
     'serialport:read': [],
     'serialport:write': [],
+    'serialport:print:error': [],
+    'serialport:print:door:closed': [],
+    'serialport:print:action:wait': [],
+
+    // Filament Runout
+    'work:pause': [],
 
     // HTTP events
     'http:discover': [],

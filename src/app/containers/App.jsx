@@ -12,7 +12,8 @@ import { actions as keyboardShortcutActions } from '../flux/keyboardShortcut';
 import Header from './Header/index';
 import Laser from './Laser';
 import Settings from './Settings';
-import Workspace from './Workspace';
+// import Workspace from './Workspace';
+import Workspace from './Workspace/index_new';
 import './App.global.less';
 
 function App(props) {
@@ -34,11 +35,11 @@ function App(props) {
   useEffect(() => {
     keyboardShortcutInit();
     machineInit();
-    laserInit();
-    textInit();
     functionsInit();
     initModelsPreviewChecker();
     workspaceInit();
+    laserInit();
+    textInit();
   }, [
     functionsInit,
     initModelsPreviewChecker,
@@ -85,7 +86,7 @@ function App(props) {
       <Workspace
         isShowWorkspace={isShowWorkspace}
         style={{
-          display: location.pathname !== '/workspace' ? 'none' : 'block',
+          display: location.pathname !== '/workspace' ? 'none' : '',
         }}
       />
       <Laser

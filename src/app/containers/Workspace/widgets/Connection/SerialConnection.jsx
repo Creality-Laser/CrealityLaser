@@ -14,6 +14,7 @@ import { actions as machineActions } from '../../../../flux/machine';
 import LaserState from './LaserState';
 // import CNCState from './CNCState';
 import MachineSelectModal from '../../components/modals/modal-machine-select-new';
+import CyCleIcon from './components/CyCleIcon';
 import styles from './index.module.scss';
 
 const { Option } = Select;
@@ -301,7 +302,8 @@ class SerialConnection extends PureComponent {
         >
           <div className={styles.portSelectRow}>
             <Select
-              style={{ maxWidth: '230px' }}
+              size="small"
+              style={{ flex: 1, marginRight: '10px', maxWidth: '260px' }}
               onChange={this.actions.onChangePortOption}
               disabled={!canChangePort}
               placeholder={i18n._('Choose a port')}
@@ -317,21 +319,6 @@ class SerialConnection extends PureComponent {
                 </Option>
               ))}
             </Select>
-            {/* <Select
-              wrapperStyle={{ maxWidth: '230px' }}
-              disabled={!canChangePort}
-              // noResultsText={i18n._('No ports available')}
-              onChange={this.actions.onChangePortOption}
-              optionRenderer={this.renderPortOption}
-              options={map(ports, (o) => ({
-                value: o.port,
-                label: o.port,
-                manufacturer: o.manufacturer,
-              }))}
-              placeholder={i18n._('Choose a port')}
-              value={port}
-              valueRenderer={this.renderPortValue}
-            /> */}
             <button
               type="button"
               className={styles.freshBtn}
@@ -339,15 +326,11 @@ class SerialConnection extends PureComponent {
               onClick={this.actions.onRefreshPorts}
               disabled={!canRefresh}
             >
-              <i
-                className={classNames(
-                  'iconfont',
-                  styles.freshBtnIcon,
-                  loadingPorts ? styles.freshBtnIconSpin : ''
-                )}
+              <span
+                className={classNames(loadingPorts && styles.freshBtnIconSpin)}
               >
-                &#xe6cb;
-              </i>
+                <CyCleIcon />
+              </span>
             </button>
           </div>
         </div>
@@ -370,10 +353,15 @@ class SerialConnection extends PureComponent {
           </div>
         )}
 
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
           {!isConnected && (
             <Button
-              style={{ width: '60px', height: '24px' }}
+              size="small"
               type="primary"
               disabled={!canOpenPort}
               onClick={this.actions.onOpenPort}
@@ -383,7 +371,7 @@ class SerialConnection extends PureComponent {
           )}
           {isConnected && (
             <Button
-              style={{ width: '60px', height: '24px' }}
+              size="small"
               type="danger-linear"
               onClick={this.actions.onClosePort}
             >

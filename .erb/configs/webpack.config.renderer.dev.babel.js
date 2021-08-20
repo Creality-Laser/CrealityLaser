@@ -8,7 +8,7 @@ import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../scripts/CheckNodeEnv';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 
-// When an ESLint server is running, we can't set the NODE_ENV so we'll check if it's
+// When an ESLint serveif it'sr is running, we can't set the NODE_ENV so we'll check
 // at the dev webpack config is not accidentally run in a production environment
 if (process.env.NODE_ENV === 'production') {
   CheckNodeEnv('development');
@@ -59,8 +59,16 @@ export default merge(baseConfig, {
   module: {
     rules: [
       {
+        test: /\.worker\.(c|m)?js$/i,
+        use: [
+          {
+            loader: 'worker-loader',
+          },
+        ],
+      },
+      {
         test: /\.[jt]sx?$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /\.worker\.(c|m)?js$/i],
         use: [
           {
             loader: require.resolve('babel-loader'),
@@ -69,10 +77,6 @@ export default merge(baseConfig, {
             },
           },
         ],
-      },
-      {
-        test: /\.worker\.js$/,
-        use: { loader: 'worker-loader' },
       },
       {
         test: /\.global\.css$/,
@@ -239,8 +243,12 @@ export default merge(baseConfig, {
         use: 'url-loader',
       },
       {
-        test: /\.worker\.js$/,
-        use: { loader: 'worker-loader' },
+        test: /\.worker\.(c|m)?js$/i,
+        use: [
+          {
+            loader: 'worker-loader',
+          },
+        ],
       },
     ],
   },

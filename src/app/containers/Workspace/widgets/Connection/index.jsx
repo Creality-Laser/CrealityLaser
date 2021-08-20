@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Modal, Button, notification } from 'antd';
 
+import SegmentControls from './components/SegmentControls';
+import { createDefaultWidget } from '../../../../components/SMWidget';
 import { actions as machineActions } from '../../../../flux/machine';
 import {
   CONNECTION_TYPE_SERIAL,
@@ -11,7 +13,6 @@ import {
   MACHINE_SERIES,
   PROTOCOL_TEXT,
 } from '../../../../constants';
-import Dropdown from '../../components/Dropdown_new';
 import SerialConnection from './SerialConnection';
 import WifiConnection from './WifiConnection';
 import styles from './index.module.scss';
@@ -22,7 +23,6 @@ const i18n = {
 
 class Connection extends PureComponent {
   state = {
-    isDropped: true,
     alertMessage: '',
     showHomeReminder: false,
   };
@@ -59,12 +59,12 @@ class Connection extends PureComponent {
         showHomeReminder: false,
       });
     },
-    onToggleDrop: (prevDropped) => {
-      this.setState({
-        isDropped: !prevDropped,
-      });
-    },
   };
+
+  constructor(props) {
+    super(props);
+    this.props.setTitle('Connection');
+  }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     const { isHomed } = nextProps;
@@ -92,7 +92,7 @@ class Connection extends PureComponent {
 
   render() {
     const { connectionType, isConnected, series, isHomed } = this.props;
-    const { isDropped, alertMessage, showHomeReminder } = this.state;
+    const { alertMessage, showHomeReminder } = this.state;
     const isOriginal = series === MACHINE_SERIES.ORIGINAL.value;
 
     if (alertMessage) {
@@ -100,42 +100,43 @@ class Connection extends PureComponent {
     }
     return (
       <>
-        <Dropdown
-          label={i18n._('Connection')}
-          isDropped={isDropped}
-          onToggleDrop={this.actions.onToggleDrop}
-          wrapperStyle={{
-            minWidth: '300px',
-          }}
-        >
-          <div className={styles.contentWrapper}>
-            <Button
-              onClick={this.actions.onSelectTabSerial}
-              disabled={
-                isConnected && connectionType !== CONNECTION_TYPE_SERIAL
+        <div className={styles.contentWrapper}>
+          <SegmentControls
+            items={[
+              {
+                label: 'Serial Port',
+                value: CONNECTION_TYPE_SERIAL,
+                disabled:
+                  isConnected && connectionType !== CONNECTION_TYPE_SERIAL,
+              },
+              {
+                label: 'Wi-Fi',
+                value: CONNECTION_TYPE_WIFI,
+                disabled:
+                  isConnected && connectionType !== CONNECTION_TYPE_WIFI,
+              },
+            ]}
+            currentValue={connectionType}
+            onChange={(value) => {
+              if (value === CONNECTION_TYPE_SERIAL) {
+                this.actions.onSelectTabSerial();
               }
-            >
-              {i18n._('Serial Port')}
-            </Button>
-            <Button
-              onClick={this.actions.onSelectTabWifi}
-              disabled={isConnected && connectionType !== CONNECTION_TYPE_WIFI}
-            >
-              {i18n._('Wi-Fi')}
-            </Button>
-            <span>{connectionType}</span>
-            {!EXPERIMENTAL_WIFI_CONTROL && <p>{i18n._('Serial Port')}</p>}
-            {connectionType === CONNECTION_TYPE_SERIAL && (
-              <SerialConnection
-                dataSource={this.props.dataSource}
-                style={{ marginTop: '10px' }}
-              />
-            )}
-            {connectionType === CONNECTION_TYPE_WIFI && (
-              <WifiConnection style={{ marginTop: '10px' }} />
-            )}
-          </div>
-        </Dropdown>
+              if (value === CONNECTION_TYPE_WIFI) {
+                this.actions.onSelectTabWifi();
+              }
+            }}
+          />
+          {!EXPERIMENTAL_WIFI_CONTROL && <p>{i18n._('Serial Port')}</p>}
+          {connectionType === CONNECTION_TYPE_SERIAL && (
+            <SerialConnection
+              dataSource={this.props.dataSource}
+              style={{ marginTop: '10px' }}
+            />
+          )}
+          {connectionType === CONNECTION_TYPE_WIFI && (
+            <WifiConnection style={{ marginTop: '10px' }} />
+          )}
+        </div>
         <Modal
           visible={
             isConnected &&
@@ -179,6 +180,7 @@ class Connection extends PureComponent {
 }
 
 Connection.propTypes = {
+  setTitle: PropTypes.func,
   dataSource: PropTypes.string.isRequired,
   connectionType: PropTypes.string.isRequired,
   series: PropTypes.string.isRequired,
@@ -209,4 +211,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(machineActions.updateConnectionState(state)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Connection);
+export default createDefaultWidget(
+  connect(mapStateToProps, mapDispatchToProps)(Connection)
+);

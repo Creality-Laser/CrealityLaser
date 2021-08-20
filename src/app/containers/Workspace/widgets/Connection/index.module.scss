@@ -1,9 +1,7 @@
 @import '../../../../styles/variables.scss';
 
-.content-wrapper {
-  padding: 30px 20px 20px;
+.contentWrapper {
   background-color: $white;
-  border-radius: 0px 0px 20px 20px;
 }
 
 // separator without margin on top and bottom
@@ -15,17 +13,17 @@
   border: 0;
   border-top: 1px solid $border-color;
 
-  &.separator-underline {
+  &.separatorUnderline {
     margin: 0 0 10px;
   }
 }
 
-.connection-state {
+.connectionState {
   width: 100%;
-  &.connection-state-name {
+  &.connectionStateName {
     font-size: $font-size-lead;
   }
-  &.connection-state-icon {
+  &.connectionStateIcon {
     float: right;
     font-size: $font-size-lead;
     margin-right: 12px;
@@ -35,14 +33,14 @@
   }
 }
 
-.connection-state-head {
+.connectionStateHead {
   vertical-align: middle;
-  &.connection-state-head-name {
+  &.connectionStateHeadName {
     margin-left: 10px;
     color: $grey-color;
     vertical-align: middle;
   }
-  &.connection-state-head-icon {
+  &.connectionStateHeadIcon {
     i {
       font-size: $font-size-base;
       vertical-align: middle;
@@ -50,13 +48,14 @@
   }
 }
 
-.port-select-row {
+.portSelectRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.fresh-btn {
+.freshBtn {
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -66,19 +65,14 @@
   color: $white;
   border: none;
   padding: 0;
-  background-color: $btn-hover-color-color;
-  border-color: $btn-hover-color-color;
-
-  &:hover {
-    background-color: $main-hover-color;
-    border-color: $main-hover-color;
-  }
+  background-color: $primary-color;
+  border-color: $primary-color;
 }
 
-.fresh-btn-icon {
+.freshBtnIcon {
 }
 
-.fresh-btn-icon-spin {
+.freshBtnIconSpin {
   animation: iconSpin 2s ease-in infinite forwards;
 }
 

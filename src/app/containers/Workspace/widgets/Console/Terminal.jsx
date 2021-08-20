@@ -201,9 +201,11 @@ class TerminalWrapper extends PureComponent {
     if (!isMaximized) {
       this.term.resize(cols, 16);
     }
-    // const inputHeight = height - (this.terminalContainer.current.clientHeight || rows * lineHeight);
+    // const inputHeight =
+    //   height -
+    //   (this.terminalContainer.current.clientHeight || rows * lineHeight);
     // this.setState({
-    //     inputHeight
+    //   inputHeight,
     // });
   }
 

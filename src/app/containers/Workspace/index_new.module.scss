@@ -1,0 +1,22 @@
+@import '../../styles/variables.scss';
+
+.wrapper {
+  width: 100%;
+  height: calc(100vh - 50px);
+  display: flex;
+}
+.left_row_wrapper {
+  min-width: 340px;
+  max-width: 340px;
+  padding: 10px;
+  outline: 1px solid yellowgreen;
+}
+
+.center_content_wrapper {
+  flex: 1;
+}
+
+.right_row_wrapper {
+  min-width: 200px;
+  outline: 1px solid gray;
+}

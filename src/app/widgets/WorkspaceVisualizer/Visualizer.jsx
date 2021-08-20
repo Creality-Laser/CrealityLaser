@@ -514,7 +514,9 @@ class Visualizer extends Component {
       'hashchange',
       (event) => {
         if (event.newURL.endsWith('workspace')) {
-          this.canvas.current.resizeWindow();
+          if (this.canvas.current) {
+            this.canvas.current.resizeWindow();
+          }
         }
       },
       false
@@ -550,7 +552,9 @@ class Visualizer extends Component {
   subscribe() {
     const tokens = [
       pubsub.subscribe('resize', () => {
-        this.canvas.current.resizeWindow();
+        if (this.canvas.current) {
+          this.canvas.current.resizeWindow();
+        }
       }),
     ];
     this.pubsubTokens = this.pubsubTokens.concat(tokens);

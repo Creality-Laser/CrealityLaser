@@ -44,6 +44,7 @@ export const actions = {
     gcodeRenderingWorker.onmessage = (e) => {
       const data = e.data;
       const { status, value, renderMethod, isDone, boundingBox } = data;
+
       switch (status) {
         case 'succeed': {
           const { modelGroup, gcodeFile } = getState().workspace;
@@ -277,6 +278,7 @@ export const actions = {
         })
       );
       dispatch(actions.loadGcode(gcodeFile));
+
       gcodeRenderingWorker.postMessage({
         func: 'WORKSPACE',
         gcodeFilename: gcodeFile.uploadName,
@@ -354,6 +356,7 @@ export const actions = {
   loadGcode: (gcodeFile) => async (dispatch, getState) => {
     const { connectionStatus, port } = getState().machine;
     gcodeFile = gcodeFile || getState().workspace.gcodeFile;
+
     if (
       connectionStatus !== CONNECTION_STATUS_CONNECTED ||
       gcodeFile === null

@@ -23,6 +23,9 @@ import LaserState from './LaserState';
 import IpInputModal from './Modal/IpInputModal';
 import FeedbackModal from './Modal/FeedbackModal';
 import { Server } from '../../../../flux/machine/Server';
+import CyCleIcon from './components/CyCleIcon';
+
+const { Option } = Select;
 
 const i18n = {
   _: (str) => str,
@@ -225,8 +228,6 @@ class WifiConnection extends PureComponent {
     } = this.props;
     const { server, connectModalVisible, ip, feedBackType } = this.state;
 
-    console.log(discovering);
-
     return (
       <div>
         <div
@@ -235,30 +236,36 @@ class WifiConnection extends PureComponent {
         >
           <div className={styles.portSelectRow}>
             <Select
-              wrapperStyle={{ maxWidth: '230px' }}
-              noResultsText={i18n._('No machines detected.')}
+              size="small"
+              style={{ flex: 1, marginRight: '10px', maxWidth: '260px' }}
               onChange={this.actions.onChangeServerOption}
-              optionRenderer={this.renderServerOptions}
               disabled={isOpen}
-              options={map(servers, (s) => ({
+              placeholder={i18n._('Choose a machine')}
+              value={server.address}
+            >
+              {map(servers, (s) => ({
                 label: s.name,
                 value: s.address,
                 name: s.name,
                 address: s.address,
-              }))}
-              placeholder={i18n._('Choose a machine')}
-              value={server.address}
-              valueRenderer={this.renderServerValue}
-            />
-            {/* <button
-                            type="button"
-                            className={styles.freshBtn}
-                            title={i18n._('Refresh')}
-                            onClick={this.actions.onRefreshServers}
-                            disabled={isOpen}
-                        >
-                            <i className={classNames("iconfont", styles.freshBtnIcon, discovering ? styles.freshBtnIconSpin : "")}>&#xe6cb;</i>
-                        </button> */}
+              })).map((server) => {
+                return (
+                  <Option key={server.address}>
+                    <div
+                      style={{
+                        whiteSpace: 'nowrap',
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      <i>
+                        {server.name} ({server.address})
+                      </i>
+                    </div>
+                  </Option>
+                );
+              })}
+            </Select>
             <button
               type="button"
               className={styles.freshBtn}
@@ -268,9 +275,11 @@ class WifiConnection extends PureComponent {
               }}
               disabled={isOpen}
             >
-              <i className={classNames('iconfont', styles.freshBtnIcon)}>
-                &#xe6ad;
-              </i>
+              <span
+                className={classNames(discovering && styles.freshBtnIconSpin)}
+              >
+                <CyCleIcon />
+              </span>
             </button>
           </div>
         </div>
@@ -317,7 +326,7 @@ class WifiConnection extends PureComponent {
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {!isConnected && (
             <Button
-              wrapperStyle={{ width: '60px', height: '24px' }}
+              size="small"
               type="primary"
               disabled={isOpen}
               onClick={this.actions.openServer}
@@ -327,7 +336,7 @@ class WifiConnection extends PureComponent {
           )}
           {isConnected && (
             <Button
-              wrapperStyle={{ width: '60px', height: '24px' }}
+              size="small"
               type="danger-linear"
               onClick={this.actions.closeServer}
             >
@@ -393,7 +402,7 @@ class WifiConnection extends PureComponent {
               >
                 <Button
                   onClick={this.actions.hideWifiConnectionMessage}
-                  wrapperStyle={{
+                  style={{
                     width: '80px',
                     height: '30px',
                     marginRight: '20px',
@@ -407,7 +416,7 @@ class WifiConnection extends PureComponent {
                     this.props.closeServer();
                   }}
                   type="primary"
-                  wrapperStyle={{ width: '80px', height: '30px' }}
+                  style={{ width: '80px', height: '30px' }}
                 >
                   {i18n._('OK')}
                 </Button>

@@ -16,6 +16,14 @@
   align-items: center;
 }
 
+.divider {
+  display: inline-block;
+  width: 1px;
+  margin: 0 15px;
+  min-height: 100%;
+  background-color: white;
+}
+
 .logo_wrapper {
   display: flex;
   align-items: center;
@@ -32,4 +40,24 @@
   line-height: 1;
   color: white;
   margin-bottom: 0;
+}
+
+.tab_link {
+  padding: 3px 8px;
+  border-radius: 3px;
+}
+
+.tab_active {
+  position: relative;
+}
+
+.tab_active::after {
+  display: inline-block;
+  position: absolute;
+  content: ' ';
+  width: 50%;
+  height: 3px;
+  background-color: white;
+  bottom: -10px;
+  left: 25%;
 }

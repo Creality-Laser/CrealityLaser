@@ -1,0 +1,35 @@
+@import '../../../../../../styles/variables.scss';
+
+.wrapper {
+  display: flex;
+  height: 28px;
+}
+.item {
+  cursor: pointer;
+  flex: 1;
+  border: 1px solid $primary-color;
+  border-right: none;
+  background-color: $white;
+}
+.item:first-child {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+.item:last-child {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+.item:last-child {
+  border-right: none;
+  border-right: 1px solid $primary-color;
+}
+.item_active {
+  background-color: $primary-color;
+  color: $white;
+}
+.item_disabled {
+  background-color: $gray;
+  color: $white;
+  cursor: not-allowed;
+  border-color: $gray;
+}
