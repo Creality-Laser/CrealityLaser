@@ -187,7 +187,6 @@ class GcodeParameters extends PureComponent {
     // const isBW = mode === 'bw';
     const isGreyscale = mode === 'greyscale';
     // const isVector = mode === 'vector';
-
     return (
       <>
         <ParametersHead
@@ -312,7 +311,7 @@ class GcodeParameters extends PureComponent {
                 </ParameterItemValue>
               </ParameterItem>
             )}
-            {false && dwellTime !== ABSENT_VALUE && (
+            {dwellTime !== ABSENT_VALUE && (
               <ParameterItem
                 popover={{
                   title: t('Dwell Time'),
@@ -329,7 +328,7 @@ class GcodeParameters extends PureComponent {
                     step={0.1}
                     onChange={actions.onChangeDwellTime}
                     style={{ width: '65px' }}
-                    addonAfter="mm/min"
+                    addonAfter="ms"
                   />
                 </ParameterItemValue>
               </ParameterItem>

@@ -15,19 +15,19 @@ import {
 } from '../../shared/lib/SVGParser/SvgToString';
 
 function bit(x) {
-  // if (x >= 128) {
-  //   return 255;
-  // } else {
-  //   return 0;
-  // }
-  const step = 30;
-  if (x < step) {
-    return 0;
-  } else if (255 - x <= step) {
+  if (x >= 128) {
     return 255;
+  } else {
+    return 0;
   }
+  // const step = 30;
+  // if (x < step) {
+  //   return 0;
+  // } else if (255 - x <= step) {
+  //   return 255;
+  // }
 
-  return x - (x % step);
+  // return x - (x % step);
 }
 
 function normalize(x) {
@@ -79,7 +79,7 @@ const algorithms = {
 };
 
 async function processLaserGreyscale(modelInfo) {
-  const { uploadName } = modelInfo;
+  const { uploadName, mode } = modelInfo;
   const { width, height, rotationZ = 0, flip = 0 } = modelInfo.transformation;
 
   const { invert, contrast, brightness, whiteClip, algorithm } =
@@ -130,42 +130,88 @@ async function processLaserGreyscale(modelInfo) {
       }
     });
 
-  // serpentine path
-  for (let y = 0; y < img.bitmap.height; y++) {
-    const reverse = (y & 1) === 1;
+  if (mode === 'greyscale') {
+    // serpentine path
+    for (let y = 0; y < img.bitmap.height; y++) {
+      const reverse = (y & 1) === 1;
 
-    for (
-      let x = reverse ? img.bitmap.width - 1 : 0;
-      reverse ? x >= 0 : x < img.bitmap.width;
-      reverse ? x-- : x++
-    ) {
-      const index = (y * img.bitmap.width + x) << 2;
-      const origin = img.bitmap.data[index];
+      for (
+        let x = reverse ? img.bitmap.width - 1 : 0;
+        reverse ? x >= 0 : x < img.bitmap.width;
+        reverse ? x-- : x++
+      ) {
+        const index = (y * img.bitmap.width + x) << 2;
+        const origin = img.bitmap.data[index];
 
-      img.bitmap.data[index] = bit(origin);
-      img.bitmap.data[index + 1] = img.bitmap.data[index];
-      img.bitmap.data[index + 2] = img.bitmap.data[index];
-      const err = origin - img.bitmap.data[index];
+        img.bitmap.data[index] = bit(origin);
+        img.bitmap.data[index + 1] = img.bitmap.data[index];
+        img.bitmap.data[index + 2] = img.bitmap.data[index];
+        const err = origin - img.bitmap.data[index];
 
-      for (let i = 0; i < matrixWidth; i++) {
-        for (let j = 0; j < matrixHeight; j++) {
-          if (matrix[j][i] > 0) {
-            const x2 = reverse
-              ? x - (i - matrixOffset)
-              : x + (i - matrixOffset);
-            const y2 = y + j;
-            if (x2 >= 0 && x2 < img.bitmap.width && y2 < img.bitmap.height) {
-              const idx2 =
-                index + (x2 - x) * 4 + (y2 - y) * img.bitmap.width * 4;
-              img.bitmap.data[idx2] = normalize(
-                img.bitmap.data[idx2] + matrix[j][i] * err
-              );
+        for (let i = 0; i < matrixWidth; i++) {
+          for (let j = 0; j < matrixHeight; j++) {
+            if (matrix[j][i] > 0) {
+              const x2 = reverse
+                ? x - (i - matrixOffset)
+                : x + (i - matrixOffset);
+              const y2 = y + j;
+              if (x2 >= 0 && x2 < img.bitmap.width && y2 < img.bitmap.height) {
+                const idx2 =
+                  index + (x2 - x) * 4 + (y2 - y) * img.bitmap.width * 4;
+                img.bitmap.data[idx2] = normalize(
+                  img.bitmap.data[idx2] + matrix[j][i] * err
+                );
+              }
             }
           }
         }
       }
     }
   }
+
+  return new Promise((resolve) => {
+    img.write(`${DataStorage.tmpDir}/${outputFilename}`, () => {
+      resolve({
+        filename: outputFilename,
+      });
+    });
+  });
+}
+
+async function processLaserLineToLine(modelInfo) {
+  const { uploadName } = modelInfo;
+  const { width, height, rotationZ = 0, flip = 0 } = modelInfo.transformation;
+  const { invert, contrast, brightness, whiteClip } = modelInfo.config;
+  const { density = 4 } = modelInfo.gcodeConfig || {};
+  const outputFilename = pathWithRandomSuffix(uploadName);
+  const img = await Jimp.read(`${DataStorage.tmpDir}/${uploadName}`);
+  img
+    .background(0xffffffff)
+    .brightness((brightness - 50.0) / 50)
+    .quality(100)
+    .contrast((contrast - 50.0) / 50)
+    .greyscale()
+    .flip(!!Math.floor(flip / 2), !!(flip % 2))
+    .resize(width * density, height * density)
+    .rotate((-rotationZ * 180) / Math.PI)
+    .scan(0, 0, img.bitmap.width, img.bitmap.height, (x, y, idx) => {
+      const data = img.bitmap.data;
+
+      if (data[idx + 3] === 0) {
+        data[idx] = 255;
+      } else {
+        if (invert) {
+          data[idx] = 255 - data[idx];
+          if (data[idx] < 255 - whiteClip) {
+            data[idx] = 0;
+          }
+        } else {
+          if (data[idx] >= whiteClip) {
+            data[idx] = 255;
+          }
+        }
+      }
+    });
 
   return new Promise((resolve) => {
     img.write(`${DataStorage.tmpDir}/${outputFilename}`, () => {

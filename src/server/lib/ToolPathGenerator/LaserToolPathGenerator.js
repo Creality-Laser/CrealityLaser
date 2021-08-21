@@ -155,12 +155,13 @@ class LaserToolPathGenerator extends EventEmitter {
       (mode === 'greyscale' && movementMode === 'greyscale-line')
     ) {
       workingGcode = await this.generateGcodeBW(modelInfo, modelPath);
-    } else if (mode === 'greyscale') {
-      // workingGcode = await this.generateGcodeGreyscale_origin(
-      //   modelInfo,
-      //   modelPath
-      // );
+    } else if (mode === 'greyscale' && movementMode === 'greyscale-dot') {
+      workingGcode = await this.generateGcodeGreyscale_origin(
+        modelInfo,
+        modelPath
+      );
       // workingGcode = await this.generateGcodeGreyscale(modelInfo, modelPath);
+    } else if (mode === 'linetoline') {
       workingGcode = await this.generateGcodeGreyscale_new(
         modelInfo,
         modelPath
@@ -274,11 +275,9 @@ class LaserToolPathGenerator extends EventEmitter {
 
   async generateGcodeGreyscale_origin(modelInfo, modelPath) {
     const { gcodeConfigPlaceholder, config, gcodeConfig } = modelInfo;
-    const { fixedPowerEnabled, fixedPower } = gcodeConfig;
-    const { workSpeed, dwellTime } = gcodeConfigPlaceholder;
+    const { fixedPowerEnabled, fixedPower, dwellTime } = gcodeConfig;
+    const { workSpeed } = gcodeConfigPlaceholder;
     const { bwThreshold } = config;
-
-    const dotPower = fixedPowerEnabled ? fixedPower * 10 : 1000;
 
     const img = await Jimp.read(modelPath);
     img.mirror(false, true);
@@ -295,81 +294,40 @@ class LaserToolPathGenerator extends EventEmitter {
 
     let firstTurnOn = true;
     function turnOnLaser() {
-      // if (firstTurnOn && fixedPowerEnabled) {
-      //   firstTurnOn = false;
-      //   const powerStrength = Math.floor((fixedPower * 255) / 100);
-      //   return `M3 P${fixedPower} S${powerStrength}`;
-      // }
-      // return 'M3';
-
       if (firstTurnOn) {
         firstTurnOn = false;
-        if (fixedPowerEnabled) {
-          return `M3 S${fixedPower * 10}`;
-        }
-        return `M3 S1000`;
+        const powerStrength = Math.floor((fixedPower * 1000) / 100);
+        return `M3 S${powerStrength}`;
       }
-      return `M3`;
+      return 'M3';
     }
 
     const content = [];
-    // content.push(`G1 F${workSpeed}`);
     content.push(`G1 F${workSpeed}`);
-    content.push(`M4 S0`);
-
-    let isNewRow = false;
+    const dTime = dwellTime / 1000;
 
     for (let i = 0; i < width; ++i) {
       const isReverse = i % 2 === 0;
-
-      isNewRow = true;
-
       for (
         let j = isReverse ? height : 0;
         isReverse ? j >= 0 : j < height;
         isReverse ? j-- : j++
       ) {
         const idx = j * width * 4 + i * 4;
-
-        // should print point.
         if (img.bitmap.data[idx] < bwThreshold) {
-          // if (isNewRow) {
-          //   content.push(`G0 X${normalizer.x(i)} Y${normalizer.y(j)} S0`);
-          //   content.push(`G1 Y${normalizer.y(j)} S${dotPower}`);
-          //   isNewRow = false;
-          // } else {
-          //   content.push(`Y${normalizer.y(j)} S${dotPower}`);
-          // }
-
-          // content.push('S0');
-          // content.push(`G1 X${normalizer.x(i)} Y${normalizer.y(j)}`);
-          // content.push(turnOnLaser());
-          // content.push(`G4 P${dwellTime}`);
-          // content.push('M5');
-
-          content.push(
-            `G1 X${normalizer.x(i)} Y${normalizer.y(j)} S${dotPower}`
-          );
-          content.push(
-            `G0 X${normalizer.x(i)} Y${
-              isReverse
-                ? normalizer.y(j) - (normalizer.y(j) - normalizer.y(j - 1)) / 2
-                : (normalizer.y(j + 1) - normalizer.y(j)) / 2 + normalizer.y(j)
-            } S0`
-          );
+          content.push(`G1 X${normalizer.x(i)} Y${normalizer.y(j)}`);
+          content.push(turnOnLaser());
+          content.push(`G4 P${dTime}`);
+          content.push('M05');
         }
       }
-
-      content.push('S0');
       const p = i / width;
       if (p - progress > 0.05) {
         progress = p;
         this.emit('progress', progress);
       }
     }
-    // content.push('G0 X0 Y0');
-    content.push('M5');
-    content.push('G0 X0 Y0 Z0');
+    content.push('G0 X0 Y0');
 
     return content;
   }

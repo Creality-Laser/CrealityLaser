@@ -61,7 +61,7 @@ class ToolPathRenderer {
     }
     if (headType === 'laser') {
       if (mode === 'greyscale' && movementMode === 'greyscale-dot') {
-        return this.parseToLine(data);
+        return this.parseToPoints(data);
       } else {
         return this.parseToLine(data);
       }
