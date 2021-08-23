@@ -436,6 +436,8 @@ class Canvas extends Component {
   }
 
   render() {
+    const { backgroundColor = '#eee' } = this.props;
+
     if (!Detector.webgl) {
       return null;
     }
@@ -443,7 +445,7 @@ class Canvas extends Component {
       <div
         ref={this.node}
         style={{
-          backgroundColor: '#eee',
+          backgroundColor,
         }}
       />
     );
@@ -451,6 +453,7 @@ class Canvas extends Component {
 }
 
 Canvas.propTypes = {
+  backgroundColor: PropTypes.string,
   backgroundGroup: PropTypes.object,
   modelGroup: PropTypes.object.isRequired,
   printableArea: PropTypes.object.isRequired,

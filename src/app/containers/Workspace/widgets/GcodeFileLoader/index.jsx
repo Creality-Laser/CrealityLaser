@@ -9,7 +9,7 @@ import path from 'path';
 import request from 'superagent';
 import { Modal, Button, Checkbox } from 'antd';
 
-import Dropdown from '../../components/Dropdown_new';
+import { createDefaultWidget } from '../../../../components/SMWidget';
 import { pathWithRandomSuffix } from '../../../../../shared/lib/random-utils';
 import styles from './index.module.scss';
 import {
@@ -40,7 +40,6 @@ class GcodeFileLoader extends PureComponent {
     loadToWorkspaceOnLoad: false,
     selectFileName: '',
     selectFileType: '',
-    isDropped: false,
     fileUploadProgress: 0,
     fileUploading: false,
   };
@@ -222,12 +221,12 @@ class GcodeFileLoader extends PureComponent {
         );
       });
     },
-    onToggleDrop: (prevDropped) => {
-      this.setState({
-        isDropped: !prevDropped,
-      });
-    },
   };
+
+  constructor(props) {
+    super(props);
+    this.props.setTitle('Gcode Files');
+  }
 
   componentDidMount() {
     for (let i = 0; i < 5; i++) {
@@ -258,7 +257,6 @@ class GcodeFileLoader extends PureComponent {
       loadToWorkspaceOnLoad,
       selectFileName,
       selectFileType,
-      isDropped,
       fileUploading,
       fileUploadProgress,
     } = this.state;
@@ -268,182 +266,150 @@ class GcodeFileLoader extends PureComponent {
 
     return (
       <>
-        <Dropdown
-          label={i18n._('G-code Files')}
-          isDropped={isDropped}
-          onToggleDrop={this.actions.onToggleDrop}
-          wrapperStyle={{
-            minWidth: '230px',
-          }}
-        >
-          <div className={styles.contentWrapper}>
-            <input
-              ref={this.fileInput}
-              type="file"
-              accept=".gcode,.nc,.cnc"
-              style={{ display: 'none' }}
-              multiple={false}
-              onChange={actions.onChangeFile}
+        <div className={styles.contentWrapper}>
+          <input
+            ref={this.fileInput}
+            type="file"
+            accept=".gcode,.nc,.cnc"
+            style={{ display: 'none' }}
+            multiple={false}
+            onChange={actions.onChangeFile}
+          />
+          <Button
+            type="primary"
+            onClick={actions.onClickToUpload}
+            block
+            size="small"
+          >
+            {i18n._('Open G-code File')}
+          </Button>
+          <div
+            style={{ marginTop: '10px', marginBottom: '16px' }}
+            className={styles.previewRow}
+          >
+            <span style={{ paddingLeft: '4px' }}>
+              {i18n._('Preview in workspace')}
+            </span>
+            <Checkbox
+              checked={loadToWorkspaceOnLoad}
+              onChange={actions.onChangeShouldPreview}
+              style={{ width: '20px', height: '20px' }}
             />
-            <Button
-              type="primary"
-              onClick={actions.onClickToUpload}
-              style={{ height: '30px' }}
-            >
-              {i18n._('Open G-code File')}
-            </Button>
-            <div
-              style={{ marginTop: '10px', marginBottom: '16px' }}
-              className={styles.previewRow}
-            >
-              <span style={{ paddingLeft: '4px' }}>
-                {i18n._('Preview in workspace')}
-              </span>
-              <Checkbox
-                checked={loadToWorkspaceOnLoad}
-                onChange={actions.onChangeShouldPreview}
-                style={{ width: '20px', height: '20px' }}
-              />
-            </div>
-            {gcodeFiles && gcodeFiles.length > 0 && (
-              <div className={styles.gcodeFilesWrapper}>
-                {_.map(gcodeFiles, (gcodeFile) => {
-                  const name =
-                    gcodeFile.name.length > 33
-                      ? `${gcodeFile.name.substring(
-                          0,
-                          13
-                        )}...${gcodeFile.name.substring(
-                          gcodeFile.name.length - 10,
-                          gcodeFile.name.length
-                        )}`
-                      : gcodeFile.name;
-                  let size = '';
-                  const { isRenaming } = gcodeFile;
+          </div>
+          {gcodeFiles && gcodeFiles.length > 0 && (
+            <div className={styles.gcodeFilesWrapper}>
+              {_.map(gcodeFiles, (gcodeFile) => {
+                const name =
+                  gcodeFile.name.length > 33
+                    ? `${gcodeFile.name.substring(
+                        0,
+                        13
+                      )}...${gcodeFile.name.substring(
+                        gcodeFile.name.length - 10,
+                        gcodeFile.name.length
+                      )}`
+                    : gcodeFile.name;
+                let size = '';
+                const { isRenaming } = gcodeFile;
 
-                  if (gcodeFile.size / 1024 / 1024 > 1) {
-                    size = `${(gcodeFile.size / 1024 / 1024).toFixed(2)} MB`;
-                  } else if (gcodeFile.size / 1024 > 1) {
-                    size = `${(gcodeFile.size / 1024).toFixed(2)} KB`;
-                  } else {
-                    size = `${gcodeFile.size.toFixed(2)} B`;
-                  }
-                  const lastModifiedDate = new Date(gcodeFile.lastModifiedDate);
-                  const date = `${lastModifiedDate.getFullYear()}.${lastModifiedDate.getMonth()}.${lastModifiedDate.getDay()}   ${lastModifiedDate.getHours()}:${lastModifiedDate.getMinutes()}`;
-                  return (
+                if (gcodeFile.size / 1024 / 1024 > 1) {
+                  size = `${(gcodeFile.size / 1024 / 1024).toFixed(2)} MB`;
+                } else if (gcodeFile.size / 1024 > 1) {
+                  size = `${(gcodeFile.size / 1024).toFixed(2)} KB`;
+                } else {
+                  size = `${gcodeFile.size.toFixed(2)} B`;
+                }
+                const lastModifiedDate = new Date(gcodeFile.lastModifiedDate);
+                const date = `${lastModifiedDate.getFullYear()}.${lastModifiedDate.getMonth()}.${lastModifiedDate.getDay()}   ${lastModifiedDate.getHours()}:${lastModifiedDate.getMinutes()}`;
+
+                return (
+                  <div key={pathWithRandomSuffix(gcodeFile.uploadName) + name}>
                     <div
-                      key={pathWithRandomSuffix(gcodeFile.uploadName) + name}
+                      className={classNames(styles.gcodeFile, {
+                        [styles.selected]:
+                          selectFileName === gcodeFile.uploadName,
+                      })}
+                      onClick={(event) =>
+                        actions.onSelectFile(gcodeFile.uploadName, name, event)
+                      }
+                      onKeyDown={noop}
+                      role="button"
+                      tabIndex={0}
                     >
-                      <div
-                        className={classNames(styles['gcode-file'], {
-                          [styles.selected]:
-                            selectFileName === gcodeFile.uploadName,
-                        })}
-                        onClick={(event) =>
-                          actions.onSelectFile(
-                            gcodeFile.uploadName,
-                            name,
-                            event
-                          )
-                        }
-                        onKeyDown={noop}
-                        role="button"
-                        tabIndex={0}
+                      <button
+                        type="button"
+                        className={classNames(styles.gcodeFileRemove)}
+                        onClick={() => {
+                          actions.onRemoveFile(gcodeFile);
+                        }}
                       >
-                        <button
-                          type="button"
-                          className={classNames(styles['gcode-file-remove'])}
-                          onClick={() => {
-                            actions.onRemoveFile(gcodeFile);
-                          }}
-                        >
-                          <i
-                            className={classNames(
-                              'iconfont',
-                              styles['gcode-file-remove-icon']
-                            )}
-                          >
-                            &#xe6ad;
-                          </i>
-                        </button>
-                        {/* <div className={styles['gcode-file-img']}>
-                                        <img
-                                            src={gcodeFile.thumbnail}
-                                            alt=""
-                                        />
-                                    </div> */}
-                        <div
+                        <i
                           className={classNames(
-                            'input-text',
-                            styles['gcode-file-text']
+                            'iconfont',
+                            styles.gcodeFileRemoveIcon
                           )}
                         >
+                          x
+                        </i>
+                      </button>
+                      <div
+                        className={classNames(
+                          'input-text',
+                          styles.gcodeFileText
+                        )}
+                      >
+                        <div
+                          className={classNames(styles.gcodeFileTextName, {
+                            [styles.haveOpacity]: isRenaming === false,
+                          })}
+                          // onClick={(event) => actions.onRenameStart(uploadName, index, event)}
+                        >
                           <div
-                            className={classNames(
-                              styles['gcode-file-text-name'],
-                              { [styles.haveOpacity]: isRenaming === false }
-                            )}
-                            // onClick={(event) => actions.onRenameStart(uploadName, index, event)}
+                            className={styles.gcodeFileTextRename}
+                            title={gcodeFile.name}
                           >
-                            <div
-                              className={styles['gcode-file-text-rename']}
-                              title={gcodeFile.name}
-                            >
-                              {name}
-                            </div>
+                            {name}
                           </div>
-                          {/* <div className={classNames(
-                                            styles['gcode-file-input-name'],
-                                            { [styles.haveOpacity]: isRenaming === true }
-                                        )}
-                                        >
-                                            <input
-                                                defaultValue={gcodeFile.name.replace(/(.gcode|.cnc|.nc)$/, '')}
-                                                className={classNames('input-select')}
-                                                onBlur={() => actions.onRenameEnd(uploadName, index)}
-                                                onKeyDown={(event) => actions.onKeyDown(event)}
-                                                ref={this.changeNameInput[index]}
-                                            />
-                                        </div> */}
-                          <div className={styles['gcode-file-text-info']}>
-                            <span>{size}</span>
-                            <span>{date}</span>
-                          </div>
+                        </div>
+                        <div className={styles.gcodeFileTextInfo}>
+                          <span>{size}</span>
+                          <span>{date}</span>
                         </div>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
-            )}
-            {gcodeFiles && gcodeFiles.length > 0 && (
-              <hr className={styles.divider} />
-            )}
-            <Button
-              type="primary"
-              disabled={!hasFile}
-              onClick={actions.loadGcodeToWorkspace}
-              style={{ height: '30px' }}
-            >
-              {i18n._('Load G-code to Workspace')}
-            </Button>
-            <Button
-              type="primary"
-              disabled={
-                !(
-                  hasFile &&
-                  isConnected &&
-                  isHeadType &&
-                  connectionType === CONNECTION_TYPE_WIFI
-                )
-              }
-              onClick={actions.sendFile}
-              style={{ height: '30px', marginTop: '10px' }}
-            >
-              {i18n._('Send to IVI via Wi-Fi')}
-            </Button>
-          </div>
-        </Dropdown>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          {gcodeFiles && gcodeFiles.length > 0 && (
+            <hr className={styles.divider} />
+          )}
+          <Button
+            disabled={!hasFile}
+            onClick={actions.loadGcodeToWorkspace}
+            size="small"
+            block
+          >
+            {i18n._('Load G-code to Workspace')}
+          </Button>
+          <Button
+            disabled={
+              !(
+                hasFile &&
+                isConnected &&
+                isHeadType &&
+                connectionType === CONNECTION_TYPE_WIFI
+              )
+            }
+            size="small"
+            onClick={actions.sendFile}
+            style={{ marginTop: '10px' }}
+            block
+          >
+            {i18n._('Send to IVI via Wi-Fi')}
+          </Button>
+        </div>
         <Modal
           visible={fileUploading}
           onCancel={() => this.setState({ fileUploading: false })}
@@ -474,6 +440,7 @@ class GcodeFileLoader extends PureComponent {
 }
 
 GcodeFileLoader.propTypes = {
+  setTitle: PropTypes.func,
   gcodeFiles: PropTypes.array.isRequired,
 
   headType: PropTypes.string,
@@ -519,4 +486,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(GcodeFileLoader);
+export default createDefaultWidget(
+  connect(mapStateToProps, mapDispatchToProps)(GcodeFileLoader)
+);

@@ -31,7 +31,9 @@ class OperatorGroup extends PureComponent {
     return (
       <>
         <Button
-          style={{ width: '324px', height: '24px', marginTop: '12px' }}
+          style={{ marginTop: '12px' }}
+          block
+          size="small"
           type="primary"
           disabled={!canClick}
           onClick={executeGcodeAutoHome}
@@ -48,12 +50,14 @@ class OperatorGroup extends PureComponent {
         >
           <Popover
             title={i18n._('Set Work Origin')}
+            placement="leftTop"
             content={i18n._(
               'Set the current position of the head as the work origin.'
             )}
           >
             <Button
-              style={{ width: '155px', height: '24px' }}
+              size="small"
+              style={{ width: '140px' }}
               disabled={!canClick || isCurrentWith3DPHead}
               onClick={() => executeGcode('G92 X0 Y0 Z0;\nM500;')}
             >
@@ -62,14 +66,15 @@ class OperatorGroup extends PureComponent {
           </Popover>
           <Popover
             title={i18n._('Run Boundary')}
+            placement="leftTop"
             content={
-              <div>
+              <div style={{ maxWidth: '260px' }}>
                 <p>
                   {i18n._(
                     'Click to check the boundary of the image to be engraved.'
                   )}
                 </p>
-                <br />
+                {/* <br /> */}
                 <p>
                   {i18n._(
                     `Note: If you are using the CNC Carving Module, make sure the carving bit will not \
@@ -80,7 +85,8 @@ class OperatorGroup extends PureComponent {
             }
           >
             <Button
-              style={{ width: '155px', height: '24px' }}
+              size="small"
+              style={{ width: '140px' }}
               disabled={!canClick || isCurrentWith3DPHead}
               onClick={runBoundary}
             >
@@ -98,10 +104,12 @@ class OperatorGroup extends PureComponent {
         >
           <Popover
             title={i18n._('Go To Work Origin')}
+            placement="leftTop"
             content={i18n._('Move the head to the last saved work origin.')}
           >
             <Button
-              style={{ width: '155px', height: '24px' }}
+              size="small"
+              style={{ width: '140px' }}
               disabled={!canClick || isCurrentWith3DPHead}
               onClick={() =>
                 this.setState({ goToWorkOriginModalVisible: true })
@@ -112,12 +120,14 @@ class OperatorGroup extends PureComponent {
           </Popover>
           <Popover
             title={i18n._('Remove Work Origin')}
+            placement="leftTop"
             content={i18n._(
               'Remove the current position of the head as the work origin.'
             )}
           >
             <Button
-              style={{ width: '155px', height: '24px' }}
+              size="small"
+              style={{ width: '140px' }}
               disabled={!canClick || isCurrentWith3DPHead}
               onClick={() => executeGcode('G92.1;\nM500;')}
             >
@@ -125,7 +135,7 @@ class OperatorGroup extends PureComponent {
             </Button>
           </Popover>
         </div>
-        <div
+        {/* <div
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -138,11 +148,8 @@ class OperatorGroup extends PureComponent {
             content={i18n._('Return to Saved Position in Machine.')}
           >
             <Button
-              style={{
-                width: '155px',
-                height: '24px',
-                fontSize: '12px',
-              }}
+              size="small"
+              style={{ width: '140px' }}
               disabled={!canClick}
               onClick={() => {
                 executeGcode('G61 XYZ S0');
@@ -156,14 +163,15 @@ class OperatorGroup extends PureComponent {
             content={i18n._('Save Current Location in Machine.')}
           >
             <Button
-              style={{ width: '155px', height: '24px' }}
+              size="small"
+              style={{ width: '140px' }}
               disabled={!canClick}
               onClick={() => executeGcode('G60 S0')}
             >
               {i18n._('Save Current Location')}
             </Button>
           </Popover>
-        </div>
+        </div> */}
         <Modal
           visible={goToWorkOriginModalVisible}
           onCancel={() => this.setState({ goToWorkOriginModalVisible: false })}

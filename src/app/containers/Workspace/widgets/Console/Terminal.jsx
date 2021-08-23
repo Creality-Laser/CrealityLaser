@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import log from '../../../../lib/log';
-import styles from './index.module.scss';
+// import styles from './index.module.scss';
 
 // .widget-header-absolute widget-content-absolute
 class TerminalWrapper extends PureComponent {
@@ -255,15 +255,21 @@ class TerminalWrapper extends PureComponent {
     const inputHeight = `${this.state.inputHeight}px`;
     return (
       <div
-        className={classNames(
-          isDefault ? styles.terminalContentAbsolute : styles.terminalContent
-        )}
+        // className={classNames(
+        //   isDefault ? styles.terminalContentAbsolute : styles.terminalContent
+        // )}
+        style={{
+          margin: '-15px -10px -20px',
+        }}
       >
         <div
           ref={this.terminalContainer}
-          className={classNames(
-            isMaximized ? styles.maximizedTernimalWrapper : ''
-          )}
+          // className={classNames(
+          //   isMaximized ? styles.maximizedTernimalWrapper : ''
+          // )}
+          style={{
+            maxHeight: '300px',
+          }}
         />
         <input
           ref={this.input}

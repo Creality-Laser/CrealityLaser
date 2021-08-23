@@ -1,9 +1,6 @@
 @import '../../../../../styles/variables.scss';
 
-.display-panel-wrapper {
-}
-
-.display-panel-table {
+.displayPanelTable {
   width: 330px;
   border: 1px solid #ddd;
   border-collapse: separate !important;
@@ -32,18 +29,18 @@
   }
 }
 
-.display-panel-table-disabled {
+.displayPanelTableDisabled {
   thead tr th {
     background-color: #eee;
     color: #333;
   }
 }
 
-.dropdown-wrapper {
+.dropdownWrapper {
   position: relative;
 }
 
-.dropdown-header {
+.dropdownHeader {
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -60,7 +57,7 @@
     background: $main-hover-color;
   }
 }
-.dropdown-header-disabled {
+.dropdownHeaderDisabled {
   cursor: not-allowed;
   background-color: #ddd;
   color: #fff;
@@ -70,21 +67,21 @@
     color: #fff;
   }
 }
-.dropdown-header-label {
+.dropdownHeaderLabel {
   font-size: 12px;
 }
-.dropdown-icon {
+.dropdownIcon {
   display: inline-block;
   font-size: 12px;
-  transform: scale(0.5) rotate(90deg);
+  // transform: rotate(180deg);
   transition: all 0.3s;
 }
 
-.dropdown-icon-up {
-  transform: scale(0.5) rotate(-90deg);
+.dropdownIconUp {
+  // transform: rotate(-90deg);
 }
 
-.dropdown-panel-wrapper {
+.dropdownPanelWrapper {
   position: absolute;
   top: calc(100% + 3px);
   right: 0;
@@ -94,7 +91,7 @@
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.16);
   border-radius: 3px;
 }
-.dropdown-item {
+.dropdownItem {
   cursor: pointer;
   font-size: 10px;
   color: #333;
@@ -106,7 +103,7 @@
   }
 }
 
-.dropdown-item-disabled {
+.dropdownItemDisabled {
   cursor: not-allowed;
   color: #999;
   background-color: #eee;
@@ -115,47 +112,47 @@
   }
 }
 
-.keypad-wrapper {
+.keypadWrapper {
   display: flex;
   align-items: center;
   margin-top: 13px;
 }
 
-.jogpad-wrapper {
+.jogpadWrapper {
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
 }
-.jogpad-col {
+.jogpadCol {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.jogpad-col1 {
+.jogpadCol1 {
   width: 55px;
 }
-.jogpad-col2 {
+.jogpadCol2 {
   width: 55px;
 }
 
-.jogpad-col3 {
+.jogpadCol3 {
   width: 180px;
 }
 
-.jogpad-col-label {
+.jogpadColLabel {
   color: #333;
   margin-bottom: 6px;
 }
 
-.jogpad-scale-wrapper {
+.jogpadScaleWrapper {
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
   align-items: center;
 }
 
-.jogpad-scale-item {
+.jogpadScaleItem {
   cursor: pointer;
   display: inline-block;
   width: 40px;
@@ -181,17 +178,17 @@
   }
 }
 
-.jogpad-scale-item-actived {
+.jogpadScaleItemActived {
   background-color: #bfd2ff;
 }
 
-.jogpad-btns-wrapper {
+.jogpadBtnsWrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.jogpad-btn {
+.jogpadBtn {
   cursor: pointer;
   background-color: #e8f0ff;
   color: $btn-hover-color-color;
@@ -202,18 +199,18 @@
   }
 }
 
-.jogpad-btn-triangle {
+.jogpadBtnTriangle {
   position: relative;
 
-  &:hover .jogpad-btn-triangle-background svg path {
+  &:hover .jogpadBtnTriangleBackground svg path {
     fill: #bfd2ff;
   }
 }
 
-.jogpad-btn-triangle-background,
-.jogpad-btn-triangle-background-left,
-.jogpad-btn-triangle-background-right,
-.jogpad-btn-triangle-background-bottom {
+.jogpadBtnTriangleBackground,
+.jogpadBtnTriangleBackgroundLeft,
+.jogpadBtnTriangleBackgroundRight,
+.jogpadBtnTriangleBackgroundBottom {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -225,70 +222,72 @@
   }
 }
 
-.jogpad-btn-triangle-background-left {
+.jogpadBtnTriangleBackgroundLeft {
   transform: translate(-50%, -50%) rotate(-90deg);
 }
 
-.jogpad-btn-triangle-background-right {
+.jogpadBtnTriangleBackgroundRight {
   transform: translate(-50%, -50%) rotate(90deg);
 }
 
-.jogpad-btn-triangle-background-bottom {
+.jogpadBtnTriangleBackgroundBottom {
   transform: translate(-50%, -50%) rotate(180deg);
 }
 
-.jogpad-btn-triangle-label {
+.jogpadBtnTriangleLabel {
   padding: 3px;
 }
 
-.jogpad-btn-circle,
-.jogpad-btn-circle-bigger,
-.jogpad-btn-circle-biggest {
+.jogpadBtnCircle,
+.jogpadBtnCircleBigger,
+.jogpadBtnCircleBiggest {
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
 }
 
-.jogpad-btn-circle {
+.jogpadBtnCircle {
   width: 34px;
   height: 34px;
 }
 
-.jogpad-btn-circle-bigger {
+.jogpadBtnCircleBigger {
   width: 40px;
   height: 40px;
 }
 
-.jogpad-btn-circle-biggest {
+.jogpadBtnCircleBiggest {
   width: 44px;
   height: 44px;
 }
 
-.jogpad-btn-icon {
+.jogpadBtnIcon {
   display: inline-block;
-  font-size: 12px;
-  transform: scale(0.6);
-}
-.jogpad-btn-icon-left-top {
+  font-size: 18px;
 }
 
-.jogpad-btn-icon-right-top {
+.jogpadBtnIconLeftTop {
   display: inline-block;
-  transform: scale(0.6) rotate(90deg);
+  transform: rotate(-45deg);
 }
 
-.jogpad-btn-icon-left-bottom {
+.jogpadBtnIconRightTop {
   display: inline-block;
-  transform: scale(0.6) rotate(-90deg);
+  transform: rotate(45deg);
 }
 
-.jogpad-btn-icon-right-bottom {
+.jogpadBtnIconLeftBottom {
   display: inline-block;
-  transform: scale(0.6) rotate(180deg);
+  transform: rotate(45deg);
 }
 
-.jogpad-btn-disabled {
+.jogpadBtnIconRightBottom {
+  display: inline-block;
+  transform: rotate(-45deg);
+}
+
+.jogpadBtnDisabled {
   cursor: not-allowed;
   background-color: #ddd;
   color: #999;
@@ -299,30 +298,31 @@
   }
 }
 
-.jogpad-btn-disabled .jogpad-btn-triangle-background svg path {
+.jogpadBtnDisabled .jogpadBtnTriangleBackground svg path {
   fill: #ddd;
 }
 
-.jogpad-btn-disabled:hover .jogpad-btn-triangle-background svg path {
+.jogpadBtnDisabled:hover .jogpadBtnTriangleBackground svg path {
   fill: #ddd;
 }
 
-.custom-distance-row {
+.customDistanceRow {
   margin-top: 12px;
   margin-left: 6px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
-.custom-distance-row-label {
+.customDistanceRowLabel {
   color: #333;
   margin-left: 6px;
   margin-right: 15px;
 }
-.custom-distance-row-input-group {
+.customDistanceRowInputGroup {
   display: flex;
 }
 
-.custom-distance-row-input {
+.customDistanceRowInput {
   width: 60px;
   height: 20px;
   line-height: 20px;
@@ -339,7 +339,7 @@
   }
 }
 
-.custom-distance-row-input-disabled {
+.customDistanceRowInputDisabled {
   background-color: #eee;
   color: #999;
 }

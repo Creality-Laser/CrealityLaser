@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Modal, Button } from 'antd';
+import { LinkOutlined } from '@ant-design/icons';
+
 import styles from './index.module.scss';
 
 const i18n = {
@@ -16,9 +18,12 @@ class IpInputModal extends PureComponent {
       <Modal
         visible={visible}
         onCancel={onCancel}
+        onClick={() => onOk(ip)}
         title={
           <span className={styles.title}>
-            <i className={classNames('iconfont', styles.titleIcon)}>&#xe60a;</i>
+            <i className={classNames('iconfont', styles.titleIcon)}>
+              <LinkOutlined />
+            </i>
             <span>{i18n._('Network Connection')}</span>
           </span>
         }
@@ -26,7 +31,6 @@ class IpInputModal extends PureComponent {
         minHeight="220px"
       >
         <div>
-          <hr className={styles.modalNewDivider} />
           <div className={styles.modalNewContentWrapper}>
             <span className={styles.modalNewContentInputLabel}>IP: </span>
             <input
@@ -42,26 +46,6 @@ class IpInputModal extends PureComponent {
                 }
               }}
             />
-          </div>
-          <div className={styles.modalNewContentOperatorRow}>
-            <Button
-              onClick={onCancel}
-              wrapperStyle={{
-                width: '80px',
-                height: '30px',
-                marginRight: '30px',
-              }}
-            >
-              {i18n._('Cancel')}
-            </Button>
-            <Button
-              onClick={() => onOk(ip)}
-              type="primary"
-              wrapperStyle={{ width: '80px', height: '30px' }}
-              disabled={!ip || !ip.trim()}
-            >
-              {i18n._('OK')}
-            </Button>
           </div>
         </div>
       </Modal>

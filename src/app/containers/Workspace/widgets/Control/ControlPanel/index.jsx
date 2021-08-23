@@ -470,6 +470,7 @@ class ControlPanel extends PureComponent {
         <KeypadOverlay show={state.canClick && state.keypadJogging}>
           <span className={styles.keypadWrapper}>
             <Switch
+              size="small"
               checked={state.keypadJogging}
               onClick={actions.toggleKeypadJogging}
               disabled={!canClick}

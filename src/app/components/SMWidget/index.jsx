@@ -207,6 +207,7 @@ function createDefaultWidget(WrappedWidget) {
               setTitle={actions.setTitle}
               setDisplay={actions.setDisplay}
               setControlButtons={actions.setControlButtons}
+              {...this.props}
             />
           </Widget.Content>
         </Widget>

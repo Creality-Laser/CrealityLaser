@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import ensureArray from 'ensure-array';
 import classNames from 'classnames';
 import { Button, Modal } from 'antd';
+import { PlayCircleFilled, EditOutlined } from '@ant-design/icons';
 
-import Dropdown from '../../components/Dropdown_new';
+import { createDefaultWidget } from '../../../../components/SMWidget';
 import api from '../../../../api';
 import { actions as machineActions } from '../../../../flux/machine';
 // import { actions as developToolsActions } from '../../../../flux/develop-tools';
@@ -28,7 +29,6 @@ const STATUS_IDLE = 'idle';
 
 class Macro extends PureComponent {
   state = {
-    isDropped: false,
     modalName: MODAL_NONE,
     modalParams: {},
     macros: [],
@@ -157,12 +157,12 @@ class Macro extends PureComponent {
       }
       return true;
     },
-    onToggleDrop: (prevDropped) => {
-      this.setState({
-        isDropped: !prevDropped,
-      });
-    },
   };
+
+  constructor(props) {
+    super(props);
+    this.props.setTitle('Macro');
+  }
 
   componentDidMount() {
     this.fetchMacros();
@@ -181,7 +181,6 @@ class Macro extends PureComponent {
   render() {
     const { isDisabled = false } = this.props;
     const {
-      isDropped,
       macros,
       modalName,
       modalParams,
@@ -193,86 +192,73 @@ class Macro extends PureComponent {
 
     return (
       <>
-        <Dropdown
-          label={i18n._('Macro')}
-          isDropped={isDropped}
-          onToggleDrop={this.actions.onToggleDrop}
-          isDisabled={isDisabled}
-          wrapperStyle={{
-            minWidth: '240px',
-          }}
-        >
-          <div className={styles.contentWrapper}>
-            {macros.length === 0 && (
-              <div className={styles.noMacroWrapper}>{i18n._('No macros')}</div>
-            )}
-            {macros.length > 0 && (
-              <div className={styles.macroListWrapper}>
-                {ensureArray(macros).map((macro) => (
-                  <div key={macro.id} className={styles.macroListItem}>
-                    <button
-                      className={styles.macroListItemRunBtn}
-                      type="button"
-                      title={i18n._('Run Macro')}
-                      disabled={!canClick}
-                      onClick={() => {
-                        this.actions.runMacro(macro);
-                      }}
-                    >
-                      <i
-                        className={classNames(
-                          'iconfont',
-                          styles.macroListItemRunIcon
-                        )}
-                      >
-                        &#xe6bd;
-                      </i>
-                    </button>
-                    <span
-                      className={styles.macroListItemName}
-                      title={macro.name}
-                    >
-                      {macro.name}
-                    </span>
-                    <button
-                      className={styles.macroListItemEditBtn}
-                      type="button"
-                      onClick={() => {
-                        this.actions.openEditMacroModal(macro.id);
-                      }}
-                    >
-                      <i
-                        className={classNames(
-                          'iconfont',
-                          styles.macroListItemEditIcon
-                        )}
-                      >
-                        &#xe6ae;
-                      </i>
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-            <hr className={styles.divider} />
-            <Button
-              type="primary"
-              style={{ width: '130px' }}
-              onClick={() => this.actions.openModal(MODAL_ADD_MACRO, {})}
-            >
-              New Macro
-            </Button>
-          </div>
-        </Dropdown>
+        <div className={styles.contentWrapper}>
+          {macros.length === 0 && (
+            <div className={styles.noMacroWrapper}>{i18n._('No macros')}</div>
+          )}
+          {macros.length > 0 && (
+            <div className={styles.macroListWrapper}>
+              {ensureArray(macros).map((macro) => (
+                <div key={macro.id} className={styles.macroListItem}>
+                  <button
+                    className={styles.macroListItemRunBtn}
+                    type="button"
+                    title={i18n._('Run Macro')}
+                    disabled={!canClick}
+                    onClick={() => {
+                      this.actions.runMacro(macro);
+                    }}
+                  >
+                    <PlayCircleFilled />
+                  </button>
+                  <span className={styles.macroListItemName} title={macro.name}>
+                    {macro.name}
+                  </span>
+                  <button
+                    className={styles.macroListItemEditBtn}
+                    type="button"
+                    onClick={() => {
+                      this.actions.openEditMacroModal(macro.id);
+                    }}
+                  >
+                    <EditOutlined />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          <hr className={styles.divider} />
+          <Button
+            type="primary"
+            size="small"
+            block
+            onClick={() => this.actions.openModal(MODAL_ADD_MACRO, {})}
+            disabled={isDisabled}
+          >
+            New Macro
+          </Button>
+        </div>
         <Modal
           visible={modalName === MODAL_ADD_MACRO}
           onCancel={this.actions.closeModal}
           zIndex={1060}
           title={i18n._('New Macro')}
           modalContentWidth="460px"
+          onOk={() => {
+            this.actions.addMacro(newMacroFields).then(() => {
+              this.actions.initNewMacroFields();
+              this.actions.closeModal();
+            });
+          }}
+          okButtonProps={{
+            disabled:
+              !newMacroFields.name ||
+              !newMacroFields.content ||
+              !newMacroFields.repeat ||
+              newMacroFields.repeat < 0,
+          }}
         >
           <div>
-            <hr className={styles.modalNewDivider} />
             <div className={styles.modalNewContentWrapper}>
               <div className={styles.modalNewContentInputLabel}>Macro Name</div>
               <input
@@ -327,37 +313,6 @@ class Macro extends PureComponent {
                 }}
               />
             </div>
-            <hr className={styles.modalNewDivider} />
-            <div className={styles.modalNewContentOperatorRow}>
-              <Button
-                onClick={this.actions.closeModal}
-                style={{
-                  width: '80px',
-                  height: '30px',
-                  marginRight: '30px',
-                }}
-              >
-                {i18n._('Cancel')}
-              </Button>
-              <Button
-                onClick={() => {
-                  this.actions.addMacro(newMacroFields).then(() => {
-                    this.actions.initNewMacroFields();
-                    this.actions.closeModal();
-                  });
-                }}
-                type="primary"
-                style={{ width: '80px', height: '30px' }}
-                disabled={
-                  !newMacroFields.name ||
-                  !newMacroFields.content ||
-                  !newMacroFields.repeat ||
-                  newMacroFields.repeat < 0
-                }
-              >
-                {i18n._('OK')}
-              </Button>
-            </div>
           </div>
         </Modal>
         <Modal
@@ -366,9 +321,9 @@ class Macro extends PureComponent {
           zIndex={1060}
           title={i18n._('Edit Macro')}
           modalContentWidth="460px"
+          footer={null}
         >
           <div>
-            <hr className={styles.modalNewDivider} />
             <div className={styles.modalNewContentWrapper}>
               <div className={styles.modalNewContentInputLabel}>Macro Name</div>
               <input
@@ -486,6 +441,7 @@ class Macro extends PureComponent {
           title={i18n._('Delete Macro')}
           modalContentWidth="460px"
           minHeight="178px"
+          footer={null}
         >
           <div>
             <div className={styles.modalDelMacroContentWrapper}>
@@ -536,6 +492,7 @@ class Macro extends PureComponent {
 }
 
 Macro.propTypes = {
+  setTitle: PropTypes.func,
   // dataSource: PropTypes.string.isRequired,
 
   // redux
@@ -567,4 +524,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Macro);
+export default createDefaultWidget(
+  connect(mapStateToProps, mapDispatchToProps)(Macro)
+);

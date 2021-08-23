@@ -40,10 +40,10 @@ const i18n = {
 
 const ACCEPT = `${LASER_GCODE_SUFFIX}, ${CNC_GCODE_SUFFIX}, ${PRINTING_GCODE_SUFFIX}`;
 
-const reloadPage = (forcedReload = true) => {
-  // Reload the current page, without using the cache
-  window.location.reload(forcedReload);
-};
+// const reloadPage = (forcedReload = true) => {
+//   // Reload the current page, without using the cache
+//   window.location.reload(forcedReload);
+// };
 
 class Workspace extends PureComponent {
   state = {
@@ -239,11 +239,11 @@ class Workspace extends PureComponent {
     const {
       style,
       className,
-      showPrimaryContainer,
-      showSecondaryContainer,
+      // showPrimaryContainer,
+      // showSecondaryContainer,
       defaultWidgets,
-      primaryWidgets,
-      secondaryWidgets,
+      // primaryWidgets,
+      // secondaryWidgets,
       isShowWorkspace,
       isConnected,
       connectionType,
@@ -251,8 +251,8 @@ class Workspace extends PureComponent {
 
     const actions = { ...this.actions };
     const { connected, isDraggingWidget } = this.state;
-    const hidePrimaryContainer = !showPrimaryContainer;
-    const hideSecondaryContainer = !showSecondaryContainer;
+    // const hidePrimaryContainer = !showPrimaryContainer;
+    // const hideSecondaryContainer = !showSecondaryContainer;
 
     const isCurrentConnectedByWiFi =
       isConnected && connectionType === CONNECTION_TYPE_WIFI;
@@ -303,7 +303,7 @@ class Workspace extends PureComponent {
               {/* <Stop isDisabled={isCurrentConnectedByWiFi} /> */}
             </div>
             <div className={styles.workspace_table_row}>
-              {false && (
+              {/* {false && (
                 <div
                   ref={this.primaryContainer}
                   className={classNames(styles.primary_container, {
@@ -320,8 +320,8 @@ class Workspace extends PureComponent {
                     updateTabContainer={this.props.updateTabContainer}
                   />
                 </div>
-              )}
-              {false && (
+              )} */}
+              {/* {false && (
                 <div
                   ref={this.primaryToggler}
                   className={classNames(styles.primary_toggler)}
@@ -345,7 +345,7 @@ class Workspace extends PureComponent {
                     )}
                   </button>
                 </div>
-              )}
+              )} */}
 
               <div
                 ref={this.defaultContainer}
@@ -356,7 +356,7 @@ class Workspace extends PureComponent {
                   toggleFromDefault={this.actions.toggleFromDefault}
                 />
               </div>
-              {false && (
+              {/* {false && (
                 <div
                   ref={this.secondaryToggler}
                   className={classNames(styles.secondary_toggler)}
@@ -380,8 +380,8 @@ class Workspace extends PureComponent {
                     )}
                   </button>
                 </div>
-              )}
-              {false && (
+              )} */}
+              {/* {false && (
                 <div
                   ref={this.secondaryContainer}
                   className={classNames(styles.secondary_container, {
@@ -398,7 +398,7 @@ class Workspace extends PureComponent {
                     updateTabContainer={this.props.updateTabContainer}
                   />
                 </div>
-              )}
+              )} */}
             </div>
             {/* <GcodeInfo /> */}
             <Console
@@ -419,8 +419,8 @@ Workspace.propTypes = {
   showPrimaryContainer: PropTypes.bool.isRequired,
   showSecondaryContainer: PropTypes.bool.isRequired,
   defaultWidgets: PropTypes.array.isRequired,
-  primaryWidgets: PropTypes.array.isRequired,
-  secondaryWidgets: PropTypes.array.isRequired,
+  // primaryWidgets: PropTypes.array.isRequired,
+  // secondaryWidgets: PropTypes.array.isRequired,
   updateTabContainer: PropTypes.func.isRequired,
   uploadGcodeFile: PropTypes.func.isRequired,
   isShowWorkspace: PropTypes.bool,

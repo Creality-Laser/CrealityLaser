@@ -18,7 +18,7 @@ $widget-background-color: #fafafa;
     // border: 1px solid #ccc;
     border: none;
     background-color: $widget-background-color;
-    background-color: #4b90f2;
+    // background-color: #4b90f2;
     color: #222;
   }
 
@@ -115,7 +115,8 @@ $widget-background-color: #fafafa;
   }
 
   .widget-title {
-    color: white;
+    // color: white;
+    color: #4b90f2;
     margin-top: 0;
     font-size: 14px;
     font-weight: 600;
@@ -182,6 +183,7 @@ $widget-background-color: #fafafa;
     width: auto;
 
     .widget-button {
+      color: #4b90f2;
       min-width: 30px;
       height: 32px;
       float: left;

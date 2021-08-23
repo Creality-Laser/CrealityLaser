@@ -2,6 +2,8 @@ import includes from 'lodash/includes';
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { CaretDownFilled } from '@ant-design/icons';
+
 import { MACHINE_HEAD_TYPE, METRIC_UNITS } from '../../../../../constants';
 import styles from './index.module.scss';
 
@@ -252,7 +254,7 @@ class DropdownButton extends PureComponent {
                 isDropped ? styles.dropdownIconUp : ''
               )}
             >
-              &#xe6bd;
+              <CaretDownFilled />
             </i>
           </span>
         </div>

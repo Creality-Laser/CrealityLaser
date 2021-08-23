@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { map, includes } from 'lodash';
 import { Button, Select, Modal } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
 import { actions as machineActions } from '../../../../flux/machine';
 import {
@@ -269,16 +270,14 @@ class WifiConnection extends PureComponent {
             <button
               type="button"
               className={styles.freshBtn}
-              title={i18n._('Refresh')}
+              title={i18n._('Add')}
               onClick={() => {
                 this.setState({ connectModalVisible: true });
               }}
               disabled={isOpen}
             >
-              <span
-                className={classNames(discovering && styles.freshBtnIconSpin)}
-              >
-                <CyCleIcon />
+              <span className={classNames(discovering && styles.freshBtnIcon)}>
+                <PlusOutlined />
               </span>
             </button>
           </div>

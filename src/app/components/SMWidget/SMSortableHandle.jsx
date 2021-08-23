@@ -4,7 +4,7 @@ import Widget from '../Widget';
 // Widget sortable handle
 const SMSortableHandle = React.memo(() => (
   <Widget.Sortable className="sortable-handle">
-    <span style={{ color: 'white' }}>
+    <span>
       <HamburgerIcon />
       <span style={{ marginRight: '5px' }} />
     </span>

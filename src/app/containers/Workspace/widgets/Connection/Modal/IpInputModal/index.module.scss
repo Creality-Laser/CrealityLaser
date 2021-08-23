@@ -1,21 +1,21 @@
 @import '../../../../../../styles/variables.scss';
 
-.modal-new-divider {
+.modalNewDivider {
   border-color: #ddd;
   margin: 0;
 }
 
-.modal-new-content-wrapper {
+.modalNewContentWrapper {
   display: flex;
   align-items: center;
   padding: 42px 20px 16px;
 }
 
-.modal-new-content-input-label {
+.modalNewContentInputLabel {
   color: #333;
   margin-right: 10px;
 }
-.modal-new-content-input {
+.modalNewContentInput {
   width: 100%;
   border-radius: 4px;
   transition: all 0.3s;
@@ -30,7 +30,7 @@
   }
 }
 
-.modal-new-content-operator-row {
+.modalNewContentOperatorRow {
   display: flex;
   width: 100%;
   justify-content: flex-end;
@@ -42,7 +42,7 @@
   align-items: center;
 }
 
-.title-icon {
+.titleIcon {
   display: inline-block;
   font-size: 22px !important;
   margin-right: 10px;

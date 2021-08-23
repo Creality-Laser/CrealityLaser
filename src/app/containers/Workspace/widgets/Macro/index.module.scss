@@ -1,38 +1,37 @@
 @import '../../../../styles/variables.scss';
 
-.content-wrapper {
-  padding: 30px 20px 20px;
+.contentWrapper {
   background-color: $white;
   border-radius: 0px 0px 20px 20px;
 }
 
-.macro-list-wrapper {
+.macroListWrapper {
   max-height: 124px;
   overflow-y: auto;
 }
 
 /* width */
-.macro-list-wrapper::-webkit-scrollbar {
+.macroListWrapper::-webkit-scrollbar {
   width: 6px;
 }
 
 /* Track */
-.macro-list-wrapper::-webkit-scrollbar-track {
+.macroListWrapper::-webkit-scrollbar-track {
   background: transparent;
 }
 
 /* Handle */
-.macro-list-wrapper::-webkit-scrollbar-thumb {
+.macroListWrapper::-webkit-scrollbar-thumb {
   background: #e8f0ff;
   border-radius: 3px;
 }
 
 /* Handle on hover */
-.macro-list-wrapper::-webkit-scrollbar-thumb:hover {
+.macroListWrapper::-webkit-scrollbar-thumb:hover {
   background: #bfd2ff;
 }
 
-.macro-list-item {
+.macroListItem {
   display: flex;
   height: 31px;
   align-items: center;
@@ -40,64 +39,33 @@
   border-bottom: 1px solid #ddd;
 }
 
-.macro-list-item:last-child {
+.macroListItem:last-child {
   border-bottom: none;
 }
 
-.macro-list-item-run-btn,
-.macro-list-item-edit-btn {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  padding: 0;
+.macroListItemRunBtn,
+.macroListItemEditBtn {
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
-  line-height: 16px;
-  text-align: center;
-  transition: all 0.3s;
-}
-.macro-list-item-run-btn {
-  padding-left: 2px;
-}
-.macro-list-item-run-btn {
-  border: 1px solid $btn-hover-color-color;
-  color: $btn-hover-color-color;
+  color: $gray-darker;
   background-color: $white;
-
-  &:hover {
-    border-color: $main-hover-color;
-    background-color: $main-hover-color;
-    color: $white;
-  }
+  padding: 0;
 }
 
-.macro-list-item-edit-btn {
-  border: 1px solid $btn-hover-color-color;
-  color: $white;
-  background-color: $btn-hover-color-color;
-
-  &:hover {
-    border-color: $main-hover-color;
-    background-color: $main-hover-color;
-  }
-}
-
-.macro-list-item-run-icon,
-.macro-list-item-edit-icon {
-  display: inline-block;
-  font-size: 12px;
-  transform: scale(0.6);
-}
-
-.macro-list-item-name {
+.macroListItemName {
   margin: 0 6px;
   flex: 1;
-  max-width: 200px;
+  max-width: 245px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
 
-.no-macro-wrapper {
+.noMacroWrapper {
   color: #999;
   max-height: 186px;
   padding-left: 10px;
@@ -105,23 +73,22 @@
 
 .divider {
   border-color: #ddd;
-  margin: 12px -20px;
 }
 
-.modal-new-divider {
+.modalNewDivider {
   border-color: #ddd;
   margin: 0;
 }
 
-.modal-new-content-wrapper {
+.modalNewContentWrapper {
   padding: 16px 30px;
 }
 
-.modal-new-content-input-label {
+.modalNewContentInputLabel {
   margin-bottom: 10px;
   color: #333;
 }
-.modal-new-content-input {
+.modalNewContentInput {
   width: 100%;
   border-radius: 4px;
   transition: all 0.3s;
@@ -136,7 +103,7 @@
     border-color: $btn-hover-color-color;
   }
 }
-.modal-new-content-textarea {
+.modalNewContentTextarea {
   width: 100%;
   height: 107px;
   border-radius: 4px;
@@ -153,32 +120,30 @@
   }
 }
 
-.modal-new-content-operator-row {
+.modalNewContentOperatorRow {
   display: flex;
   width: 100%;
   justify-content: flex-end;
   padding: 20px 30px;
 }
 
-.modal-edit-content-operator-row {
+.modalEditContentOperatorRow {
   display: flex;
   width: 100%;
   justify-content: space-between;
   padding: 20px 30px;
 }
 
-.modal-edit-content-operator-row-left {
-}
-.modal-edit-content-operator-row-right {
+.modalEditContentOperatorRowRight {
   display: flex;
 }
 
-.modal-del-macro-content-wrapper {
+.modalDelMacroContentWrapper {
   display: flex;
   padding: 20px 30px;
 }
 
-.modal-del-macro-content-icon {
+.modalDelMacroContentIcon {
   display: inline-block;
   width: 28px;
   height: 28px;
@@ -189,11 +154,11 @@
   line-height: 28px;
   margin-right: 12px;
 }
-.modal-del-macro-content {
+.modalDelMacroContent {
   flex: 1;
 }
 
-.modal-del-macro-operater-row {
+.modalDelMacroOperaterRow {
   display: flex;
   align-items: center;
   justify-content: flex-end;

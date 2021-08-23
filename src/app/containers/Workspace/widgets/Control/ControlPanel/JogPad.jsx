@@ -2,7 +2,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import _ from 'lodash';
+
 import { Switch, Button } from 'antd';
+import { CaretUpFilled, CaretDownFilled } from '@ant-design/icons';
 
 import { DISTANCE_MIN, DISTANCE_MAX, DISTANCE_STEP } from '../constants';
 import styles from './index.module.scss';
@@ -145,7 +147,7 @@ class JogPad extends PureComponent {
                     styles.jogpadBtnIconLeftTop
                   )}
                 >
-                  &#xe6cc;
+                  <CaretUpFilled />
                 </span>
               </span>
               <span
@@ -182,7 +184,7 @@ class JogPad extends PureComponent {
                     styles.jogpadBtnIconRightTop
                   )}
                 >
-                  &#xe6cc;
+                  <CaretUpFilled />
                 </span>
               </span>
               <span
@@ -283,7 +285,7 @@ class JogPad extends PureComponent {
                     styles.jogpadBtnIconLeftBottom
                   )}
                 >
-                  &#xe6cc;
+                  <CaretDownFilled />
                 </span>
               </span>
               <span
@@ -323,7 +325,7 @@ class JogPad extends PureComponent {
                     styles.jogpadBtnIconRightBottom
                   )}
                 >
-                  &#xe6cc;
+                  <CaretDownFilled />
                 </span>
               </span>
 
@@ -342,18 +344,21 @@ class JogPad extends PureComponent {
           </div>
         </div>
         <div className={styles.customDistanceRow}>
-          <Switch
-            checked={isCustomDistanceSelected}
-            onClick={() => {
-              if (isCustomDistanceSelected) {
-                selectDistance('0.05');
-              } else {
-                selectDistance();
-              }
-            }}
-          />
-          <span className={styles.customDistanceRowLabel}>
-            {i18n._('Custom Distance')}
+          <span>
+            <Switch
+              size="small"
+              checked={isCustomDistanceSelected}
+              onClick={() => {
+                if (isCustomDistanceSelected) {
+                  selectDistance('0.05');
+                } else {
+                  selectDistance();
+                }
+              }}
+            />
+            <span className={styles.customDistanceRowLabel}>
+              {i18n._('Custom Distance')}
+            </span>
           </span>
           <span className={styles.customDistanceRowInputGroup}>
             <Button
@@ -361,8 +366,8 @@ class JogPad extends PureComponent {
               style={{
                 width: '20px',
                 height: '20px',
-                fontSize: '16px',
-                lineHeight: '16px',
+                padding: 0,
+                lineHeight: '20px',
                 borderRadius: '50%',
               }}
               disabled={!isCustomDistanceSelected}
@@ -394,8 +399,8 @@ class JogPad extends PureComponent {
               style={{
                 width: '20px',
                 height: '20px',
-                fontSize: '16px',
-                lineHeight: '18px',
+                padding: 0,
+                lineHeight: '20px',
                 borderRadius: '50%',
               }}
               disabled={!isCustomDistanceSelected}

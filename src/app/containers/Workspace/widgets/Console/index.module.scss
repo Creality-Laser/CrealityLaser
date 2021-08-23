@@ -56,9 +56,9 @@
 }
 
 .normalWrapper {
-  position: fixed;
-  top: 40%;
-  left: 0;
+  // position: fixed;
+  // top: 40%;
+  // left: 0;
   width: 350px;
   border-radius: 4px;
   border: 1px solid #ddd;
@@ -129,5 +129,5 @@
 }
 
 .maximizedTernimalWrapper {
-  height: calc(100vh - 108px);
+  // height: calc(100vh - 108px);
 }

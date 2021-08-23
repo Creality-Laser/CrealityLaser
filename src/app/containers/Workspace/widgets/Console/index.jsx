@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Button } from 'antd';
 
+import { createDefaultWidget } from '../../../../components/SMWidget';
 import Console from './Console';
 import { actions as widgetActions } from '../../../../flux/widget';
 import styles from './index.module.scss';
@@ -47,6 +48,11 @@ class ConsoleWidget extends PureComponent {
     },
   };
 
+  constructor(props) {
+    super(props);
+    this.props.setTitle('Console');
+  }
+
   render() {
     const { clearRenderStamp, minimized, isMaximized } = this.state;
     const { widgetId, isDefault, isShowWorkspace } = this.props;
@@ -55,24 +61,23 @@ class ConsoleWidget extends PureComponent {
 
     return (
       <>
-        {minimized && (
+        <Console
+          minimized={minimized}
+          isMaximized={isMaximized}
+          isDefault={isDefault}
+          widgetId={widgetId}
+          clearRenderStamp={clearRenderStamp}
+        />
+        {/* {minimized && (
           <div className={styles.minimizedWrapper} title={i18n._('Console')}>
-            <Button
-              type="primary"
-              wrapperStyle={{
-                width: '50px',
-                height: '50px',
-                borderRadius: '50%',
-              }}
-              onClick={this.actions.toggleMinimized}
-            >
+            <Button type="primary" onClick={this.actions.toggleMinimized}>
               <i className={classNames('iconfont', styles.minimizedIcon)}>
                 &#xe6cd;
               </i>
             </Button>
           </div>
-        )}
-        {isShowWorkspace && (
+        )} */}
+        {/* {isShowWorkspace && (
           <div
             className={classNames(
               minimized ? styles.hide : '',
@@ -172,13 +177,14 @@ class ConsoleWidget extends PureComponent {
               />
             </div>
           </div>
-        )}
+        )} */}
       </>
     );
   }
 }
 
 ConsoleWidget.propTypes = {
+  setTitle: PropTypes.func,
   minimized: PropTypes.bool.isRequired,
   widgetId: PropTypes.string.isRequired,
   isDefault: PropTypes.bool.isRequired,
@@ -208,4 +214,6 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(widgetActions.toggleWorkspaceWidgetToDefault(ownProps.widgetId)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConsoleWidget);
+export default createDefaultWidget(
+  connect(mapStateToProps, mapDispatchToProps)(ConsoleWidget)
+);
