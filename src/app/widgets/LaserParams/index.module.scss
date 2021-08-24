@@ -9,7 +9,6 @@
     display: inline-block;
     vertical-align: top;
     padding: 0 10px 0 0;
-    width: 25%;
 
     &__btn {
       display: block;
@@ -92,6 +91,7 @@
   outline-color: $btn-focus-color;
 }
 .mode_select_item_img {
+  max-width: 75px;
   border: 1px solid $border-color;
   border-radius: 3px;
 }

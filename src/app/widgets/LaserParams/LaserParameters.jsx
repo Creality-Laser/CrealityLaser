@@ -206,6 +206,8 @@ class LaserParameters extends PureComponent {
     // const isProcessMode = isEditor && sourceType === 'raster';
     const isProcessMode = isProcess && sourceType === 'raster';
 
+    const appendMode = config.appendMode;
+
     return (
       <>
         <input
@@ -252,6 +254,7 @@ class LaserParameters extends PureComponent {
                 disabled={selectedModelHideFlag}
                 sourceType={sourceType}
                 mode={mode}
+                appendMode={appendMode}
                 showOrigin={showOrigin}
                 changeSelectedModelShowOrigin={changeSelectedModelShowOrigin}
                 changeSelectedModelMode={changeSelectedModelMode}

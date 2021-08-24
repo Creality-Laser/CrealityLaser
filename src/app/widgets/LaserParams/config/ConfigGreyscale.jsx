@@ -43,8 +43,16 @@ class ConfigGreyscale extends PureComponent {
   };
 
   render() {
-    const { invert, contrast, brightness, whiteClip, algorithm, disabled, t } =
-      this.props;
+    const {
+      invert,
+      contrast,
+      brightness,
+      whiteClip,
+      algorithm,
+      disabled,
+      t,
+      hideFields = [],
+    } = this.props;
 
     return (
       <div>
@@ -144,39 +152,41 @@ class ConfigGreyscale extends PureComponent {
                   />
                 </ParameterItemValue>
               </ParameterItem>
-              <ParameterItem
-                popover={{
-                  title: t('Algorithm'),
-                  content: 'Choose an algorithm for image processing.',
-                }}
-              >
-                <ParameterItemLabel>{t('Algorithm')}</ParameterItemLabel>
-                <ParameterItemValue>
-                  <StyledSelect
-                    disabled={disabled}
-                    style={{
-                      zIndex: 5,
-                    }}
-                    name="algorithm"
-                    placeholder="Choose algorithms"
-                    value={algorithm}
-                    onChange={(value) =>
-                      this.actions.onChangeAlgorithm({ value })
-                    }
-                  >
-                    <Option value="FloydSteinburg">Floyd-Steinburg</Option>
-                    <Option value="JarvisJudiceNinke">
-                      Jarvis-Judice-Ninke
-                    </Option>
-                    <Option value="Stucki">Stucki</Option>
-                    <Option value="Atkinson">Atkinson</Option>
-                    <Option value="Burkes">Burkes</Option>
-                    <Option value="Sierra2">Sierra2</Option>
-                    <Option value="Sierra3">Sierra3</Option>
-                    <Option value="SierraLite">SierraLite</Option>
-                  </StyledSelect>
-                </ParameterItemValue>
-              </ParameterItem>
+              {!hideFields.includes('algorithm') && (
+                <ParameterItem
+                  popover={{
+                    title: t('Algorithm'),
+                    content: 'Choose an algorithm for image processing.',
+                  }}
+                >
+                  <ParameterItemLabel>{t('Algorithm')}</ParameterItemLabel>
+                  <ParameterItemValue>
+                    <StyledSelect
+                      disabled={disabled}
+                      style={{
+                        zIndex: 5,
+                      }}
+                      name="algorithm"
+                      placeholder="Choose algorithms"
+                      value={algorithm}
+                      onChange={(value) =>
+                        this.actions.onChangeAlgorithm({ value })
+                      }
+                    >
+                      <Option value="FloydSteinburg">Floyd-Steinburg</Option>
+                      <Option value="JarvisJudiceNinke">
+                        Jarvis-Judice-Ninke
+                      </Option>
+                      <Option value="Stucki">Stucki</Option>
+                      <Option value="Atkinson">Atkinson</Option>
+                      <Option value="Burkes">Burkes</Option>
+                      <Option value="Sierra2">Sierra2</Option>
+                      <Option value="Sierra3">Sierra3</Option>
+                      <Option value="SierraLite">SierraLite</Option>
+                    </StyledSelect>
+                  </ParameterItemValue>
+                </ParameterItem>
+              )}
             </div>
           </>
         )}
@@ -186,6 +196,7 @@ class ConfigGreyscale extends PureComponent {
 }
 
 ConfigGreyscale.propTypes = {
+  hideFields: PropTypes.arrayOf(PropTypes.string),
   t: PropTypes.func,
   invert: PropTypes.bool,
   contrast: PropTypes.number.isRequired,
