@@ -31,6 +31,17 @@ jobs:
           yarn install
           yarn package:win64
 
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.FRANK_PUBLISH }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
       - name: Setting Environment Variables
         run: |
           $PRODUCT_NAME="Creality Laser"
@@ -52,7 +63,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.FRANK_PUBLISH }}
         with:
-          upload_url: ${{ github.event.release.upload_url }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ env.INSTALLER_ASSET_PATH }}
           asset_name: ${{ env.INSTALLER_ASSET_NAME }}
           asset_content_type: application/octet-stream
