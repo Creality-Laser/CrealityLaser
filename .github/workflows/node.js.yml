@@ -29,4 +29,30 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.FRANK_PUBLISH }}
         run: |
           yarn install
-          yarn package_publish:win64
+          yarn package:win64
+
+      - name: Setting Environment Variables
+        run: |
+          $PRODUCT_NAME="Creality Laser"
+          $PACKAGE_NAME="Creality-Laser"
+          $PACKAGE_VERSION=node -e "console.log(require('./src/package.json').version)"
+          $RELEASE="${PACKAGE_NAME}-${PACKAGE_VERSION}"
+
+          $INSTALLER_ASSET_PATH="./release/${PRODUCT_NAME} ${PACKAGE_VERSION}.exe"
+          $INSTALLER_ASSET_NAME="${RELEASE}-win-x64.exe"
+
+          $INSTALLER_AU_ASSET_NAME="${PACKAGE_NAME}-Setup-${PACKAGE_VERSION}.exe"
+          echo "INSTALLER_ASSET_PATH=${INSTALLER_ASSET_PATH}" >> ${Env:GITHUB_ENV}
+          echo "INSTALLER_ASSET_NAME=${INSTALLER_ASSET_NAME}" >> ${Env:GITHUB_ENV}
+          echo "INSTALLER_AU_ASSET_NAME=${INSTALLER_AU_ASSET_NAME}" >> ${Env:GITHUB_ENV}
+
+      - name: Upload Release Asset - Windows x64 Installer
+        id: upload-release-asset-x64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.FRANK_PUBLISH }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ env.INSTALLER_ASSET_PATH }}
+          asset_name: ${{ env.INSTALLER_ASSET_NAME }}
+          asset_content_type: application/octet-stream
