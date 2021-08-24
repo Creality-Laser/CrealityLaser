@@ -92,8 +92,8 @@ class ToolPathModel {
     };
   }
 
-  generateToolPath3D(toolPath) {
-    this.toolPathObj3D = generateToolPathObject3D(toolPath);
+  generateToolPath3D(toolPath, gcodeConfig) {
+    this.toolPathObj3D = generateToolPathObject3D(toolPath, gcodeConfig);
   }
 
   loadToolPath(filename) {
@@ -102,7 +102,7 @@ class ToolPathModel {
     return new Promise((resolve) => {
       new THREE.FileLoader().load(toolPathFilePath, (data) => {
         const toolPath = JSON.parse(data);
-        this.generateToolPath3D(toolPath);
+        this.generateToolPath3D(toolPath, this.gcodeConfig);
         if (this.gcodeConfig.multiPassEnabled) {
           this.estimatedTime =
             toolPath.estimatedTime * this.gcodeConfig.multiPasses;

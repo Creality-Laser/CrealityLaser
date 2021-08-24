@@ -60,9 +60,9 @@ const generateImageObject3D = (imageSrc, width, height, anchor) => {
   return object3D;
 };
 
-const generateToolPathObject3D = (toolPath) => {
+const generateToolPathObject3D = (toolPath, gcodeConfig) => {
   const toolPathRenderer = new ToolPathRenderer();
-  const object3D = toolPathRenderer.render(toolPath);
+  const object3D = toolPathRenderer.render(toolPath, gcodeConfig);
 
   object3D.position.set(toolPath.positionX, toolPath.positionY, 0);
   object3D.scale.set(1, 1, 1);

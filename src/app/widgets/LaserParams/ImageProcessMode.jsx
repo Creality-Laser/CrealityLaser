@@ -64,13 +64,6 @@ class ImageProcessMode extends PureComponent {
                 onClick={() => actions.changeSelectedModelMode('bw')}
               />
               <ProcessModeSelectItem
-                label={t('GREYSCALE')}
-                disabled={disabled}
-                modeBgImage={greyscaleBgImg}
-                isSelected={this.props.mode === 'greyscale' && !isLineToLine}
-                onClick={() => actions.changeSelectedModelMode('greyscale')}
-              />
-              <ProcessModeSelectItem
                 label={t('LINETOLINE')}
                 disabled={disabled}
                 modeBgImage={greyscaleBgImg}
@@ -78,6 +71,13 @@ class ImageProcessMode extends PureComponent {
                   this.props.mode === 'greyscale' && appendMode === 'lineToLine'
                 }
                 onClick={() => actions.changeSelectedModelMode('lineToLine')}
+              />
+              <ProcessModeSelectItem
+                label={t('DITHER')}
+                disabled={disabled}
+                modeBgImage={greyscaleBgImg}
+                isSelected={this.props.mode === 'greyscale' && !isLineToLine}
+                onClick={() => actions.changeSelectedModelMode('greyscale')}
               />
               <ProcessModeSelectItem
                 label={t('VECTOR')}

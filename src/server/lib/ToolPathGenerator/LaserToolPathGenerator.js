@@ -139,7 +139,7 @@ class LaserToolPathGenerator extends EventEmitter {
 
   async generateToolPathObj(modelInfo, modelPath) {
     const { mode, gcodeConfig, sourceType, transformation } = modelInfo;
-    const { movementMode } = gcodeConfig;
+    const { movementMode, appendMode } = gcodeConfig;
 
     // let fakeGcodes = this.getGcodeHeader();
 
@@ -150,18 +150,25 @@ class LaserToolPathGenerator extends EventEmitter {
     // fakeGcodes.push('G90');
     // fakeGcodes.push('G21');
     let workingGcode = '';
+    console.log(mode, movementMode, appendMode);
     if (
       mode === 'bw' ||
-      (mode === 'greyscale' && movementMode === 'greyscale-line')
+      (mode === 'greyscale' &&
+        movementMode === 'greyscale-line' &&
+        appendMode !== 'lineToLine')
     ) {
       workingGcode = await this.generateGcodeBW(modelInfo, modelPath);
-    } else if (mode === 'greyscale' && movementMode === 'greyscale-dot') {
+    } else if (
+      mode === 'greyscale' &&
+      movementMode === 'greyscale-dot' &&
+      appendMode !== 'lineToLine'
+    ) {
       workingGcode = await this.generateGcodeGreyscale_origin(
         modelInfo,
         modelPath
       );
       // workingGcode = await this.generateGcodeGreyscale(modelInfo, modelPath);
-    } else if (mode === 'linetoline') {
+    } else if (appendMode === 'lineToLine') {
       workingGcode = await this.generateGcodeGreyscale_new(
         modelInfo,
         modelPath

@@ -53,14 +53,20 @@ class MotionColor {
 const motionColor = new MotionColor();
 
 class ToolPathRenderer {
-  render(toolPath) {
+  render(toolPath, gcodeConfig) {
+    console.log(gcodeConfig);
+    const { appendMode } = gcodeConfig;
     const { headType, mode, movementMode, data } = toolPath;
     // now only support cnc&laser
     if (!['cnc', 'laser'].includes(headType)) {
       return null;
     }
     if (headType === 'laser') {
-      if (mode === 'greyscale' && movementMode === 'greyscale-dot') {
+      if (
+        mode === 'greyscale' &&
+        movementMode === 'greyscale-dot' &&
+        appendMode !== 'lineToLine'
+      ) {
         return this.parseToPoints(data);
       } else {
         return this.parseToLine(data);

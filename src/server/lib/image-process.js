@@ -82,7 +82,7 @@ async function processLaserGreyscale(modelInfo) {
   const { uploadName, mode } = modelInfo;
   const { width, height, rotationZ = 0, flip = 0 } = modelInfo.transformation;
 
-  const { invert, contrast, brightness, whiteClip, algorithm } =
+  const { invert, contrast, brightness, whiteClip, algorithm, appendMode } =
     modelInfo.config;
   const { density = 4 } = modelInfo.gcodeConfig || {};
 
@@ -130,7 +130,7 @@ async function processLaserGreyscale(modelInfo) {
       }
     });
 
-  if (mode === 'greyscale') {
+  if (mode === 'greyscale' && appendMode !== 'lineToLine') {
     // serpentine path
     for (let y = 0; y < img.bitmap.height; y++) {
       const reverse = (y & 1) === 1;
