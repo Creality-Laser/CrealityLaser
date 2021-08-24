@@ -49,18 +49,20 @@ class ToolPathModel {
   }
 
   updateMode(mode, gcodeConfig) {
-    if (mode === this.mode) {
-      return;
-    }
+    // if (mode === this.mode) {
+    //   return;
+    // }
     this.updateNeedPreview(true);
     this.modeConfigs[this.mode] = {
       gcodeConfig: {
         ...this.gcodeConfig,
+        ...gcodeConfig,
       },
     };
     if (this.modeConfigs[mode]) {
       this.gcodeConfig = {
         ...this.modeConfigs[mode].gcodeConfig,
+        ...gcodeConfig,
       };
     } else {
       this.gcodeConfig = {

@@ -267,6 +267,15 @@ class Model {
         };
       }
       this.mode = mode;
+    } else {
+      this.modeConfigs[this.mode] = {
+        config: {
+          ...config,
+        },
+      };
+      this.config = {
+        ...config,
+      };
     }
 
     this.generateProcessObject3D();

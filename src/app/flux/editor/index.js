@@ -399,15 +399,32 @@ export const actions = {
     (headType, sourceType, mode) => async (dispatch, getState) => {
       const { modelGroup, svgModelGroup, toolPathModelGroup } =
         getState()[headType];
+
+      // hack!!
+      let appendMode = '';
+      if (mode === 'lineToLine') {
+        appendMode = 'lineToLine';
+        // lineToLine is also kind of greyscale.
+        mode = 'greyscale';
+      }
+
       const modelDefaultConfigs = generateModelDefaultConfigs(
         headType,
         sourceType,
-        mode
+        mode,
+        appendMode
       );
 
       const { config } = modelDefaultConfigs;
 
       const selectedModel = modelGroup.getSelectedModel();
+
+      const selectedModelConfig = selectedModel.getModeConfig(mode) || {};
+      // re-correct appendMode;
+      if (selectedModelConfig.config) {
+        selectedModelConfig.config.appendMode = appendMode;
+      }
+
       const options = {
         headType,
         uploadName: selectedModel.uploadName,
@@ -421,7 +438,7 @@ export const actions = {
         },
         config: {
           ...config,
-          ...selectedModel.getModeConfig(mode),
+          ...selectedModelConfig,
         },
       };
 
@@ -432,6 +449,7 @@ export const actions = {
         if (res.body.previewFileName) {
           processImageName = res.body.previewFileName;
         }
+
         if (!processImageName) {
           return;
         }
@@ -440,7 +458,7 @@ export const actions = {
 
         const modelState = modelGroup.updateSelectedMode(
           mode,
-          config,
+          { ...config, appendMode },
           processImageName
         );
 
@@ -453,10 +471,10 @@ export const actions = {
             toolAngle,
           };
         }
-        const toolPathModelState = toolPathModelGroup.updateSelectedMode(
-          mode,
-          gcodeConfig
-        );
+        const toolPathModelState = toolPathModelGroup.updateSelectedMode(mode, {
+          ...gcodeConfig,
+          appendMode,
+        });
 
         dispatch(actions.toggleToolPathVisible(headType));
 

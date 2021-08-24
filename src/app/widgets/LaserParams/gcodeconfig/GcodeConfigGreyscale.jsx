@@ -47,7 +47,7 @@ class GcodeConfigGreyscale extends PureComponent {
   };
 
   render() {
-    const { density, movementMode, disabled, t } = this.props;
+    const { density, movementMode, disabled, t, appendMode } = this.props;
 
     return (
       <div>
@@ -59,28 +59,30 @@ class GcodeConfigGreyscale extends PureComponent {
         {this.state.expanded && (
           <>
             <div>
-              <ParameterItem>
-                <ParameterItemLabel>{t('Movement Mode')}</ParameterItemLabel>
-                <ParameterItemValue>
-                  <StyledSelect
-                    disabled={disabled}
-                    style={{ zIndex: 5, width: '160px' }}
-                    name="Movement"
-                    placeholder="Choose movement mode"
-                    value={movementMode}
-                    onChange={(value) =>
-                      this.actions.onChangeMovementMode(value)
-                    }
-                  >
-                    <Option value="greyscale-line">
-                      {t('Line (Normal Quality)')}
-                    </Option>
-                    <Option value="greyscale-dot">
-                      {t('Dot (High Quality)')}
-                    </Option>
-                  </StyledSelect>
-                </ParameterItemValue>
-              </ParameterItem>
+              {appendMode !== 'lineToLine' && (
+                <ParameterItem>
+                  <ParameterItemLabel>{t('Movement Mode')}</ParameterItemLabel>
+                  <ParameterItemValue>
+                    <StyledSelect
+                      disabled={disabled}
+                      style={{ zIndex: 5, width: '160px' }}
+                      name="Movement"
+                      placeholder="Choose movement mode"
+                      value={movementMode}
+                      onChange={(value) =>
+                        this.actions.onChangeMovementMode(value)
+                      }
+                    >
+                      <Option value="greyscale-line">
+                        {t('Line (Normal Quality)')}
+                      </Option>
+                      <Option value="greyscale-dot">
+                        {t('Dot (High Quality)')}
+                      </Option>
+                    </StyledSelect>
+                  </ParameterItemValue>
+                </ParameterItem>
+              )}
               <ParameterItem
                 popover={{
                   title: t('Density'),
@@ -115,6 +117,7 @@ GcodeConfigGreyscale.propTypes = {
   t: PropTypes.func,
   density: PropTypes.number.isRequired,
   movementMode: PropTypes.string.isRequired,
+  appendMode: PropTypes.string,
   disabled: PropTypes.bool,
 
   updateSelectedModelGcodeConfig: PropTypes.func.isRequired,
@@ -122,10 +125,11 @@ GcodeConfigGreyscale.propTypes = {
 
 const mapStateToProps = (state) => {
   const { gcodeConfig } = state.laser;
-  const { density, movementMode } = gcodeConfig;
+  const { density, movementMode, appendMode = '' } = gcodeConfig;
   return {
     density,
     movementMode,
+    appendMode,
   };
 };
 

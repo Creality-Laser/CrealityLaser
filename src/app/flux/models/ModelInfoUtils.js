@@ -39,7 +39,7 @@ const checkParams = (headType, sourceType, mode) => {
   return true;
 };
 
-const generateLaserDefaults = (mode, sourceType) => {
+const generateLaserDefaults = (mode, sourceType, appendMode = '') => {
   let config = null;
   let gcodeConfig = null;
   switch (mode) {
@@ -58,6 +58,7 @@ const generateLaserDefaults = (mode, sourceType) => {
         whiteClip: 255,
         bwThreshold: 168,
         algorithm: 'Atkinson',
+        appendMode,
       };
       break;
     }
@@ -116,6 +117,7 @@ const generateLaserDefaults = (mode, sourceType) => {
       multiPassEnabled: false,
       multiPasses: 2,
       multiPassDepth: 1,
+      appendMode,
     };
   } else if (mode === 'bw') {
     gcodeConfig = {
@@ -251,10 +253,15 @@ const generateCNCDefaults = (mode, sourceType) => {
   return { config, gcodeConfig };
 };
 
-const generateModelDefaultConfigs = (headType, sourceType, mode) => {
+const generateModelDefaultConfigs = (
+  headType,
+  sourceType,
+  mode,
+  appendMode
+) => {
   let defaultConfigs = {};
   if (headType === 'laser') {
-    defaultConfigs = generateLaserDefaults(mode, sourceType);
+    defaultConfigs = generateLaserDefaults(mode, sourceType, appendMode);
   } else if (headType === 'cnc') {
     defaultConfigs = generateCNCDefaults(mode, sourceType);
   }

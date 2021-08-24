@@ -34,11 +34,16 @@ class ImageProcessMode extends PureComponent {
   };
 
   render() {
-    const { sourceType, mode, showOrigin, disabled, t } = this.props;
+    const { sourceType, mode, appendMode, showOrigin, disabled, t } =
+      this.props;
     const actions = this.actions;
     const isBW = sourceType === 'raster' && mode === 'bw';
     const isGreyscale = sourceType === 'raster' && mode === 'greyscale';
     const isRasterVector = sourceType === 'raster' && mode === 'vector';
+    const isLineToLine =
+      sourceType === 'raster' &&
+      mode === 'greyscale' &&
+      appendMode === 'lineToLine';
 
     return (
       <>
@@ -62,8 +67,17 @@ class ImageProcessMode extends PureComponent {
                 label={t('GREYSCALE')}
                 disabled={disabled}
                 modeBgImage={greyscaleBgImg}
-                isSelected={this.props.mode === 'greyscale'}
+                isSelected={this.props.mode === 'greyscale' && !isLineToLine}
                 onClick={() => actions.changeSelectedModelMode('greyscale')}
+              />
+              <ProcessModeSelectItem
+                label={t('LINETOLINE')}
+                disabled={disabled}
+                modeBgImage={greyscaleBgImg}
+                isSelected={
+                  this.props.mode === 'greyscale' && appendMode === 'lineToLine'
+                }
+                onClick={() => actions.changeSelectedModelMode('lineToLine')}
               />
               <ProcessModeSelectItem
                 label={t('VECTOR')}
@@ -85,7 +99,12 @@ class ImageProcessMode extends PureComponent {
               </ParameterItemValue>
             </ParameterItem>
             {isBW && <ConfigRasterBW disabled={disabled} />}
-            {isGreyscale && <ConfigGreyscale disabled={disabled} />}
+            {isGreyscale && !isLineToLine && (
+              <ConfigGreyscale disabled={disabled} />
+            )}
+            {isLineToLine && (
+              <ConfigGreyscale disabled={disabled} hideFields={['algorithm']} />
+            )}
             {isRasterVector && <ConfigRasterVector disabled={disabled} />}
           </>
         )}
@@ -98,6 +117,7 @@ ImageProcessMode.propTypes = {
   t: PropTypes.func,
   sourceType: PropTypes.string.isRequired,
   mode: PropTypes.string.isRequired,
+  appendMode: PropTypes.string,
   showOrigin: PropTypes.bool,
   disabled: PropTypes.bool,
 
