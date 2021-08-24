@@ -1,6 +1,6 @@
-# CV_Laser
+# Creality Laser
 
-Laser Desktop App for Creality CV Laser, inspired by [Luban](https://github.com/Snapmaker/Luban).
+Laser Desktop App for Creality, inspired by [Luban](https://github.com/Snapmaker/Luban).
 
 ## 框架相关
 
