@@ -820,10 +820,10 @@ class LaserToolPathGenerator extends EventEmitter {
 
     let firstTurnOn = true;
     function turnOnLaser() {
-      if (firstTurnOn && fixedPowerEnabled) {
+      if (firstTurnOn) {
         firstTurnOn = false;
-        const powerStrength = Math.floor((fixedPower * 255) / 100);
-        return `M3 P${fixedPower} S${powerStrength}`;
+        const powerStrength = Math.floor((fixedPower * 1000) / 100);
+        return `M3 S${powerStrength}`;
       }
       return 'M3';
     }
