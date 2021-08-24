@@ -34,7 +34,7 @@
     ]
   },
   "build": {
-    "productName": "CV-Laser",
+    "productName": "Creality Laser",
     "appId": "com.creality.CVLaser",
     "files": [
       "dist/",
