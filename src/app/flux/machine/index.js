@@ -260,6 +260,7 @@ export const actions = {
         }, 600);
       },
       'serialport:open': (options) => {
+        console.log(options, '---------- options--------');
         const { port, err } = options;
         if (err && err !== 'inuse') {
           return;

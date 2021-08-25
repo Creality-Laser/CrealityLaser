@@ -9,6 +9,7 @@ import {
   WRITE_SOURCE_CLIENT,
 } from '../../controllers/constants';
 import ScreenController from '../../controllers/Marlin/ScreenController';
+import GrblController from '../../controllers/Grbl/GrblController';
 
 const log = logger('service:socket-server');
 
@@ -62,12 +63,21 @@ const serialportOpen = (socket, options) => {
     if (dataSource === PROTOCOL_SCREEN) {
       controller = new ScreenController({ port, dataSource, baudrate: 115200 });
     } else {
-      controller = new MarlinController({
-        port,
-        dataSource,
-        baudrate: 115200,
-        connectionTimeout,
-      });
+      // controller = new MarlinController({
+      //   port,
+      //   dataSource,
+      //   baudrate: 115200,
+      //   connectionTimeout,
+      // });
+      controller = new GrblController(
+        { io: socket },
+        {
+          port,
+          dataSource,
+          baudrate: 115200,
+          rtscts: false,
+        }
+      );
     }
   }
 
