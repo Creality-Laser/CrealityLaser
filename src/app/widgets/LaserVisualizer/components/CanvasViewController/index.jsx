@@ -12,18 +12,21 @@ function CanvasViewController(props) {
         shape="circle"
         icon={<FocusIcon />}
         onClick={autoFocus}
+        title="Reset Position"
       />
       <Button
         type="text"
         shape="circle"
         icon={<ZoomInIcon />}
         onClick={zoomIn}
+        title="Zoom In"
       />
       <Button
         type="text"
         shape="circle"
         icon={<ZoomOutIcon />}
         onClick={zoomOut}
+        title="Zoom Out"
       />
     </>
   );

@@ -100,7 +100,7 @@ $visualizer-padding: 10px;
   z-index: $z-index-float;
   position: absolute;
   right: 12px;
-  bottom: 38px;
+  bottom: 30px;
 
   p {
     text-align: right;
@@ -112,7 +112,7 @@ $visualizer-padding: 10px;
   z-index: 500;
   position: absolute;
   left: 6px;
-  bottom: 32px;
+  bottom: 42px;
 }
 
 .visualizer-progress {
@@ -120,6 +120,6 @@ $visualizer-padding: 10px;
   position: absolute;
   bottom: 60px;
   left: 0;
-  width: 100%;
+  width: 98%;
   height: 6px;
 }
