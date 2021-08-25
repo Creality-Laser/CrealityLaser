@@ -58,14 +58,14 @@ export default merge(baseConfig, {
 
   module: {
     rules: [
-      {
-        test: /\.worker\.(c|m)?js$/i,
-        use: [
-          {
-            loader: 'worker-loader',
-          },
-        ],
-      },
+      // {
+      //   test: /\.worker\.(c|m)?js$/i,
+      //   use: [
+      //     {
+      //       loader: 'worker-loader',
+      //     },
+      //   ],
+      // },
       {
         test: /\.[jt]sx?$/,
         exclude: [/node_modules/, /\.worker\.(c|m)?js$/i],

@@ -3,6 +3,14 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
+import { Button } from 'antd';
+import {
+  CaretRightOutlined,
+  PauseOutlined,
+  BorderOutlined,
+  CloseCircleOutlined,
+} from '@ant-design/icons';
+
 import {
   // Workflow
   WORKFLOW_STATE_RUNNING,
@@ -120,54 +128,41 @@ class WorkflowControl extends PureComponent {
           isAllBtnDisabled ? styles.workflowControlWrapperDisabled : ''
         )}
       >
-        <button
+        <Button
           type="button"
           className={styles.workflowControlBtn}
           title={i18n._('Run')}
           onClick={this.actions.handleRun}
           disabled={isServerWaiting || !canPlay}
         >
-          <i
-            className={classNames(
-              'iconfont',
-              styles.workflowControlBtnIcon,
-              styles.workflowControlBtnIconTriangle
-            )}
-          >
-            &#xe6bd;
-          </i>
-        </button>
-        <button
+          <CaretRightOutlined />
+        </Button>
+        <Button
           type="button"
           className={styles.workflowControlBtn}
           title={i18n._('Pause')}
           onClick={this.actions.handlePause}
           disabled={isServerWaiting || !canPause}
         >
-          <i className={classNames('iconfont', styles.workflowControlBtnIcon)}>
-            &#xe6d6;
-          </i>
-        </button>
-        <button
+          <PauseOutlined />
+        </Button>
+        <Button
           type="button"
           className={styles.workflowControlBtn}
           title={i18n._('Stop')}
           onClick={this.actions.handleStop}
           disabled={isServerWaiting || !canStop}
         >
-          <i className={classNames(styles.workflowControlBtnIconStop)} />
-        </button>
-        <button
-          type="button"
+          <BorderOutlined style={{ fontSize: '12px' }} />
+        </Button>
+        <Button
           className={styles.workflowControlBtn}
           title={i18n._('Close')}
           onClick={this.actions.handleClose}
           disabled={isServerWaiting || !canClose}
         >
-          <i className={classNames('iconfont', styles.workflowControlBtnIcon)}>
-            &#xe6b0;
-          </i>
-        </button>
+          <CloseCircleOutlined />
+        </Button>
       </div>
     );
   }

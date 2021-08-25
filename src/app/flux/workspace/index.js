@@ -5,7 +5,7 @@ import uuid from 'uuid';
 import api from '../../api';
 import log from '../../lib/log';
 import { pathWithRandomSuffix } from '../../../shared/lib/random-utils';
-import GcodeToArraybufferGeometry from '../../workers/GcodeToArraybufferGeometry.worker';
+import GcodeToArraybufferGeometry from '../../workers/GcodeToArraybufferGeometry';
 
 import gcodeBufferGeometryToObj3d from '../../workers/GcodeToBufferGeometry/gcodeBufferGeometryToObj3d';
 import {
@@ -37,84 +37,77 @@ const INITIAL_STATE = {
   progress: 0,
 };
 
-const gcodeRenderingWorker = new GcodeToArraybufferGeometry();
+// const gcodeRenderingWorker = new GcodeToArraybufferGeometry();
 
 export const actions = {
   init: () => (dispatch, getState) => {
-    gcodeRenderingWorker.onmessage = (e) => {
-      const data = e.data;
-      const { status, value, renderMethod, isDone, boundingBox } = data;
-
-      switch (status) {
-        case 'succeed': {
-          const { modelGroup, gcodeFile } = getState().workspace;
-          const { positions, colors, index, indexColors } = value;
-
-          const bufferGeometry = new THREE.BufferGeometry();
-          const positionAttribute = new THREE.Float32BufferAttribute(
-            positions,
-            3
-          );
-          const indexAttribute = new THREE.Float32BufferAttribute(index, 1);
-          const colorAttribute = new THREE.Uint8BufferAttribute(colors, 3);
-          const indexColorAttribute = new THREE.Uint8BufferAttribute(
-            indexColors,
-            3
-          );
-          // this will map the buffer values to 0.0f - +1.0f in the shader
-          colorAttribute.normalized = true;
-          indexColorAttribute.normalized = true;
-
-          bufferGeometry.addAttribute('position', positionAttribute);
-          bufferGeometry.addAttribute('a_color', colorAttribute);
-          bufferGeometry.addAttribute('a_index', indexAttribute);
-          bufferGeometry.addAttribute('a_index_color', indexColorAttribute);
-
-          const object3D = gcodeBufferGeometryToObj3d(
-            'WORKSPACE',
-            bufferGeometry,
-            renderMethod
-          );
-          // object3D.material.uniforms.u_visible_index_count.value = 20000;
-          object3D.name = `${gcodeFile.name}-${uuid.v4()}`;
-
-          modelGroup.add(object3D);
-          object3D.position.copy(new THREE.Vector3());
-
-          if (isDone) {
-            dispatch(
-              actions.updateState({
-                renderState: 'rendered',
-                boundingBox,
-                stage: WORKSPACE_STAGE.LOAD_GCODE_SUCCEED,
-              })
-            );
-          }
-
-          dispatch(actions.render());
-          break;
-        }
-        case 'progress': {
-          const state = getState().printing;
-          if (value - state.progress > 0.01 || value > 1 - EPSILON) {
-            dispatch(actions.updateState({ progress: value }));
-          }
-          break;
-        }
-        case 'err': {
-          dispatch(
-            actions.updateState({
-              renderState: 'idle',
-              stage: WORKSPACE_STAGE.LOAD_GCODE_FAILED,
-              progress: 1,
-            })
-          );
-          break;
-        }
-        default:
-          break;
-      }
-    };
+    // gcodeRenderingWorker.onmessage = (e) => {
+    //   const data = e.data;
+    //   const { status, value, renderMethod, isDone, boundingBox } = data;
+    //   switch (status) {
+    //     case 'succeed': {
+    //       const { modelGroup, gcodeFile } = getState().workspace;
+    //       const { positions, colors, index, indexColors } = value;
+    //       const bufferGeometry = new THREE.BufferGeometry();
+    //       const positionAttribute = new THREE.Float32BufferAttribute(
+    //         positions,
+    //         3
+    //       );
+    //       const indexAttribute = new THREE.Float32BufferAttribute(index, 1);
+    //       const colorAttribute = new THREE.Uint8BufferAttribute(colors, 3);
+    //       const indexColorAttribute = new THREE.Uint8BufferAttribute(
+    //         indexColors,
+    //         3
+    //       );
+    //       // this will map the buffer values to 0.0f - +1.0f in the shader
+    //       colorAttribute.normalized = true;
+    //       indexColorAttribute.normalized = true;
+    //       bufferGeometry.addAttribute('position', positionAttribute);
+    //       bufferGeometry.addAttribute('a_color', colorAttribute);
+    //       bufferGeometry.addAttribute('a_index', indexAttribute);
+    //       bufferGeometry.addAttribute('a_index_color', indexColorAttribute);
+    //       const object3D = gcodeBufferGeometryToObj3d(
+    //         'WORKSPACE',
+    //         bufferGeometry,
+    //         renderMethod
+    //       );
+    //       // object3D.material.uniforms.u_visible_index_count.value = 20000;
+    //       object3D.name = `${gcodeFile.name}-${uuid.v4()}`;
+    //       modelGroup.add(object3D);
+    //       object3D.position.copy(new THREE.Vector3());
+    //       if (isDone) {
+    //         dispatch(
+    //           actions.updateState({
+    //             renderState: 'rendered',
+    //             boundingBox,
+    //             stage: WORKSPACE_STAGE.LOAD_GCODE_SUCCEED,
+    //           })
+    //         );
+    //       }
+    //       dispatch(actions.render());
+    //       break;
+    //     }
+    //     case 'progress': {
+    //       const state = getState().printing;
+    //       if (value - state.progress > 0.01 || value > 1 - EPSILON) {
+    //         dispatch(actions.updateState({ progress: value }));
+    //       }
+    //       break;
+    //     }
+    //     case 'err': {
+    //       dispatch(
+    //         actions.updateState({
+    //           renderState: 'idle',
+    //           stage: WORKSPACE_STAGE.LOAD_GCODE_FAILED,
+    //           progress: 1,
+    //         })
+    //       );
+    //       break;
+    //     }
+    //     default:
+    //       break;
+    //   }
+    // };
   },
 
   setGcodePrintingIndex: (index) => (dispatch, getState) => {
@@ -255,7 +248,7 @@ export const actions = {
 
   renderGcodeFile:
     (gcodeFile, needToList = true) =>
-    (dispatch, getState) => {
+    async (dispatch, getState) => {
       const oldGcodeFile = getState().workspace.gcodeFile;
 
       if (needToList) {
@@ -277,12 +270,80 @@ export const actions = {
           progress: 0,
         })
       );
-      dispatch(actions.loadGcode(gcodeFile));
 
-      gcodeRenderingWorker.postMessage({
-        func: 'WORKSPACE',
-        gcodeFilename: gcodeFile.uploadName,
-      });
+      await dispatch(actions.loadGcode(gcodeFile));
+
+      await GcodeToArraybufferGeometry(
+        {
+          func: 'WORKSPACE',
+          gcodeFilename: gcodeFile.uploadName,
+        },
+        (data) => {
+          // { status: 'progress', value: progress }
+          const { value } = data;
+          const { progress } = getState().workspace;
+
+          const validProgress = value - progress > 0.01 || value > 1 - EPSILON;
+          if (validProgress) {
+            dispatch(actions.updateState({ progress: value }));
+          }
+        }
+      )
+        .then((data) => {
+          if (!data || data.status !== 'succeed') {
+            return;
+          }
+          const { value, renderMethod, isDone, boundingBox } = data;
+          const { modelGroup, gcodeFile } = getState().workspace;
+          const { positions, colors, index, indexColors } = value;
+          const bufferGeometry = new THREE.BufferGeometry();
+          const positionAttribute = new THREE.Float32BufferAttribute(
+            positions,
+            3
+          );
+          const indexAttribute = new THREE.Float32BufferAttribute(index, 1);
+          const colorAttribute = new THREE.Uint8BufferAttribute(colors, 3);
+          const indexColorAttribute = new THREE.Uint8BufferAttribute(
+            indexColors,
+            3
+          );
+          // this will map the buffer values to 0.0f - +1.0f in the shader
+          colorAttribute.normalized = true;
+          indexColorAttribute.normalized = true;
+          bufferGeometry.addAttribute('position', positionAttribute);
+          bufferGeometry.addAttribute('a_color', colorAttribute);
+          bufferGeometry.addAttribute('a_index', indexAttribute);
+          bufferGeometry.addAttribute('a_index_color', indexColorAttribute);
+          const object3D = gcodeBufferGeometryToObj3d(
+            'WORKSPACE',
+            bufferGeometry,
+            renderMethod
+          );
+          // object3D.material.uniforms.u_visible_index_count.value = 20000;
+          object3D.name = `${gcodeFile.name}-${uuid.v4()}`;
+          modelGroup.add(object3D);
+          object3D.position.copy(new THREE.Vector3());
+          if (isDone) {
+            dispatch(
+              actions.updateState({
+                renderState: 'rendered',
+                boundingBox,
+                stage: WORKSPACE_STAGE.LOAD_GCODE_SUCCEED,
+              })
+            );
+          }
+          dispatch(actions.render());
+        })
+        .catch((err) => {
+          console.error(`workspace load gcode file error: ${err}`);
+          dispatch(
+            actions.updateState({
+              renderState: 'idle',
+              stage: WORKSPACE_STAGE.LOAD_GCODE_FAILED,
+              progress: 1,
+            })
+          );
+        });
     },
 
   addGcodeFiles: (fileInfo) => (dispatch, getState) => {

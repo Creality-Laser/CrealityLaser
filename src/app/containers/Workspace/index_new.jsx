@@ -1,8 +1,5 @@
-import React, { useRef, useState, useEffect } from 'react';
-import classNames from 'classnames';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
-import includes from 'lodash/includes';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Sortable from 'react-sortablejs';
@@ -10,7 +7,6 @@ import { Modal, Button } from 'antd';
 import Dropzone from '../../components/Dropzone';
 
 import { controller } from '../../lib/controller';
-import DefaultWidgets from './DefaultWidgets';
 import Visualizer from '../../widgets/WorkspaceVisualizer/Visualizer';
 import {
   WORKFLOW_STATE_IDLE,
@@ -67,14 +63,6 @@ function Workspace(props) {
     },
   };
 
-  const defaultContainer = useRef(null);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     window.location.hash = '/settings';
-  //   }, 2000);
-  // }, []);
-
   useEffect(() => {
     const controllerEvents = {
       connect: () => {
@@ -104,22 +92,8 @@ function Workspace(props) {
     };
   }, []);
 
-  const toggleFromDefault = (widgetId) => () => {
-    const { updateTabContainer } = props;
-    // clone
-    const defaultWidgets = _.slice(defaultWidgets);
-    if (includes(defaultWidgets, widgetId)) {
-      defaultWidgets.splice(defaultWidgets.indexOf(widgetId), 1);
-      updateTabContainer('default', {
-        widgets: defaultWidgets,
-      });
-    }
-  };
-
   const isCurrentConnectedByWiFi =
     isConnected && connectionType === CONNECTION_TYPE_WIFI;
-
-  console.log(defaultWidgets, '========= defaultWidgets ===========');
 
   return (
     <>
@@ -179,19 +153,28 @@ function Workspace(props) {
           </div>
           <div className={styles.center_content_wrapper}>
             <Visualizer />
-            {/* <div
-              ref={defaultContainer}
-              className={classNames(styles.default_container, styles.fixed)}
-            >
-              <DefaultWidgets
-                defaultWidgets={defaultWidgets}
-                toggleFromDefault={toggleFromDefault}
-              />
-            </div> */}
           </div>
           <div className={styles.right_row_wrapper}>
-            <GcodeFileLoader widgetId="gcodeFileLoader" />
-            <Control widgetId="control" isDisabled={isCurrentConnectedByWiFi} />
+            <Sortable
+              options={{
+                animation: 150,
+                delay: 0,
+                group: {
+                  name: 'workspace-left-bar',
+                },
+                handle: '.sortable-handle',
+                filter: '.sortable-filter',
+                chosenClass: 'sortable-chosen',
+                ghostClass: 'sortable-ghost',
+                dataIdAttr: 'data-widget-id',
+              }}
+            >
+              <GcodeFileLoader widgetId="gcodeFileLoader" />
+              <Control
+                widgetId="control"
+                isDisabled={isCurrentConnectedByWiFi}
+              />
+            </Sortable>
           </div>
         </div>
       </Dropzone>
@@ -202,16 +185,8 @@ function Workspace(props) {
 Workspace.propTypes = {
   ...withRouter.propTypes,
   style: PropTypes.object,
-  // showPrimaryContainer: PropTypes.bool.isRequired,
-  // showSecondaryContainer: PropTypes.bool.isRequired,
-  // defaultWidgets: PropTypes.array.isRequired,
-  // primaryWidgets: PropTypes.array.isRequired,
-  // secondaryWidgets: PropTypes.array.isRequired,
-  // updateTabContainer: PropTypes.func.isRequired,
   uploadGcodeFile: PropTypes.func.isRequired,
   isShowWorkspace: PropTypes.bool,
-  // isConnected: PropTypes.bool,
-  // connectionType: PropTypes.string,
 };
 
 const mapStateToProps = (state) => {

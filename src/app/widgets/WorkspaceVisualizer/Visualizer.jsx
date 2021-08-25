@@ -73,6 +73,7 @@ class Visualizer extends Component {
   state = {
     // coordinateVisible: true,
     // toolheadVisible: true,
+    showProgressBar: false,
     controller: {
       type: controller.type,
       state: controller.state,
@@ -502,6 +503,21 @@ class Visualizer extends Component {
     ) {
       this.autoFocus();
     }
+
+    // stage and progressbar
+    if (nextProps.stage === WORKSPACE_STAGE.LOAD_GCODE_SUCCEED) {
+      setTimeout(() => {
+        this.setState({
+          showProgressBar: false,
+        });
+      }, 2000);
+    }
+
+    if (nextProps.stage === WORKSPACE_STAGE.LOADING_GCODE) {
+      this.setState({
+        showProgressBar: true,
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -622,8 +638,9 @@ class Visualizer extends Component {
   }
 
   autoFocus() {
-    const child = this.props.modelGroup.children[0];
-    this.canvas.current.autoFocus(child);
+    // const child = this.props.modelGroup.children[0];
+    // this.canvas.current.autoFocus(child);
+    this.canvas.current.autoFocus();
   }
 
   notice() {
@@ -632,9 +649,10 @@ class Visualizer extends Component {
       case WORKSPACE_STAGE.EMPTY:
         return '';
       case WORKSPACE_STAGE.LOADING_GCODE:
-        return i18n._('Loading Gcode...{{progress}}%', {
-          progress: (100.0 * progress).toFixed(1),
-        });
+        // return i18n._('Loading Gcode...{{progress}}%', {
+        //   progress: (100.0 * progress).toFixed(1),
+        // });
+        return `Loading Gcode... ${(100.0 * progress).toFixed(1)}%`;
       case WORKSPACE_STAGE.LOAD_GCODE_SUCCEED:
         return i18n._('Loaded Gcode successfully.');
       case WORKSPACE_STAGE.LOAD_GCODE_FAILED:
@@ -650,34 +668,51 @@ class Visualizer extends Component {
 
   render() {
     const state = this.state;
+    const { showProgressBar } = state;
     const notice = this.notice();
-    const { gcodeFile } = this.props;
+    const { gcodeFile, stage } = this.props;
+
+    const isProgressFailed = stage === WORKSPACE_STAGE.LOAD_GCODE_FAILED;
 
     return (
       <div
         style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}
       >
-        <div className={styles['visualizer-notice']}>
-          <p>{notice}</p>
-        </div>
-        <div className={styles['visualizer-progress']}>
-          {/* <ProgressBar progress={this.props.progress * 100} /> */}
-          <Progress percent={this.props.progress * 100} />
-        </div>
+        {showProgressBar && (
+          <div className={styles['visualizer-notice']}>
+            <p>{notice}</p>
+          </div>
+        )}
+        {showProgressBar && (
+          <div className={styles['visualizer-progress']}>
+            <Progress
+              percent={this.props.progress * 100}
+              status={isProgressFailed ? 'exception' : 'active'}
+              strokeColor={
+                isProgressFailed
+                  ? ''
+                  : {
+                      from: '#4b90f2',
+                      to: '#87d068',
+                    }
+              }
+            />
+          </div>
+        )}
         {gcodeFile !== null && (
           <div className={styles['visualizer-info']}>
             <p>{i18n._(gcodeFile.name)}</p>
           </div>
         )}
         <div className={styles['canvas-content']}>
-          {this.props.uploadState === 'uploading' && <Loading />}
-          {this.props.renderState === 'rendering' && <Rendering />}
+          {/* {this.props.uploadState === 'uploading' && <Loading />} */}
+          {/* {this.props.renderState === 'rendering' && <Rendering />} */}
           {/* <div style={{ position: 'absolute', top: '10px', left: '10px', right: '10px' }}> */}
           <div
             style={{
               position: 'absolute',
               left: '50%',
-              bottom: '20px',
+              bottom: '40px',
               transform: 'translateX(-50%)',
             }}
           >
