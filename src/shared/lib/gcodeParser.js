@@ -80,7 +80,7 @@ const parseLine = (() => {
   })();
   // eslint-disable-next-line no-useless-escape
   const re =
-    /(;.*)|(%.*)|({.*)|((?:\$\$)|(?:\$[a-zA-Z0-9#]*))|([a-zA-Z][0-9\+\-\.]+)|(\*[0-9]+)/gim;
+    /(;.*)|(%.*)|({.*)|((?:\$\$)|(?:\$[a-zA-Z0-9#]*))|([a-zA-Z][0-9+-.]+)|(\*[0-9]+)/gim;
 
   return (line, options) => {
     options = options || {};
