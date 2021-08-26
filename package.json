@@ -1,7 +1,7 @@
 {
   "name": "creality_laser",
   "version": "1.1.0",
-  "productName": "Creality Laser",
+  "productName": "CrealityLaser",
   "description": "Creality laser carving app.",
   "scripts": {
     "build": "concurrently \"yarn build:main\" \"yarn build:renderer\"",
@@ -34,7 +34,7 @@
     ]
   },
   "build": {
-    "productName": "Creality Laser",
+    "productName": "CrealityLaser",
     "appId": "com.creality.CVLaser",
     "files": [
       "dist/",
@@ -102,7 +102,7 @@
     }
   },
   "author": {
-    "name": "Creality Laser",
+    "name": "CrealityLaser",
     "url": "https://github.com/Creality-Laser/CrealityLaser"
   },
   "contributors": [

@@ -1,7 +1,7 @@
 {
   "name": "creality_laser",
   "version": "1.1.0",
-  "productName": "Creality Laser",
+  "productName": "CrealityLaser",
   "description": "Creality laser carving app.",
   "main": "./main.prod.js",
   "author": {

@@ -44,7 +44,7 @@ jobs:
 
       - name: Setting Environment Variables
         run: |
-          $PRODUCT_NAME="Creality Laser"
+          $PRODUCT_NAME="CrealityLaser"
           $PACKAGE_NAME="Creality-Laser"
           $PACKAGE_VERSION=node -e "console.log(require('./src/package.json').version)"
           $RELEASE="${PACKAGE_NAME}-${PACKAGE_VERSION}"

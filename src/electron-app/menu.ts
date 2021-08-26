@@ -59,14 +59,14 @@ export default class MenuBuilder {
       label: 'Electron',
       submenu: [
         {
-          label: i18n.t('About Creality Laser'),
+          label: i18n.t('About CrealityLaser'),
           selector: 'orderFrontStandardAboutPanel:',
         },
         { type: 'separator' },
         { label: i18n.t('Services'), submenu: [] },
         { type: 'separator' },
         {
-          label: 'Hide Creality Laser',
+          label: 'Hide CrealityLaser',
           accelerator: 'Command+H',
           selector: 'hide:',
         },

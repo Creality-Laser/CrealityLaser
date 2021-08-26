@@ -1,4 +1,4 @@
-# Creality Laser
+# CrealityLaser
 
 Laser Desktop App for Creality, inspired by [Luban](https://github.com/Snapmaker/Luban).
 
@@ -40,15 +40,13 @@ See our [docs and guides here](https://electron-react-boilerplate.js.org/docs/in
 
 ## 项目架构
 
-./.erb --------------------> 项目脚手架文件；
-./src/main.dev.ts ---------> Electron 入口文件；
-./src/app/\* --------------> 前端代码文件夹；
-./src/electron-app/\* -----> Electron 相关代码文件夹；
+./.erb --------------------> 项目脚手架文件；  
+./src/main.dev.ts ---------> Electron 入口文件；  
+./src/app/\* --------------> 前端代码文件夹；  
+./src/electron-app/\* -----> Electron 相关代码文件夹；  
 ./src/server/\* -----------> Server 相关代码文件夹；
 
-## todo
-
-[done] 1. i18n 同步内容 和 menu;
+## Wiki
 
 - [i18n](https://phrase.com/blog/posts/building-an-electron-app-with-internationalization-i18n/)
 - [ipc](https://www.electronjs.org/docs/api/ipc-main)
