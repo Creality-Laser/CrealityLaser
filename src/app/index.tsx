@@ -4,6 +4,8 @@ import { HashRouter as Router, Route } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
+
+import pkg from '../../package.json';
 import App from './containers/App';
 import '../utils/i18n';
 import reducer from './flux';
@@ -43,6 +45,12 @@ const runRender = () => {
   );
 };
 
+const setDocumentTitle = () => {
+  const { productName, version } = pkg;
+
+  document.title = `${productName} v${version}`;
+};
+
 const preventBrowserDropdown = () => {
   // Prevent browser from loading a drag-and-dropped file
   // http://stackoverflow.com/questions/6756583/prevent-browser-from-loading-a-drag-and-dropped-file
@@ -68,6 +76,7 @@ const init = async () => {
   await userLogin();
   preventBrowserDropdown();
   runRender();
+  setDocumentTitle();
 
   window.addEventListener('error', (e) => {
     console.log(e, '========== window error ==========');
