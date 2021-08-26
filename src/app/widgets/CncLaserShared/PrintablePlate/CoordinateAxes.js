@@ -47,14 +47,16 @@ class CoordinateAxes {
   // @param {number} size Define the size of the line representing the axes.
   // @see [Drawing the Coordinate Control]{@http://soledadpenades.com/articles/three-js-tutorials/drawing-the-coordinate-axes/}
   constructor(width, height) {
-    const red = colornames('red');
-    const green = colornames('green');
+    // const red = colornames('red');
+    // const green = colornames('green');
+
+    const black = colornames('black');
 
     this.group.add(
       buildAxis(
         new THREE.Vector3(0, 0, 0),
         new THREE.Vector3(width, 0, 0),
-        red,
+        black,
         false
       ), // +X
       // buildAxis(
@@ -66,7 +68,7 @@ class CoordinateAxes {
       buildAxis(
         new THREE.Vector3(0, 0, 0),
         new THREE.Vector3(0, height, 0),
-        green,
+        black,
         false
       ) // +Y
       // buildAxis(

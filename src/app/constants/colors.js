@@ -1,6 +1,7 @@
 export const RED = '#e93100';
 export const GREEN = '#22ac38';
 export const BLUE = '#00b7ee';
+export const BLACK = '#000000';
 
 export function toDigital(hex) {
   let digital = 0;

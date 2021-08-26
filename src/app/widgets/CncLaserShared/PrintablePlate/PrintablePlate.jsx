@@ -12,7 +12,7 @@ import {
 import each from 'lodash/each';
 import colornames from 'colornames';
 
-import { RED, GREEN } from '../../../constants/colors';
+import { BLACK } from '../../../constants/colors';
 import TextSprite from '../../../components/three-extensions/TextSprite';
 import TargetPoint from '../../../components/three-extensions/TargetPoint';
 
@@ -54,7 +54,7 @@ class PrintablePlate extends Object3D {
         gridSpacing,
         axisYLength,
         gridSpacing,
-        colornames('blue'), // center line
+        colornames('black'), // center line
         colornames('gray 44') // grid
       );
       each(gridLine.children, (o) => {
@@ -74,18 +74,18 @@ class PrintablePlate extends Object3D {
 
       const arrowX = new Mesh(
         new CylinderBufferGeometry(0, 1, 4),
-        new MeshBasicMaterial({ color: RED })
+        new MeshBasicMaterial({ color: BLACK })
       );
       arrowX.position.set(axisXLength + 2, 0, 0);
       arrowX.rotation.set(0, 0, -Math.PI / 2);
-      group.add(arrowX);
+      // group.add(arrowX);
 
       const arrowY = new Mesh(
         new CylinderBufferGeometry(0, 1, 4),
-        new MeshBasicMaterial({ color: GREEN })
+        new MeshBasicMaterial({ color: BLACK })
       );
       arrowY.position.set(0, axisYLength + 2, 0);
-      group.add(arrowY);
+      // group.add(arrowY);
     }
 
     {
@@ -104,25 +104,27 @@ class PrintablePlate extends Object3D {
 
     {
       // Axis Labels
-      const axisXLabel = new TextSprite({
-        x: axisXLength + 10,
-        y: 0,
-        z: 0,
-        size: 10,
-        text: 'X',
-        color: RED,
-      });
-      const axisYLabel = new TextSprite({
-        x: 0,
-        y: axisYLength + 10,
-        z: 0,
-        size: 10,
-        text: 'Y',
-        color: GREEN,
-      });
+      // const axisXLabel = new TextSprite({
+      //   x: axisXLength + 10,
+      //   y: 0,
+      //   z: 0,
+      //   size: 10,
+      //   text: 'X',
+      //   color: BLACK,
+      // });
+      // const axisYLabel = new TextSprite({
+      //   x: 0,
+      //   y: axisYLength + 10,
+      //   z: 0,
+      //   size: 10,
+      //   text: 'Y',
+      //   color: BLACK,
+      // });
 
-      group.add(axisXLabel);
-      group.add(axisYLabel);
+      // group.add(axisXLabel);
+      // group.add(axisYLabel);
+
+      const largeSize = 200;
 
       const textSize = 10 / 3;
       for (let x = 0; x <= axisXLength; x += gridSpacing) {
@@ -135,11 +137,29 @@ class PrintablePlate extends Object3D {
           text: x,
           textAlign: 'center',
           textBaseline: 'bottom',
-          color: RED,
+          color: BLACK,
           opacity: 0.5,
         });
         group.add(textLabel);
         // }
+      }
+
+      // if has large size, then show another x scale
+      if (this.size.x >= largeSize) {
+        for (let x = axisXLength; x > 0; x -= gridSpacing) {
+          const textLabel = new TextSprite({
+            x: x + 1,
+            y: this.size.y + 3,
+            z: 0,
+            size: textSize,
+            text: this.size.x - x,
+            textAlign: 'center',
+            textBaseline: 'bottom',
+            color: BLACK,
+            opacity: 0.5,
+          });
+          group.add(textLabel);
+        }
       }
       for (let y = 0; y <= axisYLength; y += gridSpacing) {
         if (y !== 0) {
@@ -151,10 +171,30 @@ class PrintablePlate extends Object3D {
             text: y,
             textAlign: 'center',
             textBaseline: 'bottom',
-            color: GREEN,
+            color: BLACK,
             opacity: 0.5,
           });
           group.add(textLabel);
+        }
+      }
+
+      // if has large size, then show another y scale
+      if (this.size.y >= largeSize) {
+        for (let y = axisYLength; y > 0; y -= gridSpacing) {
+          if (this.size.y - y !== 0) {
+            const textLabel = new TextSprite({
+              x: this.size.x + 3,
+              y,
+              z: 0,
+              size: textSize,
+              text: this.size.y - y,
+              textAlign: 'center',
+              textBaseline: 'bottom',
+              color: BLACK,
+              opacity: 0.5,
+            });
+            group.add(textLabel);
+          }
         }
       }
     }
