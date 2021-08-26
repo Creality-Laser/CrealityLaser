@@ -59,7 +59,7 @@ export default class MenuBuilder {
       label: 'Electron',
       submenu: [
         {
-          label: i18n.t('About CrealityLaser'),
+          label: i18n.t('menu:About CrealityLaser'),
           selector: 'orderFrontStandardAboutPanel:',
         },
         { type: 'separator' },
@@ -225,6 +225,18 @@ export default class MenuBuilder {
   }
 
   buildDefaultTemplate() {
+    const { languages } = config;
+    const subMenuLanguage = languages.map(({ label, value: languageCode }) => {
+      return {
+        label,
+        type: 'radio',
+        checked: i18n.language === languageCode,
+        click: () => {
+          i18n.changeLanguage(languageCode);
+        },
+      };
+    });
+
     const templateDefault = [
       {
         label: i18n.t('menu:&File'),
@@ -303,54 +315,58 @@ export default class MenuBuilder {
               ],
       },
       {
+        label: i18n.t('menu:&Settings'),
+        submenu: [
+          {
+            label: i18n.t('menu:language'),
+            submenu: subMenuLanguage,
+          },
+        ],
+      },
+      {
         label: i18n.t('menu:Help'),
         submenu: [
           {
             label: i18n.t('menu:Learn More'),
             click() {
-              shell.openExternal('https://electronjs.org');
+              shell.openExternal(
+                'https://github.com/Creality-Laser/CrealityLaser'
+              );
             },
           },
           {
             label: i18n.t('menu:Documentation'),
             click() {
               shell.openExternal(
-                'https://github.com/electron/electron/tree/master/docs#readme'
+                'https://github.com/Creality-Laser/CrealityLaser#readme'
               );
             },
           },
           {
             label: i18n.t('menu:Community Discussions'),
             click() {
-              shell.openExternal('https://www.electronjs.org/community');
+              shell.openExternal(
+                'https://github.com/Creality-Laser/CrealityLaser/discussions/landing'
+              );
             },
           },
           {
             label: i18n.t('menu:Search Issues'),
             click() {
-              shell.openExternal('https://github.com/electron/electron/issues');
+              shell.openExternal(
+                'https://github.com/Creality-Laser/CrealityLaser/issues'
+              );
+            },
+          },
+          {
+            label: i18n.t('menu:About CrealityLaser'),
+            click: () => {
+              this.mainWindow.webContents.send('show_panel', 'about');
             },
           },
         ],
       },
     ];
-
-    const { languages } = config;
-    const subMenuLanguage = languages.map(({ label, value: languageCode }) => {
-      return {
-        label,
-        type: 'radio',
-        checked: i18n.language === languageCode,
-        click: () => {
-          i18n.changeLanguage(languageCode);
-        },
-      };
-    });
-
-    templateDefault.push({
-      label: i18n.t('menu:language'),
-      submenu: subMenuLanguage,
-    });
 
     return templateDefault;
   }

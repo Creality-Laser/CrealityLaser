@@ -12,6 +12,7 @@ import { actions as keyboardShortcutActions } from '../flux/keyboardShortcut';
 import Header from './Header/index';
 import Laser from './Laser';
 import Settings from './Settings';
+import GlobalInfoModal from './GlobalInfoModal';
 import './App.global.less';
 
 function App(props) {
@@ -70,6 +71,7 @@ function App(props) {
 
   return (
     <>
+      <GlobalInfoModal />
       <Header />
       {/* <Switch>
         <Route exact path="/" component={Laser} />

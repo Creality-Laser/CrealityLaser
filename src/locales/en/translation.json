@@ -159,5 +159,7 @@
   "Toggle Locale": "Toggle Locale",
   "No model is selected": "No model is selected",
   "Failed to preview": "Failed to preview",
-  "Failed to preview, please modify parameters and try again.": "Failed to preview, please modify parameters and try again."
+  "Failed to preview, please modify parameters and try again.": "Failed to preview, please modify parameters and try again.",
+  "Version": "Version",
+  "License": "License"
 }

@@ -159,5 +159,7 @@
   "Toggle Locale": "切换语言",
   "No model is selected": "当前没有选中模型",
   "Failed to preview": "预览失败",
-  "Failed to preview, please modify parameters and try again.": "预览失败，请修改配置参数后重试。"
+  "Failed to preview, please modify parameters and try again.": "预览失败，请修改配置参数后重试。",
+  "Version": "版本",
+  "License": "许可"
 }
