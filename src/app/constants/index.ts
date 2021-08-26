@@ -121,7 +121,7 @@ export const LASER_PRINT_MODE_MANUAL = 'manual';
 export const MACHINE_SERIES = {
   CV20: {
     value: 'CV20',
-    label: 'CV20',
+    label: 'CV-20',
     setting: {
       size: {
         x: 100,
@@ -137,7 +137,7 @@ export const MACHINE_SERIES = {
   },
   CV30: {
     value: 'CV30',
-    label: 'CV30',
+    label: 'CV-30',
     setting: {
       size: {
         x: 300,

@@ -11,8 +11,13 @@ import styles from './index.module.scss';
 const { Option } = Select;
 
 const machines = Object.values(MACHINE_SERIES)
-  .map((machine) => machine && machine.value)
-  .filter((m) => m.startsWith('CV'));
+  .map(
+    (machine) =>
+      machine && machine.value && { label: machine.label, value: machine.value }
+  )
+  .filter((m) => m.value.startsWith('CV'));
+
+console.log(machines);
 
 function MachineSelection(props) {
   const { series, updateMachineSeries } = props;
@@ -30,9 +35,9 @@ function MachineSelection(props) {
         style={{ width: 160 }}
         onChange={updateMachineSeries}
       >
-        {machines.map((machine) => (
-          <Option value={machine} key={machine}>
-            {machine}
+        {machines.map(({ label, value }) => (
+          <Option value={value} key={value}>
+            {label}
           </Option>
         ))}
       </Select>
