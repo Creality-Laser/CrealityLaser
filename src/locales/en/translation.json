@@ -161,5 +161,8 @@
   "Failed to preview": "Failed to preview",
   "Failed to preview, please modify parameters and try again.": "Failed to preview, please modify parameters and try again.",
   "Version": "Version",
-  "License": "License"
+  "License": "License",
+  "Add image file to workspace": "Add image file to workspace",
+  "Add text to workspace": "Add text to workspace",
+  "Add Qrcode": "Add Qrcode"
 }

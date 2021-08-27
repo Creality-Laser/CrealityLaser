@@ -118,7 +118,7 @@ export default function AddImage(props) {
         type="primary"
         shape="round"
         style={{ float: 'left', marginRight: '20px' }}
-        title="Add image file to workspace"
+        title={t('Add image file to workspace')}
         onClick={onClickToUpload}
       >
         {t('Add File', 'Add File')}
@@ -126,7 +126,7 @@ export default function AddImage(props) {
       <Button
         shape="round"
         style={{ float: 'left', marginRight: '20px' }}
-        title="Add image file to workspace"
+        title={t('Add text to workspace')}
         onClick={() => {
           insertDefaultTextVector();
         }}
@@ -136,7 +136,7 @@ export default function AddImage(props) {
       <Button
         shape="round"
         style={{ float: 'left' }}
-        title="Add text to Qrcode"
+        title={t('Add Qrcode')}
         onClick={() => {
           resetQrcodeText();
           resetCurrentQrcode();

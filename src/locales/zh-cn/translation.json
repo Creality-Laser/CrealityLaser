@@ -11,7 +11,7 @@
   "Generate Qrcode": "生成二维码",
   "OK": "好的",
   "Cancel": "取消",
-  "Object List": "模型列表",
+  "Object List": "文件列表",
   "Please add File": "请添加文件",
   "object item": "项目",
   "Actions": "操作",
@@ -42,7 +42,7 @@
   "left": "左",
   "center": "居中",
   "right": "右",
-  "Transformation": "形变",
+  "Transformation": "变换",
   "Size": "尺寸",
   "Enter the size of the engraved picture. The size cannot be larger than size.x x size.y mm or the size of your material.": "输入图像的预期雕刻尺寸。该尺寸不能大于 {{sizeX}} x {{sizeY}}mm 或大于材料的尺寸。",
   "Size (mm)": "尺寸 (mm)",
@@ -161,5 +161,8 @@
   "Failed to preview": "预览失败",
   "Failed to preview, please modify parameters and try again.": "预览失败，请修改配置参数后重试。",
   "Version": "版本",
-  "License": "许可"
+  "License": "许可",
+  "Add image file to workspace": "添加图片文件到工作区",
+  "Add text to workspace": "添加文字到工作区",
+  "Add Qrcode": "添加二维码"
 }
