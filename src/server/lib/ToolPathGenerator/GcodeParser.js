@@ -19,7 +19,8 @@ class GcodeParser {
 
     const { headType, mode, transformation, gcodeConfig } = modelInfo;
     const { positionX, positionY, positionZ } = transformation;
-    const { jogSpeed, workSpeed, dwellTime } = gcodeConfig;
+    const { jogSpeed, workSpeed, dwellTime, movementMode, appendMode } =
+      gcodeConfig;
 
     const startPoint = {
       X: undefined,
@@ -41,11 +42,19 @@ class GcodeParser {
 
     let greyscaleRowCount = 0;
 
+    const greyscaleLineToLineMode =
+      mode === 'greyscale' && appendMode === 'lineToLine';
+
     for (let i = 0; i < fakeGcodes.length; i++) {
       this.parseLine(fakeGcodes[i] && fakeGcodes[i].trim());
       const lineObject = this.data[i];
 
-      if (mode !== 'greyscale') {
+      if (greyscaleLineToLineMode) {
+        // in greyscale mode each X represent new row
+        if (lineObject.Y) {
+          greyscaleRowCount++;
+        }
+      } else {
         if (lineObject.G === 4) {
           this.estimatedTime += dwellTime * 0.001;
         }
@@ -62,12 +71,8 @@ class GcodeParser {
             default:
           }
         }
-      } else {
-        // in greyscale mode each X represent new row
-        if (lineObject.X) {
-          greyscaleRowCount++;
-        }
       }
+
       lineObject.X !== undefined && (startPoint.X = lineObject.X);
       lineObject.Y !== undefined && (startPoint.Y = lineObject.Y);
 
@@ -78,10 +83,10 @@ class GcodeParser {
     boundingBox.max.y += positionY;
     boundingBox.min.y += positionY;
 
-    // greyscale mode estimatedTime
+    // greyscale lineToLine mode estimatedTime
     // estimatedTime = distance * workSpeed
-    if (mode === 'greyscale') {
-      const rowDistance = Math.abs(boundingBox.max.y - boundingBox.min.y);
+    if (greyscaleLineToLineMode) {
+      const rowDistance = Math.abs(boundingBox.max.x - boundingBox.min.x);
       this.estimatedTime =
         ((greyscaleRowCount * rowDistance) / workSpeed) * 60.0;
     }

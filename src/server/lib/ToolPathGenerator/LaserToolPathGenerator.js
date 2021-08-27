@@ -228,20 +228,21 @@ class LaserToolPathGenerator extends EventEmitter {
 
     let isNewRow = false;
 
-    for (let i = 0; i < width; ++i) {
-      const isReverse = i % 2 === 0;
+    for (let j = 0; j < height; j++) {
+      const isReverse = (j + 1) % 2 === 0;
       isNewRow = true;
 
       for (
-        let j = isReverse ? height : 0;
-        isReverse ? j >= 0 : j < height;
-        isReverse ? j-- : j++
+        let i = isReverse ? width : 0;
+        isReverse ? i >= 0 : i < width;
+        isReverse ? i-- : i++
       ) {
-        const idx = j * width * 4 + i * 4;
+        const idx = i * 4 + j * width * 4;
+
         if (isNewRow) {
           content.push(`G0 X${normalizer.x(i)} Y${normalizer.y(j)} S0`);
           content.push(
-            `G1 Y${normalizer.y(j)} S${grayToPower(
+            `G1 X${normalizer.x(i)} S${grayToPower(
               img.bitmap.data[idx],
               powerMin,
               powerMax
@@ -250,7 +251,7 @@ class LaserToolPathGenerator extends EventEmitter {
           isNewRow = false;
         } else {
           content.push(
-            `Y${normalizer.y(j)} S${grayToPower(
+            `X${normalizer.x(i)} S${grayToPower(
               img.bitmap.data[idx],
               powerMin,
               powerMax
@@ -261,12 +262,13 @@ class LaserToolPathGenerator extends EventEmitter {
 
       content.push('S0');
       // content.push('G0 X0 Y0 Z0');
-      const p = i / width;
+      const p = j / height;
       if (p - progress > 0.05) {
         progress = p;
         this.emit('progress', progress);
       }
     }
+
     content.push('M5');
     content.push('G0 X0 Y0 Z0');
 
@@ -282,7 +284,12 @@ class LaserToolPathGenerator extends EventEmitter {
 
   async generateGcodeGreyscale_origin(modelInfo, modelPath) {
     const { gcodeConfigPlaceholder, config, gcodeConfig } = modelInfo;
-    const { fixedPowerEnabled, fixedPower, dwellTime } = gcodeConfig;
+    const {
+      fixedPowerEnabled,
+      fixedPower,
+      dwellTime,
+      direction = 'Horizontal',
+    } = gcodeConfig;
     const { workSpeed } = gcodeConfigPlaceholder;
     const { bwThreshold } = config;
 
@@ -313,27 +320,54 @@ class LaserToolPathGenerator extends EventEmitter {
     content.push(`G1 F${workSpeed}`);
     const dTime = dwellTime / 1000;
 
-    for (let i = 0; i < width; ++i) {
-      const isReverse = i % 2 === 0;
-      for (
-        let j = isReverse ? height : 0;
-        isReverse ? j >= 0 : j < height;
-        isReverse ? j-- : j++
-      ) {
-        const idx = j * width * 4 + i * 4;
-        if (img.bitmap.data[idx] < bwThreshold) {
-          content.push(`G1 X${normalizer.x(i)} Y${normalizer.y(j)}`);
-          content.push(turnOnLaser());
-          content.push(`G4 P${dTime}`);
-          content.push('M05');
+    if (direction === 'Horizontal') {
+      for (let j = 0; j < height; j++) {
+        const isReverse = (j + 1) % 2 === 0;
+        for (
+          let i = isReverse ? width : 0;
+          isReverse ? i >= 0 : i < width;
+          isReverse ? i-- : i++
+        ) {
+          const idx = i * 4 + j * width * 4;
+
+          if (img.bitmap.data[idx] < bwThreshold) {
+            content.push(`G1 X${normalizer.x(i)} Y${normalizer.y(j)}`);
+            content.push(turnOnLaser());
+            content.push(`G4 P${dTime}`);
+            content.push('M05');
+          }
+        }
+
+        const p = j / height;
+        if (p - progress > 0.05) {
+          progress = p;
+          this.emit('progress', progress);
         }
       }
-      const p = i / width;
-      if (p - progress > 0.05) {
-        progress = p;
-        this.emit('progress', progress);
+    } else if (direction === 'Vertical') {
+      for (let i = 0; i < width; ++i) {
+        const isReverse = (i + 1) % 2 === 0;
+        for (
+          let j = isReverse ? height : 0;
+          isReverse ? j >= 0 : j < height;
+          isReverse ? j-- : j++
+        ) {
+          const idx = j * width * 4 + i * 4;
+          if (img.bitmap.data[idx] < bwThreshold) {
+            content.push(`G1 X${normalizer.x(i)} Y${normalizer.y(j)}`);
+            content.push(turnOnLaser());
+            content.push(`G4 P${dTime}`);
+            content.push('M05');
+          }
+        }
+        const p = i / width;
+        if (p - progress > 0.05) {
+          progress = p;
+          this.emit('progress', progress);
+        }
       }
     }
+
     content.push('G0 X0 Y0');
 
     return content;
