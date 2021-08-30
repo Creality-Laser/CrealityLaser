@@ -159,21 +159,19 @@ class Transformation extends PureComponent {
               <ParameterItemValue>
                 <StyledSlider
                   disabled={!selectedNotHide}
-                  value={positionX - Math.ceil(width / 2)}
+                  value={positionX}
                   min={-size.x}
                   max={size.x}
-                  onChange={(value) =>
-                    actions.onChangePositionX(value + Math.ceil(width / 2))
-                  }
+                  onChange={actions.onChangePositionX}
                   onAfterChange={actions.onModelAfterTransform}
                 />
                 <StyledInputNumber
                   disabled={!selectedNotHide}
-                  value={positionX - Math.ceil(width / 2)}
+                  value={toFixed(positionX, 1)}
                   min={-size.x}
                   max={size.x}
                   onChange={(value) => {
-                    actions.onChangePositionX(value + Math.ceil(width / 2));
+                    actions.onChangePositionX(value);
                     actions.onModelAfterTransform();
                   }}
                 />
@@ -191,21 +189,19 @@ class Transformation extends PureComponent {
               <ParameterItemValue>
                 <StyledSlider
                   disabled={!selectedNotHide}
-                  value={positionY - Math.ceil(height / 2)}
+                  value={positionY}
                   min={-size.y}
                   max={size.y}
-                  onChange={(value) =>
-                    actions.onChangePositionY(value + Math.ceil(height / 2))
-                  }
+                  onChange={actions.onChangePositionY}
                   onAfterChange={actions.onModelAfterTransform}
                 />
                 <StyledInputNumber
                   disabled={!selectedNotHide}
-                  value={positionY - Math.ceil(height / 2)}
+                  value={toFixed(positionY, 1)}
                   min={-size.y}
                   max={size.y}
                   onChange={(value) => {
-                    actions.onChangePositionY(value + Math.ceil(height / 2));
+                    actions.onChangePositionY(value);
                     actions.onModelAfterTransform();
                   }}
                 />
