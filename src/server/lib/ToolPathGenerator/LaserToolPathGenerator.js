@@ -247,14 +247,15 @@ class LaserToolPathGenerator extends EventEmitter {
           content.push(`G1 X${normalizer.x(i)} S${power}`);
           isNewRow = false;
         } else {
-          if (i === 0 || i === width - 1 || power !== lastPower) {
-            content.push(`X${normalizer.x(i)} S${power}`);
+          if (i > 1 && i < width - 2 && power === lastPower) {
+            content.pop();
           }
+          content.push(`X${normalizer.x(i)} S${power}`);
         }
         lastPower = power;
       }
 
-      content.push('S0');
+      //content.push('S0');
       // content.push('G0 X0 Y0 Z0');
       const p = j / height;
       if (p - progress > 0.05) {
