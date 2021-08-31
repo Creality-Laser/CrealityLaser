@@ -115,7 +115,7 @@
       "email": "bianyongfang@creality.com"
     }
   ],
-  "license": "GPLV3",
+  "license": "GPL-3.0",
   "keywords": [
     "electron",
     "boilerplate",
