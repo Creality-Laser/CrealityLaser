@@ -227,37 +227,31 @@ class LaserToolPathGenerator extends EventEmitter {
     content.push(`M4 S0`);
 
     let isNewRow = false;
+    let power;
+    let lastPower = -1;
 
     for (let j = 0; j < height; j++) {
       const isReverse = (j + 1) % 2 === 0;
       isNewRow = true;
 
       for (
-        let i = isReverse ? width : 0;
+        let i = isReverse ? width - 1 : 0;
         isReverse ? i >= 0 : i < width;
         isReverse ? i-- : i++
       ) {
         const idx = i * 4 + j * width * 4;
+        power = grayToPower(img.bitmap.data[idx], powerMin, powerMax);
 
         if (isNewRow) {
           content.push(`G0 X${normalizer.x(i)} Y${normalizer.y(j)} S0`);
-          content.push(
-            `G1 X${normalizer.x(i)} S${grayToPower(
-              img.bitmap.data[idx],
-              powerMin,
-              powerMax
-            )}`
-          );
+          content.push(`G1 X${normalizer.x(i)} S${power}`);
           isNewRow = false;
         } else {
-          content.push(
-            `X${normalizer.x(i)} S${grayToPower(
-              img.bitmap.data[idx],
-              powerMin,
-              powerMax
-            )}`
-          );
+          if (i === 0 || i === width - 1 || power !== lastPower) {
+            content.push(`X${normalizer.x(i)} S${power}`);
+          }
         }
+        lastPower = power;
       }
 
       content.push('S0');

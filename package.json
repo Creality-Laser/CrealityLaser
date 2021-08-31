@@ -1,6 +1,6 @@
 {
   "name": "creality_laser",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "productName": "CrealityLaser",
   "description": "Creality laser carving app.",
   "scripts": {
@@ -115,7 +115,7 @@
       "email": "bianyongfang@creality.com"
     }
   ],
-  "license": "GPLV3",
+  "license": "GPL-3.0",
   "keywords": [
     "electron",
     "boilerplate",
