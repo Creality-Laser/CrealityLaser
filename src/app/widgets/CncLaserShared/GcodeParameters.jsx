@@ -181,8 +181,11 @@ class GcodeParameters extends PureComponent {
       multiPassEnabled = false,
       multiPasses = 0,
       multiPassDepth = 0,
+      appendMode,
     } = this.props.gcodeConfig;
     const selectedNotHide = selectedModelID && !selectedModelHideFlag;
+
+    const isLineToLineGreyscale = appendMode && appendMode === 'lineToLine';
 
     // const isBW = mode === 'bw';
     const isGreyscale = mode === 'greyscale';
@@ -311,7 +314,7 @@ class GcodeParameters extends PureComponent {
                 </ParameterItemValue>
               </ParameterItem>
             )}
-            {dwellTime !== ABSENT_VALUE && (
+            {dwellTime !== ABSENT_VALUE && !isLineToLineGreyscale && (
               <ParameterItem
                 popover={{
                   title: t('Dwell Time'),
@@ -461,6 +464,7 @@ GcodeParameters.propTypes = {
   selectedModelHideFlag: PropTypes.bool,
   printOrder: PropTypes.number.isRequired,
   gcodeConfig: PropTypes.shape({
+    appendMode: PropTypes.string,
     // jogSpeed: PropTypes.number.isRequired,
     jogSpeed: PropTypes.number,
     workSpeed: PropTypes.number,
