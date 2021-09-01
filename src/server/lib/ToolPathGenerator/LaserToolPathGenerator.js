@@ -150,7 +150,7 @@ class LaserToolPathGenerator extends EventEmitter {
     // fakeGcodes.push('G90');
     // fakeGcodes.push('G21');
     let workingGcode = '';
-    console.log(mode, movementMode, appendMode);
+
     if (
       mode === 'bw' ||
       (mode === 'greyscale' &&
@@ -201,10 +201,9 @@ class LaserToolPathGenerator extends EventEmitter {
   }
 
   async generateGcodeGreyscale_new(modelInfo, modelPath) {
-    const { gcodeConfigPlaceholder, config, gcodeConfig } = modelInfo;
+    const { gcodeConfigPlaceholder, gcodeConfig } = modelInfo;
     const { fixedPowerEnabled, fixedPower } = gcodeConfig;
-    const { workSpeed, dwellTime } = gcodeConfigPlaceholder;
-    const { bwThreshold } = config;
+    const { workSpeed } = gcodeConfigPlaceholder;
 
     const powerMin = 0;
     const powerMax = fixedPowerEnabled ? fixedPower : 100;
@@ -221,8 +220,8 @@ class LaserToolPathGenerator extends EventEmitter {
     });
 
     let progress = 0;
-
     const content = [];
+
     content.push(`G1 F${workSpeed}`);
     content.push(`M4 S0`);
 
@@ -230,8 +229,9 @@ class LaserToolPathGenerator extends EventEmitter {
     let power;
     let lastPower = -1;
 
-    for (let j = 0; j < height; j++) {
-      const isReverse = (j + 1) % 2 === 0;
+    for (let j = height - 1; j >= 0; j--) {
+      // promise first row must not reverse.
+      const isReverse = (height - j) % 2 === 0;
       isNewRow = true;
 
       for (
@@ -255,7 +255,7 @@ class LaserToolPathGenerator extends EventEmitter {
       }
 
       content.push('S0');
-      // content.push('G0 X0 Y0 Z0');
+
       const p = j / height;
       if (p - progress > 0.05) {
         progress = p;
@@ -278,12 +278,7 @@ class LaserToolPathGenerator extends EventEmitter {
 
   async generateGcodeGreyscale_origin(modelInfo, modelPath) {
     const { gcodeConfigPlaceholder, config, gcodeConfig } = modelInfo;
-    const {
-      fixedPowerEnabled,
-      fixedPower,
-      dwellTime,
-      direction = 'Horizontal',
-    } = gcodeConfig;
+    const { fixedPower, dwellTime, direction = 'Horizontal' } = gcodeConfig;
     const { workSpeed } = gcodeConfigPlaceholder;
     const { bwThreshold } = config;
 
@@ -315,8 +310,9 @@ class LaserToolPathGenerator extends EventEmitter {
     const dTime = dwellTime / 1000;
 
     if (direction === 'Horizontal') {
-      for (let j = 0; j < height; j++) {
-        const isReverse = (j + 1) % 2 === 0;
+      for (let j = height - 1; j >= 0; j--) {
+        // promise first row must not reverse.
+        const isReverse = (height - j) % 2 === 0;
         for (
           let i = isReverse ? width : 0;
           isReverse ? i >= 0 : i < width;
@@ -550,36 +546,14 @@ class LaserToolPathGenerator extends EventEmitter {
       return len;
     }
 
-    // let firstTurnOn = true;
-
-    // const powerStrength = Math.floor(
-    //   ((fixedPowerEnabled ? fixedPower : 100) * 255) / 100
-    // );
-
     const powerStrength = Math.floor(
       ((fixedPowerEnabled ? fixedPower : 100) * 1000) / 100
     );
 
-    function turnOnLaser() {
-      // if (firstTurnOn && fixedPowerEnabled) {
-      //   firstTurnOn = false;
-      // const powerStrength = Math.floor(
-      //   (fixedPower * (255 - currentPower)) / 100
-      // );
-      //   return `M3 P${fixedPower} S${powerStrength}`;
-      // }
-      // return 'M3';
-      return `M4 S${powerStrength}`;
-    }
-
     function genMovement(normalizer, start, end) {
       return [
-        // `G0 F${jogSpeed}`,
         `G0 X${normalizer.x(start.x)} Y${normalizer.y(start.y)}} S0`,
-        // turnOnLaser(),
-        // `G1 F${workSpeed}`,
         `G1 X${normalizer.x(end.x)} Y${normalizer.y(end.y)} S${powerStrength}`,
-        // 'M5',
       ];
     }
 
@@ -609,9 +583,11 @@ class LaserToolPathGenerator extends EventEmitter {
         x: 1,
         y: 0,
       };
-      for (let j = 0; j < height; j++) {
+      for (let j = height - 1; j >= 0; j--) {
         let len = 0;
-        const isReverse = j % 2 !== 0;
+        // promise first row must not reverse.
+        const isReverse = (height - j) % 2 === 0;
+
         const sign = isReverse ? -1 : 1;
         for (
           let i = isReverse ? width - 1 : 0;
