@@ -25,7 +25,7 @@ const CNC_LASER_FRAG_SHADER = [
   '    if(v_g_code == 0.0){',
   '        discard;',
   '    }',
-  '    gl_FragColor = vec4(vColor, 1);',
+  '    gl_FragColor = vec4(vColor.xyz, 1);',
   '}',
 ].join('');
 
@@ -42,12 +42,21 @@ class MotionColor {
 
   G1(sPower = 0) {
     const depth = 1 - parseFloat(sPower / 1000);
-    const threeColorObj = new THREE.Color(depth, depth, depth);
-    return threeColorObj;
+    return new THREE.Color(depth, depth, depth);
   }
 
   unknown() {
     return new THREE.Color(0x000000);
+  }
+
+  gcodeGetColor(stateG, sPower) {
+    if (stateG === 0) {
+      return [this.G0().r, this.G0().g, this.G0().b];
+    } else if (stateG === 1) {
+      return [this.G1(sPower).r, this.G1(sPower).g, this.G1(sPower).b];
+    } else {
+      return [this.unknown().r, this.unknown().g, this.unknown().b];
+    }
   }
 }
 const motionColor = new MotionColor();
@@ -97,43 +106,23 @@ class ToolPathRenderer {
       item.Z !== undefined && (newState.Z = item.Z);
       item.S !== undefined && (newState.S = item.S);
 
-      if (state.G === 1 && newState.G === 0) {
-        positions.push(state.X);
-        positions.push(state.Y);
-        positions.push(state.Z);
-        gCodes.push(newState.G);
-        colors.push(motionColor.G0.r);
-        colors.push(motionColor.G0.g);
-        colors.push(motionColor.G0.b);
+      positions.push(state.X);
+      positions.push(state.Y);
+      positions.push(state.Z);
+      positions.push(newState.X);
+      positions.push(newState.Y);
+      positions.push(newState.Z);
+      gCodes.push(newState.G);
+      gCodes.push(newState.G);
+      for (let i = 0; i <= 2; i++) {
+        colors.push(motionColor.gcodeGetColor(newState.G, newState.S)[i]);
       }
-
-      if (
-        state.G !== newState.G ||
-        state.X !== newState.X ||
-        state.Y !== newState.Y ||
-        state.Z !== newState.Z ||
-        state.S !== newState.S
-      ) {
-        state = newState;
-        positions.push(state.X);
-        positions.push(state.Y);
-        positions.push(state.Z);
-        gCodes.push(state.G);
-        if (state.G === 0) {
-          colors.push(motionColor.G0.r);
-          colors.push(motionColor.G0.g);
-          colors.push(motionColor.G0.b);
-        } else if (state.G === 1) {
-          colors.push(motionColor.G1(state.S).r);
-          colors.push(motionColor.G1(state.S).g);
-          colors.push(motionColor.G1(state.S).b);
-        } else {
-          colors.push(motionColor.unknown.r);
-          colors.push(motionColor.unknown.g);
-          colors.push(motionColor.unknown.b);
-        }
+      for (let i = 0; i <= 2; i++) {
+        colors.push(motionColor.gcodeGetColor(newState.G, newState.S)[i]);
       }
+      state = newState;
     }
+
     const bufferGeometry = new THREE.BufferGeometry();
     const positionAttribute = new THREE.Float32BufferAttribute(positions, 3);
     const gCodeAttribute = new THREE.Float32BufferAttribute(gCodes, 1);
@@ -185,11 +174,11 @@ class ToolPathRenderer {
         state = { ...state, ...newState };
         geometry.vertices.push(new THREE.Vector3(state.X, state.Y, state.Z));
         if (state.G === 0) {
-          geometry.colors.push(motionColor.G0);
+          geometry.colors.push(motionColor.G0());
         } else if (state.G === 1) {
           geometry.colors.push(motionColor.G1(state.S));
         } else {
-          geometry.colors.push(motionColor.unknown);
+          geometry.colors.push(motionColor.unknown());
         }
       }
     }
