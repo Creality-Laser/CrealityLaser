@@ -830,13 +830,15 @@ class LaserToolPathGenerator extends EventEmitter {
     });
 
     let firstTurnOn = true;
+    const powerStrength = Math.floor(
+      ((fixedPowerEnabled ? fixedPower : 100) * 1000) / 100
+    );
     function turnOnLaser() {
       if (firstTurnOn) {
         firstTurnOn = false;
-        const powerStrength = Math.floor((fixedPower * 1000) / 100);
-        return `M3 S${powerStrength}`;
+        return `M4 S${powerStrength}`;
       }
-      return 'M3';
+      return 'M4';
     }
 
     // second pass generate gcode
