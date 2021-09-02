@@ -374,11 +374,12 @@ export const genQrcode = (req, res) => {
       colorDark: '#000', // black dots
       colorLight: '#0000', // Transparent background
       width: 200,
+      margin: 0,
     };
 
     return new Promise((resolve, reject) => {
       try {
-        const { path, type, colorDark, colorLight, width } = {
+        const { path, type, colorDark, colorLight, width, margin } = {
           ...defaultOptions,
           ...options,
         };
@@ -392,6 +393,7 @@ export const genQrcode = (req, res) => {
               light: colorLight, // Transparent background
             },
             width,
+            margin,
             type,
           },
           (err) => {
