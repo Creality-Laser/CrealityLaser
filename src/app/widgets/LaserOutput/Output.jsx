@@ -181,6 +181,7 @@ class Output extends PureComponent {
                   !hasModel ||
                   workflowState === 'running' ||
                   isGcodeGenerating ||
+                  !isAllModelsPreviewed ||
                   gcodeFile === null
                 }
                 style={{ display: 'block', width: '100%', marginTop: '10px' }}

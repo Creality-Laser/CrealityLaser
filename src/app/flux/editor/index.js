@@ -726,6 +726,7 @@ export const actions = {
     const { modelGroup, toolPathModelGroup, transformationUpdateTime } =
       getState()[headType];
 
+    dispatch(baseActions.resetCalculatedState(headType));
     const modelState = modelGroup.onModelTransform();
     toolPathModelGroup.updateSelectedNeedPreview(true);
     dispatch(
