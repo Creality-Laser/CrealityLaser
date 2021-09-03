@@ -7,7 +7,7 @@ import Canvas from '../../components/SMCanvas';
 import PrintablePlate from '../CncLaserShared/PrintablePlate';
 import { actions as editorActions } from '../../flux/editor';
 import AddImage from './components/AddImage';
-import UndoRedoBtns from './components/UndoRedoBtns';
+// import UndoRedoBtns from './components/UndoRedoBtns';
 import styles from './index.module.scss';
 import { PAGE_EDITOR } from '../../constants';
 // eslint-disable-next-line no-unused-vars
@@ -265,14 +265,15 @@ class Visualizer extends Component {
               autoFocus={this.actions.autoFocus}
             />
           </div>
-          <div>
+          <span />
+          {/* <div>
             <UndoRedoBtns
               canUndo={canUndo}
               canRedo={canRedo}
               undo={undo}
               redo={redo}
             />
-          </div>
+          </div> */}
         </div>
         <div className={styles['visualizer-progress']}>
           <ProgressInfo
