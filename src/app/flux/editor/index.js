@@ -382,6 +382,7 @@ export const actions = {
   selectModel: (headType, model) => (dispatch, getState) => {
     const { modelGroup } = getState()[headType];
     const find = modelGroup.getModels().find((v) => v.meshObject === model);
+    dispatch(baseActions.render(headType));
     dispatch(actions.selectModelByID(headType, find.modelID));
   },
 
@@ -669,45 +670,49 @@ export const actions = {
     // const { model } = getState()[headType];
     // const transformation = model.modelInfo.transformation;
     const { transformation } = getState()[headType];
+    const {
+      size: { x: sizeX, y: sizeY },
+    } = getState().machine;
+
     let posX = 0;
     let posY = 0;
     const { width, height } = transformation;
     switch (position) {
       case 'Top Left':
-        posX = -width / 2;
-        posY = height / 2;
+        posX = width / 2;
+        posY = sizeY - height / 2;
         break;
       case 'Top Middle':
-        posX = 0;
-        posY = height / 2;
+        posX = sizeX / 2;
+        posY = sizeY - height / 2;
         break;
       case 'Top Right':
-        posX = width / 2;
-        posY = height / 2;
+        posX = sizeX - width / 2;
+        posY = sizeY - height / 2;
         break;
       case 'Center Left':
         posX = -width / 2;
         posY = 0;
         break;
       case 'Center':
-        posX = 0;
-        posY = 0;
+        posX = sizeX / 2;
+        posY = sizeY / 2;
         break;
       case 'Center Right':
         posX = width / 2;
         posY = 0;
         break;
       case 'Bottom Left':
-        posX = -width / 2;
-        posY = -height / 2;
+        posX = width / 2;
+        posY = height / 2;
         break;
       case 'Bottom Middle':
-        posX = 0;
-        posY = -height / 2;
+        posX = sizeX / 2;
+        posY = height / 2;
         break;
       case 'Bottom Right':
-        posX = width / 2;
-        posY = -height / 2;
+        posX = sizeX - width / 2;
+        posY = height / 2;
         break;
       default:
         posX = 0;

@@ -61,21 +61,21 @@ const CanvasContextMenu = forwardRef((props, ref) => {
                 label: t('Top Right'),
                 onClick: () => onSetSelectedModelPosition('Top Right'),
               },
-              {
-                type: 'item',
-                label: t('Center Left'),
-                onClick: () => onSetSelectedModelPosition('Center Left'),
-              },
+              // {
+              //   type: 'item',
+              //   label: t('Center Left'),
+              //   onClick: () => onSetSelectedModelPosition('Center Left'),
+              // },
               {
                 type: 'item',
                 label: t('Center'),
                 onClick: () => onSetSelectedModelPosition('Center'),
               },
-              {
-                type: 'item',
-                label: t('Center Right'),
-                onClick: () => onSetSelectedModelPosition('Center Right'),
-              },
+              // {
+              //   type: 'item',
+              //   label: t('Center Right'),
+              //   onClick: () => onSetSelectedModelPosition('Center Right'),
+              // },
               {
                 type: 'item',
                 label: t('Bottom Left'),
