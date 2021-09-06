@@ -1,5 +1,5 @@
 import { isArray, includes } from 'lodash';
-
+import EventEmitter from 'events';
 import { MACHINE_SERIES } from '../../constants';
 import store from '../../../store';
 import { actions as widgetActions } from '../widget';
@@ -24,6 +24,8 @@ const INITIAL_STATE = {
 };
 
 const ACTION_UPDATE_STATE = 'machine/ACTION_UPDATE_STATE';
+
+export const machineEventEmitter = new EventEmitter();
 
 export const actions = {
   updateState: (state) => {
@@ -78,6 +80,8 @@ export const actions = {
     laserSize.z = Math.min(laserSize.z, 1000);
 
     store.set('machine.laserSize', laserSize);
+
+    machineEventEmitter.emit('laserSizeChange', laserSize);
 
     dispatch(actions.updateState({ laserSize }));
   },

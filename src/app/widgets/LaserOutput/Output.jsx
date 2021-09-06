@@ -113,6 +113,7 @@ class Output extends PureComponent {
       autoPreviewEnabled,
       gcodeFile,
       hasModel,
+      isAnyModelOverstepped,
     } = this.props;
     const isEditor = this.props.page === PAGE_EDITOR;
     const isProcess = this.props.page === PAGE_PROCESS;
@@ -121,11 +122,14 @@ class Output extends PureComponent {
       <div>
         <div>
           <Button
-            disabled={!hasModel || (isProcess && autoPreviewEnabled)}
+            disabled={
+              !hasModel ||
+              (isProcess && autoPreviewEnabled) ||
+              isAnyModelOverstepped
+            }
             onClick={this.actions.onProcess}
             style={{ display: 'block', width: '100%' }}
           >
-            {/* {isProcess ? 'Preview' : 'Process'} */}
             {t('Preview')}
           </Button>
           {/* {isProcess && ( */}
@@ -226,6 +230,7 @@ Output.propTypes = {
   setAutoPreview: PropTypes.func.isRequired,
   updateWidgetState: PropTypes.func.isRequired,
   togglePage: PropTypes.func.isRequired,
+  isAnyModelOverstepped: PropTypes.bool,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -243,9 +248,11 @@ const mapStateToProps = (state, ownProps) => {
     hasModel,
     toolPathModelGroup,
     gcodeFile,
+    isAnyModelOverstepped,
   } = state.laser;
 
   return {
+    isAnyModelOverstepped,
     page,
     modelGroup,
     hasModel,

@@ -160,17 +160,20 @@ class Transformation extends PureComponent {
                 <StyledSlider
                   disabled={!selectedNotHide}
                   value={positionX}
-                  min={-size.x}
-                  max={size.x}
+                  min={Math.floor(width / 2)}
+                  max={Math.ceil(size.x - width / 2)}
                   onChange={actions.onChangePositionX}
                   onAfterChange={actions.onModelAfterTransform}
                 />
                 <StyledInputNumber
                   disabled={!selectedNotHide}
                   value={toFixed(positionX, 1)}
-                  min={-size.x}
-                  max={size.x}
+                  min={Math.floor(width / 2)}
+                  max={Math.ceil(size.x - width / 2)}
                   onChange={(value) => {
+                    if (typeof value !== 'number') {
+                      return;
+                    }
                     actions.onChangePositionX(value);
                     actions.onModelAfterTransform();
                   }}
@@ -190,17 +193,20 @@ class Transformation extends PureComponent {
                 <StyledSlider
                   disabled={!selectedNotHide}
                   value={positionY}
-                  min={-size.y}
-                  max={size.y}
+                  min={Math.floor(height / 2)}
+                  max={Math.ceil(size.y - height / 2)}
                   onChange={actions.onChangePositionY}
                   onAfterChange={actions.onModelAfterTransform}
                 />
                 <StyledInputNumber
                   disabled={!selectedNotHide}
                   value={toFixed(positionY, 1)}
-                  min={-size.y}
-                  max={size.y}
+                  min={Math.floor(height / 2)}
+                  max={Math.ceil(size.y - height / 2)}
                   onChange={(value) => {
+                    if (typeof value !== 'number') {
+                      return;
+                    }
                     actions.onChangePositionY(value);
                     actions.onModelAfterTransform();
                   }}

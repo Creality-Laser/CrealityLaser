@@ -590,13 +590,22 @@ export const actions = {
   },
 
   updateSelectedModelTransformation:
-    (headType, transformation) => (dispatch) => {
+    (headType, transformation) => (dispatch, getState) => {
+      const { modelGroup } = getState()[headType];
       dispatch(
         threejsModelActions.updateSelectedModelTransformation(
           headType,
           transformation
         )
       );
+      setTimeout(() => {
+        dispatch(
+          baseActions.updateState(headType, {
+            isAnyModelOverstepped: modelGroup._isAnyLaserModelOverstepped(),
+          })
+        );
+      }, 0);
+
       // dispatch(
       //   svgModelActions.updateSelectedTransformation(headType, transformation)
       // );
@@ -740,6 +749,11 @@ export const actions = {
     if (new Date().getTime() - transformationUpdateTime > 50) {
       dispatch(
         baseActions.updateTransformation(headType, modelState.transformation)
+      );
+      dispatch(
+        baseActions.updateState(headType, {
+          isAnyModelOverstepped: modelGroup._isAnyLaserModelOverstepped(),
+        })
       );
     }
   },

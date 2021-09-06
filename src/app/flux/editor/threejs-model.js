@@ -79,7 +79,7 @@ export const threejsModelActions = {
             width: selectedModel.transformation.width,
             height: selectedModel.transformation.height,
           };
-          svgModelGroup.updateTransformation(transformation);
+          // svgModelGroup.updateTransformation(transformation);
           modelGroup.updateSelectedSource(source);
           modelGroup.updateSelectedModelTransformation(transformation);
           modelGroup.updateSelectedConfig({ size: Math.ceil(newSize) });

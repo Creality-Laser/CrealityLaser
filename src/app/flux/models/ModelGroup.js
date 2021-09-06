@@ -662,6 +662,20 @@ class ModelGroup {
     return boundingBox;
   }
 
+  _isAnyLaserModelOverstepped() {
+    this.overstepped = false;
+    let isAnyModelOverstepped = false;
+    for (const model of this.getModels()) {
+      if (model.sourceType !== '3d') {
+        const overstepped = model.overstepped;
+        if (overstepped) {
+          isAnyModelOverstepped = true;
+        }
+      }
+    }
+    return isAnyModelOverstepped;
+  }
+
   _checkAnyModelOverstepped() {
     let isAnyModelOverstepped = false;
     for (const model of this.getModels()) {
