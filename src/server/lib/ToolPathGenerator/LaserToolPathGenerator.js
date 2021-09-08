@@ -619,6 +619,15 @@ class LaserToolPathGenerator extends EventEmitter {
               x: start.x + direction.x * len * sign,
               y: start.y + direction.y * len * sign,
             };
+
+            // I don't know why.
+            // But it's works.
+            // This magic shit can make sequence and reverse gcode line aligned correctly...
+            if (isReverse) {
+              end.x += 1;
+              start.x += 1;
+            }
+
             content.push(...genMovement(normalizer, start, end, j));
           } else {
             len = 1;
