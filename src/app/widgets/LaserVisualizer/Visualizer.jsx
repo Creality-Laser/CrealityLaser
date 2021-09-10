@@ -7,9 +7,9 @@ import Canvas from '../../components/SMCanvas';
 import PrintablePlate from '../CncLaserShared/PrintablePlate';
 import { actions as editorActions } from '../../flux/editor';
 import AddImage from './components/AddImage';
-import UndoRedoBtns from './components/UndoRedoBtns';
+// import UndoRedoBtns from './components/UndoRedoBtns';
 import styles from './index.module.scss';
-import { PAGE_EDITOR } from '../../constants';
+// import { PAGE_EDITOR } from '../../constants';
 // eslint-disable-next-line no-unused-vars
 import CncLaserSvgEditor from '../CncLaserSvgEditor';
 
@@ -165,10 +165,10 @@ class Visualizer extends Component {
 
   render() {
     const {
-      canUndo,
-      canRedo,
-      undo,
-      redo,
+      // canUndo,
+      // canRedo,
+      // undo,
+      // redo,
       togglePage,
       uploadImage,
       setAutoPreview,
@@ -265,14 +265,15 @@ class Visualizer extends Component {
               autoFocus={this.actions.autoFocus}
             />
           </div>
-          <div>
+          <span />
+          {/* <div>
             <UndoRedoBtns
               canUndo={canUndo}
               canRedo={canRedo}
               undo={undo}
               redo={redo}
             />
-          </div>
+          </div> */}
         </div>
         <div className={styles['visualizer-progress']}>
           <ProgressInfo
@@ -301,10 +302,10 @@ Visualizer.propTypes = {
   stage: PropTypes.number.isRequired,
   progress: PropTypes.number.isRequired,
 
-  canUndo: PropTypes.bool.isRequired,
-  canRedo: PropTypes.bool.isRequired,
-  undo: PropTypes.func.isRequired,
-  redo: PropTypes.func.isRequired,
+  // canUndo: PropTypes.bool.isRequired,
+  // canRedo: PropTypes.bool.isRequired,
+  // undo: PropTypes.func.isRequired,
+  // redo: PropTypes.func.isRequired,
   uploadImage: PropTypes.func.isRequired,
   setAutoPreview: PropTypes.func.isRequired,
   togglePage: PropTypes.func.isRequired,

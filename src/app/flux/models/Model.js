@@ -11,17 +11,24 @@ const EVENTS = {
 };
 
 // const materialSelected = new THREE.MeshPhongMaterial({ color: 0xf0f0f0, specular: 0xb0b0b0, shininess: 30 });
-const materialNormal = new THREE.MeshPhongMaterial({
-  color: 0xa0a0a0,
-  specular: 0xb0b0b0,
-  shininess: 30,
-});
-const materialOverstepped = new THREE.MeshPhongMaterial({
-  color: 0xff0000,
-  shininess: 30,
-  transparent: true,
-  opacity: 0.6,
-});
+// const materialNormal = new THREE.MeshPhongMaterial({
+//   color: 0xa0a0a0,
+//   specular: 0xb0b0b0,
+//   shininess: 30,
+// });
+
+// const materialBasic = new THREE.MeshBasicMaterial({
+//   color: 0xffffff,
+//   transparent: true,
+//   opacity: 1,
+//   side: THREE.DoubleSide,
+// });
+
+// const materialOverstepped = new THREE.MeshPhongMaterial({
+//   color: 0xff0000,
+//   specular: 0xb0b0b0,
+//   shininess: 30,
+// });
 
 const DEFAULT_TRANSFORMATION = {
   positionX: 0,
@@ -322,6 +329,11 @@ class Model {
       ...this.transformation,
       ...transformation,
     };
+    const isModelOverstepped = checkIsModelOverstepped(
+      this.transformation,
+      this.limitSize
+    );
+    this.setOverstepped(isModelOverstepped);
     return this.transformation;
   }
 
@@ -436,6 +448,12 @@ class Model {
       this.transformation.width = width;
       this.transformation.height = height;
     }
+
+    const isModelOverstepped = checkIsModelOverstepped(
+      this.transformation,
+      this.limitSize
+    );
+    this.setOverstepped(isModelOverstepped);
 
     // if (width) {
     //   const geometrySize = ThreeUtils.getGeometrySize(
@@ -574,11 +592,33 @@ class Model {
     }
     this.overstepped = overstepped;
     if (this.overstepped) {
-      // this.material = materialOverstepped;
-      this.meshObject.material = materialOverstepped;
+      if (this.processObject3D && this.processObject3D.material) {
+        this.processObject3D.material.opacity = 0.3;
+      } else if (this.modelObject3D && this.modelObject3D.material) {
+        // text
+        this.modelObject3D.material.opacity = 0.3;
+      } else if (this.meshObject) {
+        // TODO dxf
+        // for (const group of this.meshObject.children) {
+        //   if (group && group.children) {
+        //     for (const gChild of group.children) {
+        //       if (gChild && gChild.material) {
+        //         // gChild.material.opacity = 0.1;
+        //       }
+        //     }
+        //   }
+        // }
+      }
     } else {
-      // this.material = (this.selected ? materialSelected : materialNormal);
-      this.meshObject.material = materialNormal;
+      if (this.processObject3D && this.processObject3D.material) {
+        this.processObject3D.material.opacity = 1;
+      } else if (this.modelObject3D && this.modelObject3D.material) {
+        // text
+        this.modelObject3D.material.opacity = 1;
+      } else if (this.meshObject) {
+        // dxf
+        this.meshObject.visible = true;
+      }
     }
   }
 
@@ -784,3 +824,71 @@ class Model {
 }
 
 export default Model;
+
+function checkIsModelOverstepped(
+  { width, height, positionX, positionY, rotationZ },
+  { x: limitX, y: limitY }
+) {
+  // get the vertex coords
+  const [xMin, xMax, yMin, yMax] = [
+    positionX - width / 2,
+    positionX + width / 2,
+    positionY - height / 2,
+    positionY + height / 2,
+  ];
+
+  // get the verte pointers before rotate
+  const [xMinYMin, xMaxYMin, xMinYMax, xMaxYMax] = [
+    [xMin, yMin],
+    [xMax, yMin],
+    [xMin, yMax],
+    [xMax, yMax],
+  ];
+
+  // 在平面坐标上，任意点P(x1,y1)，绕一个坐标点Q(x2,y2)旋转θ角度后,新的坐标设为(x, y)的计算公式：
+  // x= (x1 - x2)* cos(θ) - (y1 - y2)* sin(θ) + x2 ;
+  // y= (x1 - x2)* sin(θ) + (y1 - y2)* cos(θ) + y2 ;
+
+  function getRotatedPointer([x, y], [centerX, centerY], angle) {
+    const rotatedX =
+      (x - centerX) * Math.cos(angle) -
+      (y - centerY) * Math.sin(angle) +
+      centerX;
+    const rotatedY =
+      (x - centerX) * Math.sin(angle) +
+      (y - centerY) * Math.cos(angle) +
+      centerY;
+
+    return [rotatedX, rotatedY];
+  }
+
+  const [x1, y1] = getRotatedPointer(
+    xMinYMin,
+    [positionX, positionY],
+    rotationZ
+  );
+  const [x2, y2] = getRotatedPointer(
+    xMaxYMin,
+    [positionX, positionY],
+    rotationZ
+  );
+  const [x3, y3] = getRotatedPointer(
+    xMinYMax,
+    [positionX, positionY],
+    rotationZ
+  );
+  const [x4, y4] = getRotatedPointer(
+    xMaxYMax,
+    [positionX, positionY],
+    rotationZ
+  );
+
+  const xs = [x1, x2, x3, x4];
+  const ys = [y1, y2, y3, y4];
+
+  // const error = 0.1
+
+  return (
+    xs.some((x) => x < 0 || x > limitX) || ys.some((y) => y < 0 || y > limitY)
+  );
+}

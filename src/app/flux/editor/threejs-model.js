@@ -44,8 +44,7 @@ export const threejsModelActions = {
 
   updateSelectedModelTransformation:
     (headType, transformation) => (dispatch, getState) => {
-      const { modelGroup, toolPathModelGroup, svgModelGroup, config } =
-        getState()[headType];
+      const { modelGroup, toolPathModelGroup, config } = getState()[headType];
       const modelState =
         modelGroup.updateSelectedModelTransformation(transformation);
       const selectedModel = modelGroup.getSelectedModel();
@@ -79,7 +78,7 @@ export const threejsModelActions = {
             width: selectedModel.transformation.width,
             height: selectedModel.transformation.height,
           };
-          svgModelGroup.updateTransformation(transformation);
+          // svgModelGroup.updateTransformation(transformation);
           modelGroup.updateSelectedSource(source);
           modelGroup.updateSelectedModelTransformation(transformation);
           modelGroup.updateSelectedConfig({ size: Math.ceil(newSize) });

@@ -138,7 +138,7 @@ class LaserToolPathGenerator extends EventEmitter {
   }
 
   async generateToolPathObj(modelInfo, modelPath) {
-    const { mode, gcodeConfig, sourceType, transformation } = modelInfo;
+    const { mode, gcodeConfig, sourceType } = modelInfo;
     const { movementMode, appendMode } = gcodeConfig;
 
     // let fakeGcodes = this.getGcodeHeader();
@@ -150,7 +150,7 @@ class LaserToolPathGenerator extends EventEmitter {
     // fakeGcodes.push('G90');
     // fakeGcodes.push('G21');
     let workingGcode = '';
-    console.log(mode, movementMode, appendMode);
+
     if (
       mode === 'bw' ||
       (mode === 'greyscale' &&
@@ -201,10 +201,9 @@ class LaserToolPathGenerator extends EventEmitter {
   }
 
   async generateGcodeGreyscale_new(modelInfo, modelPath) {
-    const { gcodeConfigPlaceholder, config, gcodeConfig } = modelInfo;
+    const { gcodeConfigPlaceholder, gcodeConfig } = modelInfo;
     const { fixedPowerEnabled, fixedPower } = gcodeConfig;
-    const { workSpeed, dwellTime } = gcodeConfigPlaceholder;
-    const { bwThreshold } = config;
+    const { workSpeed } = gcodeConfigPlaceholder;
 
     const powerMin = 0;
     const powerMax = fixedPowerEnabled ? fixedPower : 100;
@@ -221,8 +220,8 @@ class LaserToolPathGenerator extends EventEmitter {
     });
 
     let progress = 0;
-
     const content = [];
+
     content.push(`G1 F${workSpeed}`);
     content.push(`M4 S0`);
 
@@ -230,8 +229,9 @@ class LaserToolPathGenerator extends EventEmitter {
     let power;
     let lastPower = -1;
 
-    for (let j = 0; j < height; j++) {
-      const isReverse = (j + 1) % 2 === 0;
+    for (let j = height - 1; j >= 0; j--) {
+      // promise first row must not reverse.
+      const isReverse = (height - j) % 2 === 0;
       isNewRow = true;
 
       for (
@@ -279,12 +279,7 @@ class LaserToolPathGenerator extends EventEmitter {
 
   async generateGcodeGreyscale_origin(modelInfo, modelPath) {
     const { gcodeConfigPlaceholder, config, gcodeConfig } = modelInfo;
-    const {
-      fixedPowerEnabled,
-      fixedPower,
-      dwellTime,
-      direction = 'Horizontal',
-    } = gcodeConfig;
+    const { fixedPower, dwellTime, direction = 'Horizontal' } = gcodeConfig;
     const { workSpeed } = gcodeConfigPlaceholder;
     const { bwThreshold } = config;
 
@@ -316,8 +311,9 @@ class LaserToolPathGenerator extends EventEmitter {
     const dTime = dwellTime / 1000;
 
     if (direction === 'Horizontal') {
-      for (let j = 0; j < height; j++) {
-        const isReverse = (j + 1) % 2 === 0;
+      for (let j = height - 1; j >= 0; j--) {
+        // promise first row must not reverse.
+        const isReverse = (height - j) % 2 === 0;
         for (
           let i = isReverse ? width : 0;
           isReverse ? i >= 0 : i < width;
@@ -371,7 +367,7 @@ class LaserToolPathGenerator extends EventEmitter {
   async generateGcodeGreyscale(modelInfo, modelPath) {
     const { gcodeConfigPlaceholder, config, gcodeConfig } = modelInfo;
     const { fixedPowerEnabled, fixedPower } = gcodeConfig;
-    const { workSpeed, dwellTime, jogSpeed = 3000 } = gcodeConfigPlaceholder;
+    const { workSpeed, jogSpeed = 3000 } = gcodeConfigPlaceholder;
     const { bwThreshold } = config;
 
     function bitEqual(a, b) {
@@ -551,36 +547,14 @@ class LaserToolPathGenerator extends EventEmitter {
       return len;
     }
 
-    // let firstTurnOn = true;
-
-    // const powerStrength = Math.floor(
-    //   ((fixedPowerEnabled ? fixedPower : 100) * 255) / 100
-    // );
-
     const powerStrength = Math.floor(
       ((fixedPowerEnabled ? fixedPower : 100) * 1000) / 100
     );
 
-    function turnOnLaser() {
-      // if (firstTurnOn && fixedPowerEnabled) {
-      //   firstTurnOn = false;
-      // const powerStrength = Math.floor(
-      //   (fixedPower * (255 - currentPower)) / 100
-      // );
-      //   return `M3 P${fixedPower} S${powerStrength}`;
-      // }
-      // return 'M3';
-      return `M4 S${powerStrength}`;
-    }
-
     function genMovement(normalizer, start, end) {
       return [
-        // `G0 F${jogSpeed}`,
         `G0 X${normalizer.x(start.x)} Y${normalizer.y(start.y)}} S0`,
-        // turnOnLaser(),
-        // `G1 F${workSpeed}`,
         `G1 X${normalizer.x(end.x)} Y${normalizer.y(end.y)} S${powerStrength}`,
-        // 'M5',
       ];
     }
 
@@ -610,9 +584,11 @@ class LaserToolPathGenerator extends EventEmitter {
         x: 1,
         y: 0,
       };
-      for (let j = 0; j < height; j++) {
+      for (let j = height - 1; j >= 0; j--) {
         let len = 0;
-        const isReverse = j % 2 !== 0;
+        // promise first row must not reverse.
+        const isReverse = (height - j) % 2 === 0;
+
         const sign = isReverse ? -1 : 1;
         for (
           let i = isReverse ? width - 1 : 0;
@@ -644,6 +620,15 @@ class LaserToolPathGenerator extends EventEmitter {
               x: start.x + direction.x * len * sign,
               y: start.y + direction.y * len * sign,
             };
+
+            // I don't know why.
+            // But it's works.
+            // This magic shit can make sequence and reverse gcode line aligned correctly...
+            if (isReverse) {
+              end.x += 1;
+              start.x += 1;
+            }
+
             content.push(...genMovement(normalizer, start, end, j));
           } else {
             len = 1;
@@ -855,13 +840,15 @@ class LaserToolPathGenerator extends EventEmitter {
     });
 
     let firstTurnOn = true;
+    const powerStrength = Math.floor(
+      ((fixedPowerEnabled ? fixedPower : 100) * 1000) / 100
+    );
     function turnOnLaser() {
       if (firstTurnOn) {
         firstTurnOn = false;
-        const powerStrength = Math.floor((fixedPower * 1000) / 100);
-        return `M3 S${powerStrength}`;
+        return `M4 S${powerStrength}`;
       }
-      return 'M3';
+      return 'M4';
     }
 
     // second pass generate gcode

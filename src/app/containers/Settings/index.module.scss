@@ -1,6 +1,8 @@
 .wrapper {
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 .content {
   margin-top: 40px;
@@ -26,4 +28,9 @@
   &:last-child {
     border-bottom: none;
   }
+}
+.backBtn {
+  min-width: 80px;
+  border-radius: 8px;
+  margin-top: 30px;
 }

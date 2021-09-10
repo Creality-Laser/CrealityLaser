@@ -382,6 +382,7 @@ export const actions = {
   selectModel: (headType, model) => (dispatch, getState) => {
     const { modelGroup } = getState()[headType];
     const find = modelGroup.getModels().find((v) => v.meshObject === model);
+    dispatch(baseActions.render(headType));
     dispatch(actions.selectModelByID(headType, find.modelID));
   },
 
@@ -397,8 +398,7 @@ export const actions = {
 
   changeSelectedModelMode:
     (headType, sourceType, mode) => async (dispatch, getState) => {
-      const { modelGroup, svgModelGroup, toolPathModelGroup } =
-        getState()[headType];
+      const { modelGroup, toolPathModelGroup } = getState()[headType];
 
       // hack!!
       let appendMode = '';
@@ -504,7 +504,7 @@ export const actions = {
 
   updateSelectedModelFlip:
     (headType, transformation) => (dispatch, getState) => {
-      const { modelGroup, svgModelGroup } = getState()[headType];
+      const { modelGroup } = getState()[headType];
 
       const selectedModel = modelGroup.getSelectedModel();
       const options = {
@@ -543,8 +543,7 @@ export const actions = {
     },
 
   updateSelectedModelConfig: (headType, config) => (dispatch, getState) => {
-    const { modelGroup, svgModelGroup, toolPathModelGroup } =
-      getState()[headType];
+    const { modelGroup, toolPathModelGroup } = getState()[headType];
 
     const selectedModel = modelGroup.getSelectedModel();
     const options = {
@@ -589,13 +588,22 @@ export const actions = {
   },
 
   updateSelectedModelTransformation:
-    (headType, transformation) => (dispatch) => {
+    (headType, transformation) => (dispatch, getState) => {
+      const { modelGroup } = getState()[headType];
       dispatch(
         threejsModelActions.updateSelectedModelTransformation(
           headType,
           transformation
         )
       );
+      setTimeout(() => {
+        dispatch(
+          baseActions.updateState(headType, {
+            isAnyModelOverstepped: modelGroup._isAnyLaserModelOverstepped(),
+          })
+        );
+      }, 0);
+
       // dispatch(
       //   svgModelActions.updateSelectedTransformation(headType, transformation)
       // );
@@ -669,45 +677,49 @@ export const actions = {
     // const { model } = getState()[headType];
     // const transformation = model.modelInfo.transformation;
     const { transformation } = getState()[headType];
+    const {
+      size: { x: sizeX, y: sizeY },
+    } = getState().machine;
+
     let posX = 0;
     let posY = 0;
     const { width, height } = transformation;
     switch (position) {
       case 'Top Left':
-        posX = -width / 2;
-        posY = height / 2;
+        posX = width / 2;
+        posY = sizeY - height / 2;
         break;
       case 'Top Middle':
-        posX = 0;
-        posY = height / 2;
+        posX = sizeX / 2;
+        posY = sizeY - height / 2;
         break;
       case 'Top Right':
-        posX = width / 2;
-        posY = height / 2;
+        posX = sizeX - width / 2;
+        posY = sizeY - height / 2;
         break;
       case 'Center Left':
         posX = -width / 2;
         posY = 0;
         break;
       case 'Center':
-        posX = 0;
-        posY = 0;
+        posX = sizeX / 2;
+        posY = sizeY / 2;
         break;
       case 'Center Right':
         posX = width / 2;
         posY = 0;
         break;
       case 'Bottom Left':
-        posX = -width / 2;
-        posY = -height / 2;
+        posX = width / 2;
+        posY = height / 2;
         break;
       case 'Bottom Middle':
-        posX = 0;
-        posY = -height / 2;
+        posX = sizeX / 2;
+        posY = height / 2;
         break;
       case 'Bottom Right':
-        posX = width / 2;
-        posY = -height / 2;
+        posX = sizeX - width / 2;
+        posY = height / 2;
         break;
       default:
         posX = 0;
@@ -726,6 +738,7 @@ export const actions = {
     const { modelGroup, toolPathModelGroup, transformationUpdateTime } =
       getState()[headType];
 
+    dispatch(baseActions.resetCalculatedState(headType));
     const modelState = modelGroup.onModelTransform();
     toolPathModelGroup.updateSelectedNeedPreview(true);
     dispatch(
@@ -734,6 +747,11 @@ export const actions = {
     if (new Date().getTime() - transformationUpdateTime > 50) {
       dispatch(
         baseActions.updateTransformation(headType, modelState.transformation)
+      );
+      dispatch(
+        baseActions.updateState(headType, {
+          isAnyModelOverstepped: modelGroup._isAnyLaserModelOverstepped(),
+        })
       );
     }
   },
@@ -850,7 +868,7 @@ export const actions = {
   },
 
   manualPreview: (headType, isProcess) => (dispatch, getState) => {
-    const { page, modelGroup, toolPathModelGroup, autoPreviewEnabled } =
+    const { modelGroup, toolPathModelGroup, autoPreviewEnabled } =
       getState()[headType];
 
     if (isProcess || autoPreviewEnabled) {

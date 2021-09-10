@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 // import { DATA_PREFIX, EPSILON } from '../../constants';
-import { DATA_PREFIX, PAGE_EDITOR, PAGE_PROCESS } from '../../constants';
+import { DATA_PREFIX, PAGE_PROCESS } from '../../constants';
 import { controller } from '../../lib/controller';
 import ModelGroup from '../models/ModelGroup';
 import ToolPathModelGroup from '../models/ToolPathModelGroup';
@@ -12,7 +12,9 @@ import {
   ACTION_UPDATE_TRANSFORMATION,
 } from '../actionType';
 import { actions as editorActions, CNC_LASER_STAGE } from '../editor';
+// import { baseActions } from '../editor/base';
 import SvgModelGroup from '../models/SvgModelGroup';
+import { machineEventEmitter } from '../machine';
 
 const INITIAL_STATE = {
   page: PAGE_PROCESS,
@@ -68,7 +70,7 @@ const INITIAL_STATE = {
 const ACTION_SET_BACKGROUND_ENABLED = 'laser/ACTION_SET_BACKGROUND_ENABLED';
 
 export const actions = {
-  init: () => (dispatch) => {
+  init: () => (dispatch, getState) => {
     dispatch(editorActions.init('laser'));
 
     const controllerEvents = {
@@ -106,6 +108,23 @@ export const actions = {
 
     Object.keys(controllerEvents).forEach((event) => {
       controller.on(event, controllerEvents[event]);
+    });
+
+    //  when laserSize change.
+    machineEventEmitter.on('laserSizeChange', (laserSize) => {
+      const state = getState().laser;
+      const { modelGroup } = state;
+
+      // update modelGroup's all model's limitSize
+      const models = modelGroup.getModels();
+      models.forEach((model) => {
+        if (model) {
+          model.limitSize = laserSize;
+        }
+      });
+
+      // update isAnyModelOverstepped
+      dispatch(editorActions.onModelTransform('laser'));
     });
   },
 

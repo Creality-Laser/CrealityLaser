@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'rc-slider';
-import debounce from 'lodash/debounce';
+import throttle from 'lodash/throttle';
 
 function StyledSlider(props) {
   const {
@@ -21,9 +21,9 @@ function StyledSlider(props) {
       value={value}
       min={min}
       max={max}
-      onChange={debounce(onChange, 50)}
+      onChange={throttle(onChange, 30)}
       onAfterChange={(...params) =>
-        debounce(() => onAfterChange(...params), 50)
+        throttle(() => onAfterChange(...params), 30)
       }
       {...restProps}
     />
