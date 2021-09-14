@@ -15,7 +15,7 @@ const machines = Object.values(MACHINE_SERIES)
     (machine) =>
       machine && machine.value && { label: machine.label, value: machine.value }
   )
-  .filter((m) => m.value.startsWith('CV'));
+  .filter((m) => m.value.startsWith('CV') || m.value.startsWith('Ender'));
 
 console.log(machines);
 

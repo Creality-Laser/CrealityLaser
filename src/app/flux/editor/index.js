@@ -1164,6 +1164,8 @@ export const actions = {
   generateGcode: (headType, thumbnail) => (dispatch, getState) => {
     const modelInfos = [];
     const { modelGroup, toolPathModelGroup } = getState()[headType];
+    const { style } = getState().machine;
+
     for (const model of modelGroup.getModels()) {
       if (model.hideFlag) continue;
       const modelTaskInfo = model.getTaskInfo();
@@ -1175,6 +1177,10 @@ export const actions = {
           ...modelTaskInfo,
           ...toolPathModelTaskInfo,
         };
+
+        if (taskInfo.gcodeConfig) {
+          taskInfo.gcodeConfig.style = style;
+        }
         modelInfos.push(taskInfo);
       }
     }

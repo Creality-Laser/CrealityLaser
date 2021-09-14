@@ -122,9 +122,10 @@ export const actions = {
           model.limitSize = laserSize;
         }
       });
-
-      // update isAnyModelOverstepped
-      dispatch(editorActions.onModelTransform('laser'));
+      if (models && models.length) {
+        // update isAnyModelOverstepped
+        dispatch(editorActions.onModelTransform('laser'));
+      }
     });
   },
 

@@ -95,7 +95,14 @@ export const generateGcode = (modelInfos, onProgress) => {
     const gcodeGenerator = new GcodeGenerator();
     let gcodeLines;
     if (headType === 'laser') {
-      gcodeLines = gcodeGenerator.parseAsLaser(toolPathObj, gcodeConfig);
+      if (gcodeConfig.style === 'marlin') {
+        gcodeLines = gcodeGenerator.parseAsMarlinLaser(
+          toolPathObj,
+          gcodeConfig
+        );
+      } else {
+        gcodeLines = gcodeGenerator.parseAsLaser(toolPathObj, gcodeConfig);
+      }
     } else {
       gcodeLines = gcodeGenerator.parseAsCNC(toolPathObj, gcodeConfig);
     }

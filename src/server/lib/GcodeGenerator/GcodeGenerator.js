@@ -101,6 +101,57 @@ class GcodeGenerator {
     return this.processGcodeMultiPass(gcodeLines, gcodeConfig);
   }
 
+  parseAsMarlinLaser(toolPathObj, gcodeConfig) {
+    const { data, positionX, positionY } = toolPathObj;
+    // process "jogSpeed, workSpeed..."
+    const gcodeConfigKeys = Object.keys(gcodeConfig);
+    const gcodeLines = [];
+    let lastG = '';
+    for (let i = 0; i < data.length; i++) {
+      const item = data[i];
+      let line = '';
+      const cmds = [];
+      let comment = null;
+      Object.keys(item).forEach((key) => {
+        // C: comment  N: empty line
+        if (['C', 'N'].includes(key)) {
+          comment = item[key];
+        } else if (gcodeConfigKeys.includes(item[key])) {
+          const paramValue = gcodeConfig[item[key]];
+          cmds.push(key + paramValue);
+        } else {
+          let value = item[key];
+          if (key === 'X' && !!positionX) {
+            value += positionX;
+          } else if (key === 'Y' && !!positionY) {
+            value += positionY;
+          }
+          if (key === 'X' || key === 'Y' || key === 'Z') {
+            if (item.G === undefined && cmds[0] !== 'G0' && cmds[0] !== 'G1') {
+              cmds.unshift(`G${lastG}`);
+            }
+            cmds.push(key + value.toFixed(3)); // restrict precision
+          } else if (key === 'G') {
+            lastG = value;
+            cmds.push(key + value);
+          } else {
+            cmds.push(key + value); // restrict precision
+          }
+        }
+      });
+      if (cmds.length > 0) {
+        line = cmds.join(' ');
+      }
+      if (comment) {
+        line += comment;
+      }
+      gcodeLines.push(line);
+      //console.log(gcodeLines);
+    }
+
+    return this.processGcodeMultiPass(gcodeLines, gcodeConfig);
+  }
+
   processGcodeMultiPass(gcodeLines, gcodeConfig) {
     const { multiPassEnabled, multiPasses, multiPassDepth } = gcodeConfig;
     if (multiPassEnabled) {

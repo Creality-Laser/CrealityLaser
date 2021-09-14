@@ -133,6 +133,7 @@ export const MACHINE_SERIES = {
         y: 100,
         z: 100,
       },
+      style: 'grbl',
     },
   },
   CV30: {
@@ -149,6 +150,24 @@ export const MACHINE_SERIES = {
         y: 300,
         z: 300,
       },
+      style: 'grbl',
+    },
+  },
+  Ender3s: {
+    value: 'Ender3s',
+    label: 'Ender-3s',
+    setting: {
+      size: {
+        x: 235,
+        y: 235,
+        z: 210,
+      },
+      laserSize: {
+        x: 235,
+        y: 235,
+        z: 210,
+      },
+      style: 'marlin',
     },
   },
   ORIGINAL: {

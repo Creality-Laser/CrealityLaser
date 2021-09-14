@@ -21,6 +21,7 @@ const INITIAL_STATE = {
   series: MACHINE_SERIES.CV20.value,
   size: MACHINE_SERIES.CV20.setting.size,
   laserSize: MACHINE_SERIES.CV20.setting.laserSize,
+  style: MACHINE_SERIES.CV20.setting.style,
 };
 
 const ACTION_UPDATE_STATE = 'machine/ACTION_UPDATE_STATE';
@@ -35,13 +36,15 @@ export const actions = {
     };
   },
   init: () => (dispatch) => {
-    const { series, size, laserSize } = store.get('machine') || INITIAL_STATE;
+    const { series, size, laserSize, style } =
+      store.get('machine') || INITIAL_STATE;
 
     dispatch(
       actions.updateState({
         series,
         size,
         laserSize,
+        style,
       })
     );
   },
@@ -55,8 +58,12 @@ export const actions = {
       seriesInfo &&
         dispatch(actions.updateMachineSize(seriesInfo.setting.size));
       seriesInfo &&
+        dispatch(actions.updateState({ style: seriesInfo.setting.style }));
+      store.set('machine.style', seriesInfo.setting.style);
+      seriesInfo &&
         dispatch(actions.updateLaserSize(seriesInfo.setting.laserSize));
       dispatch(widgetActions.updateMachineSeries(series));
+
       // dispatch(printingActions.init());
     }
   },

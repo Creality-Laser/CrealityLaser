@@ -476,6 +476,9 @@ class ModelGroup {
   }
 
   onModelTransform() {
+    if (!this.selectedModel) {
+      return false;
+    }
     this.selectedModel.onTransform();
     const {
       sourceType,
@@ -485,6 +488,7 @@ class ModelGroup {
       boundingBox,
       originalName,
     } = this.selectedModel;
+
     return {
       sourceType,
       originalName,
