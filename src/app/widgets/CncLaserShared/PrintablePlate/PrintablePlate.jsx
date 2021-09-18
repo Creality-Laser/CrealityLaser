@@ -124,10 +124,11 @@ class PrintablePlate extends Object3D {
       // group.add(axisXLabel);
       // group.add(axisYLabel);
 
-      const largeSize = 200;
+      const largeSize = 150;
 
       const textSize = 10 / 3;
-      for (let x = 0; x <= axisXLength; x += gridSpacing) {
+      const labeXLength = Math.ceil(axisXLength / 10) * 10;
+      for (let x = 0; x <= labeXLength; x += gridSpacing) {
         // if (x !== 0) {
         const textLabel = new TextSprite({
           x,
@@ -145,14 +146,14 @@ class PrintablePlate extends Object3D {
       }
 
       // if has large size, then show another x scale
-      if (this.size.x >= largeSize) {
-        for (let x = axisXLength; x > 0; x -= gridSpacing) {
+      if (labeXLength >= largeSize) {
+        for (let x = labeXLength; x > 0; x -= gridSpacing) {
           const textLabel = new TextSprite({
             x: x + 1,
-            y: this.size.y + 3,
+            y: this.size.y + 8,
             z: 0,
             size: textSize,
-            text: this.size.x - x,
+            text: labeXLength - x,
             textAlign: 'center',
             textBaseline: 'bottom',
             color: BLACK,
@@ -161,7 +162,8 @@ class PrintablePlate extends Object3D {
           group.add(textLabel);
         }
       }
-      for (let y = 0; y <= axisYLength; y += gridSpacing) {
+      const labeYLength = Math.ceil(axisYLength / 10) * 10;
+      for (let y = 0; y <= labeYLength; y += gridSpacing) {
         if (y !== 0) {
           const textLabel = new TextSprite({
             x: -4,
@@ -179,15 +181,15 @@ class PrintablePlate extends Object3D {
       }
 
       // if has large size, then show another y scale
-      if (this.size.y >= largeSize) {
-        for (let y = axisYLength; y > 0; y -= gridSpacing) {
-          if (this.size.y - y !== 0) {
+      if (labeYLength >= largeSize) {
+        for (let y = labeYLength; y > 0; y -= gridSpacing) {
+          if (labeYLength - y !== 0) {
             const textLabel = new TextSprite({
-              x: this.size.x + 3,
+              x: this.size.x + 8,
               y,
               z: 0,
               size: textSize,
-              text: this.size.y - y,
+              text: labeYLength - y,
               textAlign: 'center',
               textBaseline: 'bottom',
               color: BLACK,

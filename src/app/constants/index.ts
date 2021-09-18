@@ -119,6 +119,23 @@ export const LASER_PRINT_MODE_AUTO = 'auto';
 export const LASER_PRINT_MODE_MANUAL = 'manual';
 
 export const MACHINE_SERIES = {
+  CV01PRO: {
+    value: 'CV01PRO',
+    label: 'CV-01 Pro',
+    setting: {
+      size: {
+        x: 170,
+        y: 200,
+        z: 200,
+      },
+      laserSize: {
+        x: 170,
+        y: 200,
+        z: 200,
+      },
+      style: 'grbl',
+    },
+  },
   CV20: {
     value: 'CV20',
     label: 'CV-20',
