@@ -223,7 +223,11 @@ class LaserToolPathGenerator extends EventEmitter {
     const content = [];
 
     content.push(`G1 F${workSpeed}`);
-    content.push(`M4 S0`);
+    if (gcodeConfig.style === 'grbl') {
+      content.push(`M4`);
+    } else {
+      content.push(`M3 I`);
+    }
 
     let isNewRow = false;
     let power;
@@ -243,7 +247,7 @@ class LaserToolPathGenerator extends EventEmitter {
         power = grayToPower(img.bitmap.data[idx], powerMin, powerMax);
 
         if (isNewRow) {
-          content.push(`G0 X${normalizer.x(i)} Y${normalizer.y(j)} S0`);
+          content.push(`G0 X${normalizer.x(i)} Y${normalizer.y(j)}`);
           content.push(`G1 X${normalizer.x(i)} S${power}`);
           isNewRow = false;
         } else {
@@ -264,7 +268,11 @@ class LaserToolPathGenerator extends EventEmitter {
       }
     }
 
-    content.push('M5');
+    if (gcodeConfig.style === 'grbl') {
+      content.push(`M5`);
+    } else {
+      content.push(`M5 I`);
+    }
     content.push('G0 X0 Y0 Z0');
 
     return content;

@@ -870,6 +870,7 @@ export const actions = {
   manualPreview: (headType, isProcess) => (dispatch, getState) => {
     const { modelGroup, toolPathModelGroup, autoPreviewEnabled } =
       getState()[headType];
+    const { style } = getState().machine;
 
     if (isProcess || autoPreviewEnabled) {
       for (const model of modelGroup.getModels()) {
@@ -885,6 +886,9 @@ export const actions = {
             ...modelTaskInfo,
             ...toolPathModelTaskInfo,
           };
+          if (taskInfo.gcodeConfig) {
+            taskInfo.gcodeConfig.style = style;
+          }
           controller.commitToolPathTask({
             taskId: taskInfo.modelID,
             headType,
