@@ -273,7 +273,6 @@ class LaserToolPathGenerator extends EventEmitter {
     } else {
       content.push(`M5 I`);
     }
-    content.push('G0 X0 Y0 Z0');
 
     return content;
 
@@ -366,8 +365,6 @@ class LaserToolPathGenerator extends EventEmitter {
         }
       }
     }
-
-    content.push('G0 X0 Y0');
 
     return content;
   }
