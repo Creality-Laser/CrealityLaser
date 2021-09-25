@@ -107,21 +107,21 @@ export const generateGcode = (modelInfos, onProgress) => {
       gcodeLines = gcodeGenerator.parseAsCNC(toolPathObj, gcodeConfig);
     }
 
-    const renderMethod =
-      mode === 'greyscale' && gcodeConfig.movementMode === 'greyscale-dot'
-        ? 'point'
-        : 'line';
+    // const renderMethod =
+    //   mode === 'greyscale' && gcodeConfig.movementMode === 'greyscale-dot'
+    //     ? 'point'
+    //     : 'line';
 
-    if (i > 0) {
-      const header =
-        '\n' +
-        ';Header Start\n' +
-        `;renderMethod: ${renderMethod}\n` +
-        ';Header End' +
-        '\n';
-      writeStream.write(header);
-      fileTotalLines += header.split('\n').length;
-    }
+    // if (i > 0) {
+    //   const header =
+    //     '\n' +
+    //     ';Header Start\n' +
+    //     `;renderMethod: ${renderMethod}\n` +
+    //     ';Header End' +
+    //     '\n';
+    //   writeStream.write(header);
+    //   fileTotalLines += header.split('\n').length;
+    // }
     fileTotalLines += gcodeLines.length;
 
     writeStream.write(gcodeLines.join('\n'));
