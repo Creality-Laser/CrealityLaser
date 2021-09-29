@@ -16,8 +16,10 @@ const addHeaderToFile = (
   thumbnail,
   //runBorderGcode,
   estimatedTime,
-  fileTotalLines
+  fileTotalLines,
+  gcodeStyle
 ) => {
+  const useG92 = 'G92 X0 Y0 Z0\n';
   const useG90 = 'G90 (use absolute coordinates)\n';
 
   return new Promise((resolve, reject) => {
@@ -29,6 +31,9 @@ const addHeaderToFile = (
     });
     rs.on('open', () => {
       ws.write(header);
+      if (gcodeStyle === 'marlin') {
+        ws.write(useG92);
+      }
       ws.write(useG90);
       //ws.write(runBorderGcode);
       rs.pipe(ws);
@@ -125,6 +130,11 @@ export const generateGcode = (modelInfos, onProgress) => {
     fileTotalLines += gcodeLines.length;
 
     writeStream.write(gcodeLines.join('\n'));
+    if (gcodeConfig.style === 'marlin') {
+      writeStream.write('\nG0 X0 Y0\n');
+    } else {
+      writeStream.write('\nG28\n');
+    }
 
     estimatedTime += toolPathObj.estimatedTime;
     if (gcodeConfig.multiPassEnabled) {
@@ -204,7 +214,8 @@ export const generateGcode = (modelInfos, onProgress) => {
         thumbnail,
         //runBorderGcode,
         estimatedTime,
-        fileTotalLines
+        fileTotalLines,
+        gcodeConfig.style
       );
       resolve(res);
     });

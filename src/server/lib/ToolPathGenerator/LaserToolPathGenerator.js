@@ -189,7 +189,6 @@ class LaserToolPathGenerator extends EventEmitter {
 
     fakeGcodes = fakeGcodes.concat(workingGcode);
 
-    fakeGcodes.push('G28');
     // fakeGcodes.push('M107 P0');
     // fakeGcodes.push('; G-code END <<<');
 
@@ -305,7 +304,7 @@ class LaserToolPathGenerator extends EventEmitter {
 
     let firstTurnOn = true;
     function turnOnLaser() {
-      if (firstTurnOn) {
+      if (firstTurnOn || gcodeConfig.style === 'marlin') {
         firstTurnOn = false;
         const powerStrength = Math.floor((fixedPower * 1000) / 100);
         return `M3 S${powerStrength}`;
@@ -315,7 +314,7 @@ class LaserToolPathGenerator extends EventEmitter {
 
     const content = [];
     content.push(`G1 F${workSpeed}`);
-    const dTime = dwellTime / 1000;
+    const dTime = gcodeConfig.style === 'marlin' ? dwellTime : dwellTime / 1000;
 
     if (direction === 'Horizontal') {
       for (let j = height - 1; j >= 0; j--) {
@@ -849,7 +848,7 @@ class LaserToolPathGenerator extends EventEmitter {
       ((fixedPowerEnabled ? fixedPower : 100) * 1000) / 100
     );
     function turnOnLaser() {
-      if (firstTurnOn) {
+      if (firstTurnOn || gcodeConfig.style === 'marlin') {
         firstTurnOn = false;
         return `M4 S${powerStrength}`;
       }
@@ -961,7 +960,7 @@ class LaserToolPathGenerator extends EventEmitter {
       ((fixedPowerEnabled ? fixedPower : 100) * 1000) / 100
     );
     function turnOnLaser() {
-      if (firstTurnOn) {
+      if (firstTurnOn || gcodeConfig.style === 'marlin') {
         firstTurnOn = false;
         return `M4 S${powerStrength}`;
       }
