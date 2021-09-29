@@ -17,13 +17,27 @@ export const getPlatform = (req, res) => {
 };
 
 export const getFonts = (req, res) => {
-  const fonts = fontManager.fonts
+  let fonts = [];
+  fontManager.systemFonts.forEach((font) => {
+    if (
+      font.path.toLocaleLowerCase().indexOf('.ttc') < 0 &&
+      fonts.findIndex((i) => i === font.family) < 0
+    ) {
+      fonts.push(font.family);
+    }
+  });
+  fonts = fonts
+    .filter((font) => !!font)
     .map((font) => {
+      if (font[0] === '"') {
+        font = font.substr(1, font.length - 2);
+      }
+
       return {
-        fontFamily: font.names.fontFamily.en,
-        fontSubfamily: font.names.fontSubfamily.en,
-        fullName: font.names.fullName.en,
-        displayName: font.names.displayName.en,
+        fontFamily: font,
+        fontSubfamily: '',
+        fullName: font,
+        displayName: font,
       };
     })
     .sort((a, b) => (a.fontFamily < b.fontFamily ? -1 : 1));

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button } from 'antd';
+import { Input, Button } from 'antd';
 import { withTranslation } from 'react-i18next';
 
 import ParametersHead from '../components/params/ParametersHead';
@@ -32,7 +32,7 @@ const AddIcon = () => (
     ></path>
   </svg>
 );
-
+const { TextArea } = Input;
 class TextParameters extends PureComponent {
   state = {
     expanded: true,
@@ -101,11 +101,11 @@ class TextParameters extends PureComponent {
             >
               <ParameterItemLabel>{t('Text')}</ParameterItemLabel>
               <ParameterItemValue>
-                <textarea
+                <TextArea
                   disabled={disabled}
                   style={{ width: '202px', resize: 'none' }}
                   rows="3"
-                  value={text}
+                  defaultValue={text}
                   onChange={actions.onChangeText}
                 />
               </ParameterItemValue>

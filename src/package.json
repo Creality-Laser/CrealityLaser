@@ -28,6 +28,7 @@
     "express": "~4.16.3",
     "express-jwt": "~5.3.1",
     "express-session": "~1.15.6",
+    "font-scanner": "^0.1.2",
     "hogan.js": "~3.0.2",
     "jimp": "~0.2.28",
     "jsonwebtoken": "~8.3.0",

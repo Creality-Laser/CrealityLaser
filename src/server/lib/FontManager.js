@@ -4,6 +4,7 @@ import mv from 'mv';
 import includes from 'lodash/includes';
 import request from 'superagent';
 import * as opentype from 'opentype.js';
+import libFontManager from 'font-scanner';
 import logger from './logger';
 
 const log = logger('lib:FontManager');
@@ -44,6 +45,7 @@ class FontManager {
   constructor() {
     this.fontDir = './userData/fonts';
     this.fonts = [];
+    this.systemFonts = libFontManager.getAvailableFontsSync();
   }
 
   setFontDir(fontDir) {
@@ -173,12 +175,26 @@ class FontManager {
       return Promise.resolve(localFont);
     }
 
-    // download
-    log.debug(`Downloading font <${family}>...`);
-    return this.downloadFont(family) // subfamily is not supported (for now)
+    const fontConfig = this.systemFonts.find((f) => f.family === family);
+    if (!fontConfig || !fontConfig.path) {
+      throw new Error('No Font Found!');
+    }
+
+    // return this.downloadFont(family) // subfamily is not supported (for now)
+    //   .then((font) => {
+    //     log.debug(`Font <${family}> Downloaded`);
+    //     this.fonts.push(font);
+    //     return font;
+    //   })
+    //   .catch((err) => {
+    //     log.error(err);
+    //   });
+    return this.loadLocalFont(fontConfig.path, family) // subfamily is not supported (for now)
       .then((font) => {
-        log.debug(`Font <${family}> Downloaded`);
-        this.fonts.push(font);
+        log.debug(`Font <${family}> loadded`);
+        if (this.fonts) {
+          this.fonts.push(font);
+        }
         return font;
       })
       .catch((err) => {
