@@ -89,6 +89,7 @@ export const generateGcode = (modelInfos, onProgress) => {
   const outputFilePathTmp = `${outputFilePath}.tmp`;
 
   const writeStream = fs.createWriteStream(outputFilePathTmp, 'utf-8');
+  const gcodeStyle = modelInfos[0].gcodeConfig.style;
 
   for (let i = 0; i < modelInfos.length; i++) {
     const modelInfo = modelInfos[i];
@@ -130,11 +131,6 @@ export const generateGcode = (modelInfos, onProgress) => {
     fileTotalLines += gcodeLines.length;
 
     writeStream.write(gcodeLines.join('\n'));
-    if (gcodeConfig.style === 'marlin') {
-      writeStream.write('\nG0 X0 Y0\n');
-    } else {
-      writeStream.write('\nG28\n');
-    }
 
     estimatedTime += toolPathObj.estimatedTime;
     if (gcodeConfig.multiPassEnabled) {
@@ -163,6 +159,11 @@ export const generateGcode = (modelInfos, onProgress) => {
     }
 
     onProgress((i + 1) / modelInfos.length);
+  }
+  if (gcodeStyle === 'marlin') {
+    writeStream.write('\nG0 X0 Y0\n');
+  } else {
+    writeStream.write('\nG28\n');
   }
 
   const { gcodeConfig, thumbnail, mode } = modelInfos[0];

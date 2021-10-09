@@ -898,7 +898,7 @@ class LaserToolPathGenerator extends EventEmitter {
     }
 
     // move to work zero
-    content.push('G0 X0 Y0');
+    // content.push('G0 X0 Y0');
 
     // return `${content.join('\n')}\n`;
     return content;
@@ -1009,7 +1009,7 @@ class LaserToolPathGenerator extends EventEmitter {
     }
 
     // move to work zero
-    content.push('G0 X0 Y0');
+    // content.push('G0 X0 Y0');
     return content;
   }
 }
