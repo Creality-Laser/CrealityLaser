@@ -21,6 +21,14 @@ import MenuBuilder from './electron-app/menu';
 import pkg from './package.json';
 import store from './store';
 
+const getAssetPath = (...paths: string[]): string => {
+  const RESOURCES_PATH = app.isPackaged
+    ? path.join(process.resourcesPath, 'assets')
+    : path.join(__dirname, '../assets');
+
+  return path.join(RESOURCES_PATH, ...paths);
+};
+
 export default class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
@@ -64,14 +72,6 @@ const createWindow = async () => {
   ) {
     await installExtensions();
   }
-
-  const getAssetPath = (...paths: string[]): string => {
-    const RESOURCES_PATH = app.isPackaged
-      ? path.join(process.resourcesPath, 'assets')
-      : path.join(__dirname, '../assets');
-
-    return path.join(RESOURCES_PATH, ...paths);
-  };
 
   const windowBounds = store.get('winBounds', {}) || {};
   const defaultWindowOptions = {

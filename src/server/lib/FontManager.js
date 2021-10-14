@@ -4,7 +4,7 @@ import mv from 'mv';
 import includes from 'lodash/includes';
 import request from 'superagent';
 import * as opentype from 'opentype.js';
-import libFontManager from 'font-scanner';
+import libFontManager from 'node-system-fonts';
 import logger from './logger';
 
 const log = logger('lib:FontManager');
