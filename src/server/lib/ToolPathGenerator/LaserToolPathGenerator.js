@@ -577,7 +577,11 @@ class LaserToolPathGenerator extends EventEmitter {
     const content = [];
     content.push(`G0 F${jogSpeed}`);
     content.push(`G1 F${workSpeed}`);
-    content.push(`M4 S0`);
+    if (gcodeConfig.style === 'marlin') {
+      content.push(`M3 I`);
+    } else {
+      content.push(`M4`);
+    }
 
     // fix many continuous bare 'S0' in gcode.
     // if prev row has no content, then no another 'S0'
@@ -791,8 +795,11 @@ class LaserToolPathGenerator extends EventEmitter {
       }
     }
 
-    content.push('M5');
-    // content.push('G0 X0 Y0');
+    if (gcodeConfig.style === 'marlin') {
+      content.push(`M5 I`);
+    } else {
+      content.push(`M5`);
+    }
 
     return content;
   }
