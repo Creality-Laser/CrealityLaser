@@ -201,7 +201,7 @@ class LaserToolPathGenerator extends EventEmitter {
 
   async generateGcodeGreyscale_new(modelInfo, modelPath) {
     const { gcodeConfigPlaceholder, gcodeConfig } = modelInfo;
-    const { fixedPowerEnabled, fixedPower } = gcodeConfig;
+    const { fixedPowerEnabled, fixedPower, top2bottom } = gcodeConfig;
     const { workSpeed } = gcodeConfigPlaceholder;
 
     const powerMin = 0;
@@ -232,9 +232,15 @@ class LaserToolPathGenerator extends EventEmitter {
     let power;
     let lastPower = -1;
 
-    for (let j = height - 1; j >= 0; j--) {
+    for (
+      let j = top2bottom ? height - 1 : 0;
+      top2bottom ? j >= 0 : j < height;
+      top2bottom ? j-- : j++
+    ) {
       // promise first row must not reverse.
-      const isReverse = (height - j) % 2 === 0;
+      const isReverse = top2bottom
+        ? (height - j) % 2 === 0
+        : (height + 1) % 2 === 0;
       isNewRow = true;
 
       for (
@@ -258,8 +264,6 @@ class LaserToolPathGenerator extends EventEmitter {
         lastPower = power;
       }
 
-      //content.push('S0');
-      // content.push('G0 X0 Y0 Z0');
       const p = j / height;
       if (p - progress > 0.05) {
         progress = p;
@@ -285,7 +289,12 @@ class LaserToolPathGenerator extends EventEmitter {
 
   async generateGcodeGreyscale_origin(modelInfo, modelPath) {
     const { gcodeConfigPlaceholder, config, gcodeConfig } = modelInfo;
-    const { fixedPower, dwellTime, direction = 'Horizontal' } = gcodeConfig;
+    const {
+      fixedPower,
+      dwellTime,
+      direction = 'Horizontal',
+      top2bottom,
+    } = gcodeConfig;
     const { workSpeed } = gcodeConfigPlaceholder;
     const { bwThreshold } = config;
 
@@ -317,9 +326,15 @@ class LaserToolPathGenerator extends EventEmitter {
     const dTime = gcodeConfig.style === 'marlin' ? dwellTime : dwellTime / 1000;
 
     if (direction === 'Horizontal') {
-      for (let j = height - 1; j >= 0; j--) {
+      for (
+        let j = top2bottom ? height - 1 : 0;
+        top2bottom ? j >= 0 : j < height;
+        top2bottom ? j-- : j++
+      ) {
         // promise first row must not reverse.
-        const isReverse = (height - j) % 2 === 0;
+        const isReverse = top2bottom
+          ? (height - j) % 2 === 0
+          : (height + 1) % 2 === 0;
         for (
           let i = isReverse ? width : 0;
           isReverse ? i >= 0 : i < width;
@@ -514,7 +529,7 @@ class LaserToolPathGenerator extends EventEmitter {
 
   async generateGcodeBW(modelInfo, modelPath) {
     const { gcodeConfigPlaceholder, config, gcodeConfig } = modelInfo;
-    const { fixedPowerEnabled, fixedPower } = gcodeConfig;
+    const { fixedPowerEnabled, fixedPower, top2bottom } = gcodeConfig;
     const { workSpeed, jogSpeed } = gcodeConfigPlaceholder;
     const { bwThreshold } = config;
 
@@ -592,10 +607,16 @@ class LaserToolPathGenerator extends EventEmitter {
         x: 1,
         y: 0,
       };
-      for (let j = height - 1; j >= 0; j--) {
+      for (
+        let j = top2bottom ? height - 1 : 0;
+        top2bottom ? j >= 0 : j < height;
+        top2bottom ? j-- : j++
+      ) {
         let len = 0;
         // promise first row must not reverse.
-        const isReverse = (height - j) % 2 === 0;
+        const isReverse = top2bottom
+          ? (height - j) % 2 === 0
+          : (height + 1) % 2 === 0;
 
         const sign = isReverse ? -1 : 1;
         for (

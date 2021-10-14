@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Popover } from 'antd';
+import { Popover, Checkbox } from 'antd';
 import { withTranslation } from 'react-i18next';
 
 import { ABSENT_VALUE } from '../../constants';
@@ -64,6 +64,11 @@ class GcodeParameters extends PureComponent {
     },
     onChangeWorkSpeed: (workSpeed) => {
       this.props.updateSelectedModelGcodeConfig({ workSpeed });
+    },
+    onTop2BottomEnabled: () => {
+      this.props.updateSelectedModelGcodeConfig({
+        top2bottom: !this.props.gcodeConfig.top2bottom,
+      });
     },
     onChangePlungeSpeed: (plungeSpeed) => {
       this.props.updateSelectedModelGcodeConfig({ plungeSpeed });
@@ -182,12 +187,13 @@ class GcodeParameters extends PureComponent {
       multiPasses = 0,
       multiPassDepth = 0,
       appendMode,
+      top2bottom = false,
     } = this.props.gcodeConfig;
     const selectedNotHide = selectedModelID && !selectedModelHideFlag;
 
     const isLineToLineGreyscale = appendMode && appendMode === 'lineToLine';
 
-    // const isBW = mode === 'bw';
+    const isBW = mode === 'bw';
     const isGreyscale = mode === 'greyscale';
     // const isVector = mode === 'vector';
     return (
@@ -310,6 +316,22 @@ class GcodeParameters extends PureComponent {
                     max={6000}
                     onChange={actions.onChangeWorkSpeed}
                     addonAfter="mm/min"
+                  />
+                </ParameterItemValue>
+              </ParameterItem>
+            )}
+            {(isBW || isLineToLineGreyscale || isGreyscale) && (
+              <ParameterItem
+                popover={{
+                  title: t('Top to bottom'),
+                  content: t('Carve from top to bottom.'),
+                }}
+              >
+                <ParameterItemLabel>{t('Top to bottom')}</ParameterItemLabel>
+                <ParameterItemValue>
+                  <Checkbox
+                    checked={top2bottom}
+                    onChange={actions.onTop2BottomEnabled}
                   />
                 </ParameterItemValue>
               </ParameterItem>
@@ -475,6 +497,7 @@ GcodeParameters.propTypes = {
     multiPasses: PropTypes.number,
     fixedPowerEnabled: PropTypes.bool,
     fixedPower: PropTypes.number,
+    top2bottom: PropTypes.bool,
   }),
   paramsDescs: PropTypes.shape({
     jogSpeed: PropTypes.string,

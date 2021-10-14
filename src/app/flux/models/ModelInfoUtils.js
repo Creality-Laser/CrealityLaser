@@ -118,6 +118,7 @@ const generateLaserDefaults = (mode, sourceType, appendMode = '') => {
       multiPasses: 2,
       multiPassDepth: 1,
       appendMode,
+      top2bottom: false,
     };
   } else if (mode === 'bw') {
     gcodeConfig = {
@@ -132,6 +133,7 @@ const generateLaserDefaults = (mode, sourceType, appendMode = '') => {
       multiPassEnabled: false,
       multiPasses: 2,
       multiPassDepth: 1,
+      top2bottom: false,
     };
   } else {
     if (sourceType === 'raster') {
@@ -148,6 +150,7 @@ const generateLaserDefaults = (mode, sourceType, appendMode = '') => {
         multiPassEnabled: true,
         multiPasses: 2,
         multiPassDepth: 0.6,
+        top2bottom: false,
       };
     } else {
       gcodeConfig = {
@@ -163,6 +166,7 @@ const generateLaserDefaults = (mode, sourceType, appendMode = '') => {
         multiPassEnabled: true,
         multiPasses: 2,
         multiPassDepth: 0.6,
+        top2bottom: false,
       };
     }
   }

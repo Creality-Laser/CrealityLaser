@@ -76,6 +76,8 @@
   "When engraving multiple images, this parameter determines the print order of the selected image. When the orders are the same, the image uploaded first will be engraved first.": "雕刻多幅图像时，此参数决定所选图像的打印顺序。顺序相同时，先上传的图片先雕刻。",
   "Jog Speed": "空走速度",
   "Work Speed": "工作速度",
+  "Top to bottom": "正向雕刻",
+  "Carve from top to bottom.": "从上到下雕刻。",
   "Dwell Time": "停顿时间",
   "Plunge Speed": "插入速度",
   "Multi-pass": "多程",
