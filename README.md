@@ -11,6 +11,7 @@ Laser Desktop App for Creality, inspired by [Luban](https://github.com/Snapmaker
 - **If you have installation or compilation issues with this project, please see [our debugging guide](https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues/400)**
 
 First, clone the repo via git and install dependencies:
+[note, install dependencies in windows 10 require admin permissions.](https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues/2986)
 
 ```bash
 git clone --depth 1 --single-branch https://github.com/electron-react-boilerplate/electron-react-boilerplate.git your-project-name
