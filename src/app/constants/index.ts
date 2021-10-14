@@ -175,14 +175,14 @@ export const MACHINE_SERIES = {
     label: 'Ender-3s',
     setting: {
       size: {
-        x: 235,
-        y: 235,
-        z: 210,
+        x: 220,
+        y: 220,
+        z: 220,
       },
       laserSize: {
-        x: 235,
-        y: 235,
-        z: 210,
+        x: 220,
+        y: 220,
+        z: 220,
       },
       style: 'marlin',
     },
