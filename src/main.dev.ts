@@ -20,6 +20,7 @@ import i18n from './utils/i18n';
 import MenuBuilder from './electron-app/menu';
 import pkg from './package.json';
 import store from './store';
+// import genGcoreTest from './server/lib/dllNapi/test/gen_gcore';
 
 const getAssetPath = (...paths: string[]): string => {
   const RESOURCES_PATH = app.isPackaged
@@ -180,6 +181,8 @@ app.on('activate', () => {
 
 app.on('ready', async () => {
   try {
+    // await genGcoreTest();
+
     DataStorage.init();
 
     const data = await launchServer();
