@@ -572,7 +572,7 @@ class LaserToolPathGenerator extends EventEmitter {
 
     function genMovement(normalizer, start, end) {
       return [
-        `G0 X${normalizer.x(start.x)} Y${normalizer.y(start.y)}} S0`,
+        `G0 X${normalizer.x(start.x)} Y${normalizer.y(start.y)}}`,
         `G1 X${normalizer.x(end.x)} Y${normalizer.y(end.y)} S${powerStrength}`,
       ];
     }
@@ -600,7 +600,7 @@ class LaserToolPathGenerator extends EventEmitter {
 
     // fix many continuous bare 'S0' in gcode.
     // if prev row has no content, then no another 'S0'
-    let prevWhichRowHasContent = 0;
+    // let prevWhichRowHasContent = 0;
 
     if (!gcodeConfig.direction || gcodeConfig.direction === 'Horizontal') {
       const direction = {
@@ -624,16 +624,16 @@ class LaserToolPathGenerator extends EventEmitter {
           isReverse ? i >= 0 : i < width;
           i += len * sign
         ) {
-          const isNewRow =
-            (isReverse && i === width - 1) || (!isReverse && i === 0);
-          const isPrevRowHasContent = prevWhichRowHasContent + 1 === j;
-          if (isNewRow && isPrevRowHasContent) {
-            content.push(`S0`);
-          }
+          // const isNewRow =
+          //   (isReverse && i === width - 1) || (!isReverse && i === 0);
+          // const isPrevRowHasContent = prevWhichRowHasContent + 1 === j;
+          // if (isNewRow && isPrevRowHasContent) {
+          //   content.push(`S0`);
+          // }
 
           const idx = i * 4 + j * width * 4;
           if (img.bitmap.data[idx] <= bwThreshold) {
-            prevWhichRowHasContent = j;
+            // prevWhichRowHasContent = j;
             const start = {
               x: i,
               y: j,
@@ -684,16 +684,16 @@ class LaserToolPathGenerator extends EventEmitter {
           isReverse ? j >= 0 : j < height;
           j += len * sign
         ) {
-          const isNewRow =
-            (isReverse && j === height - 1) || (!isReverse && j === 0);
-          const isPrevRowHasContent = prevWhichRowHasContent + 1 === i;
-          if (isNewRow && isPrevRowHasContent) {
-            content.push(`S0`);
-          }
+          // const isNewRow =
+          //   (isReverse && j === height - 1) || (!isReverse && j === 0);
+          // const isPrevRowHasContent = prevWhichRowHasContent + 1 === i;
+          // if (isNewRow && isPrevRowHasContent) {
+          //   content.push(`S0`);
+          // }
 
           const idx = i * 4 + j * width * 4;
           if (img.bitmap.data[idx] <= bwThreshold) {
-            prevWhichRowHasContent = i;
+            // prevWhichRowHasContent = i;
             const start = {
               x: i,
               y: j,
