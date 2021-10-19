@@ -238,9 +238,7 @@ class LaserToolPathGenerator extends EventEmitter {
       top2bottom ? j-- : j++
     ) {
       // promise first row must not reverse.
-      const isReverse = top2bottom
-        ? (height - j) % 2 === 0
-        : (height + 1) % 2 === 0;
+      const isReverse = top2bottom ? (height - j) % 2 === 0 : (j + 1) % 2 === 0;
       isNewRow = true;
 
       for (
@@ -291,6 +289,7 @@ class LaserToolPathGenerator extends EventEmitter {
     const { gcodeConfigPlaceholder, config, gcodeConfig } = modelInfo;
     const {
       fixedPower,
+      fixedPowerEnabled,
       dwellTime,
       direction = 'Horizontal',
       top2bottom,
@@ -313,9 +312,10 @@ class LaserToolPathGenerator extends EventEmitter {
 
     let firstTurnOn = true;
     function turnOnLaser() {
+      const powerMax = fixedPowerEnabled ? fixedPower : 100;
       if (firstTurnOn || gcodeConfig.style === 'marlin') {
         firstTurnOn = false;
-        const powerStrength = Math.floor((fixedPower * 1000) / 100);
+        const powerStrength = Math.floor((powerMax * 1000) / 100);
         return `M3 S${powerStrength}`;
       }
       return 'M3';
@@ -334,7 +334,7 @@ class LaserToolPathGenerator extends EventEmitter {
         // promise first row must not reverse.
         const isReverse = top2bottom
           ? (height - j) % 2 === 0
-          : (height + 1) % 2 === 0;
+          : (j + 1) % 2 === 0;
         for (
           let i = isReverse ? width : 0;
           isReverse ? i >= 0 : i < width;
@@ -616,7 +616,7 @@ class LaserToolPathGenerator extends EventEmitter {
         // promise first row must not reverse.
         const isReverse = top2bottom
           ? (height - j) % 2 === 0
-          : (height + 1) % 2 === 0;
+          : (j + 1) % 2 === 0;
 
         const sign = isReverse ? -1 : 1;
         for (
