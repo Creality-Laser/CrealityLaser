@@ -71,6 +71,41 @@ class SerialPortClient {
     'taskProgress:generateGcode': [],
     'taskCompleted:generateToolPath': [],
     'taskCompleted:generateGcode': [],
+
+    // wifi events
+    'wifi:uploadGcore': [],
+    'wifi:uploadGcoreSucc': [],
+    'wifi:uploadGcoreErr': [],
+    'wifi:uploadGcoreProgress': [],
+    'wifi:canCelUploadGcore': [],
+    'wifi:cancelUploadGcoreSucc': [],
+    'wifi:cancelUploadGcoreErr': [],
+    'wifi:uploadGcodeFile': [],
+    'wifi:uploadGcodeFileSucc': [],
+    'wifi:uploadGcodeFileErr': [],
+    'wifi:uploadGcodeFileProgress': [],
+    'wifi:cancelUploadGcodeFile': [],
+    'wifi:cancelUploadGcodeFileSucc': [],
+    'wifi:cancelUploadGcodeFileErr': [],
+    'wifi:uploadOTAFile': [],
+    'wifi:uploadOTAFileProgress': [],
+    'wifi:uploadOTAFileSucc': [],
+    'wifi:uploadOTAFileErr': [],
+    'wifi:getDeviceInfo': [],
+    'wifi:getDeviceInfoErr': [],
+    'wifi:getDeviceInfoSucc': [],
+    'wifi:sendPrintCommand': [],
+    'wifi:sendPrintCommandSucc': [],
+    'wifi:sendPrintCommandErr': [],
+    'wifi:sendCommand': [],
+    'wifi:sendCommandErr': [],
+    'wifi:sendCommandSucc': [],
+    'wifi:getDeviceStatusHeartbeat': [],
+    'wifi:getDeviceStatusHeartbeatSucc': [],
+    'wifi:getDeviceStatusHeartbeatErr': [],
+    'wifi:cancalGetDeviceStatusHeartbeat': [],
+    'wifi:cancalGetDeviceStatusHeartbeatSucc': [],
+    'wifi:cancalGetDeviceStatusHeartbeatErr': [],
   };
 
   dataSource = '';
@@ -246,6 +281,46 @@ class SerialPortClient {
 
   commitToolPathTask(task) {
     socketController.emit('taskCommit:generateToolPath', task);
+  }
+
+  wifiUploadGcore(config) {
+    socketController.emit('wifi:uploadGcore', config);
+  }
+
+  wifiCancelUploadGcore() {
+    socketController.emit('wifi:canCelUploadGcore');
+  }
+
+  wifiUploadGcodeFile(gcodeFileInfo) {
+    socketController.emit('wifi:uploadGcodeFile', gcodeFileInfo);
+  }
+
+  wifiCancelUploadGcodeFile() {
+    socketController.emit('wifi:cancelUploadGcodeFile');
+  }
+
+  wifiUploadOTAFile(fileInfo) {
+    socketController.emit('wifi:uploadOTAFile', fileInfo);
+  }
+
+  wifiGetDeviceInfo() {
+    socketController.emit('wifi:getDeviceInfo');
+  }
+
+  wifiSendPrintCommand(command = '') {
+    socketController.emit('wifi:sendPrintCommand', command);
+  }
+
+  wifiSendCommand(command = '') {
+    socketController.emit('wifi:sendCommand', command);
+  }
+
+  wifiGetDeviceStatusHeartbeat() {
+    socketController.emit('wifi:getDeviceStatusHeartbeat');
+  }
+
+  wifiCancalGetDeviceStatusHeartbeat() {
+    socketController.emit('wifi:cancalGetDeviceStatusHeartbeat');
   }
 
   commitGcodeTask(task) {

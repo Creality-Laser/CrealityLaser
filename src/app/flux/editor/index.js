@@ -502,6 +502,33 @@ export const actions = {
     );
   },
 
+  handleSendGcoreToMachine: (headType) => async (dispatch, getState) => {
+    const { currentGcoreConfig } = getState()[headType];
+
+    // const { currentConnectdMachine } = getState().machine;
+
+    // get connect state
+    // const isConnected = currentConnectdMachine;
+
+    // if (!isConnected) {
+    //   return new Error('Not connected');
+    // }
+
+    console.log(
+      currentGcoreConfig,
+      '=========== handleSendGcoreToMachine ======'
+    );
+
+    if (currentGcoreConfig && Object.keys(currentGcoreConfig)) {
+      controller.wifiUploadGcore(currentGcoreConfig);
+      // await api
+      //   .uploadGcore(currentGcoreConfig)
+      //   .then((res) => {
+      //     console.log(res, '------------- get response ----------- ');
+      //   })
+      //   .catch(console.error);
+    }
+  },
   updateSelectedModelFlip:
     (headType, transformation) => (dispatch, getState) => {
       const { modelGroup } = getState()[headType];

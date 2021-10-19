@@ -20,6 +20,7 @@
   "Generate G-code": "Generate G-code",
   "Load G-code to Workspace": "Load G-code to Workspace",
   "Export G-code to file": "Export G-code to file",
+  "Send G-core to Machine": "Send G-core to Machine",
   "Parse Error": "Parse Error",
   "Failed to parse image file,": "Failed to parse image file {{fileName}}",
   "Failed to parse image file": "Failed to parse image file",

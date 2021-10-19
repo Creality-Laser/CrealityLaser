@@ -91,6 +91,7 @@ class TaskManager extends EventEmitter {
       });
 
       taskSelected.filename = res.filename;
+      taskSelected.modelPath = res.modelPath;
       if (taskSelected.taskStatus !== TASK_STATUS_DEPRECATED) {
         taskSelected.taskStatus = TASK_STATUS_COMPLETED;
         taskSelected.finishTime = new Date().getTime();

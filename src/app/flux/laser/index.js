@@ -44,6 +44,8 @@ const INITIAL_STATE = {
   gcodeConfig: {},
   config: {},
 
+  // about wifi params
+  currentGcoreConfig: {}, // The custom pre gcode format's config
   // snapshot state
   undoSnapshots: [{ models: [], toolPathModels: [] }], // snapshot { models, toolPathModels }
   redoSnapshots: [], // snapshot { models, toolPathModels }
@@ -74,8 +76,18 @@ export const actions = {
     dispatch(editorActions.init('laser'));
 
     const controllerEvents = {
+      'wifi:uploadGcoreProgress': (process) => {
+        console.log(process, '======== wifi:uploadGcoreProgress =======');
+      },
+      'wifi:uploadGcoreSucc': (ret) => {
+        console.log(ret, '======== wifi:uploadGcoreSucc =======');
+      },
+      'wifi:uploadGcoreErr': (err) => {
+        console.log(err, '======== wifi:uploadGcoreSucc =======');
+      },
       'taskCompleted:generateToolPath': (taskResult) => {
         if (taskResult.headType === 'laser') {
+          dispatch(actions.genCurrentGcoreConfig(taskResult));
           dispatch(editorActions.onReceiveTaskResult('laser', taskResult));
         }
       },
@@ -183,6 +195,89 @@ export const actions = {
     group.remove(...group.children);
     dispatch(actions.setBackgroundEnabled(false));
     dispatch(editorActions.render('laser'));
+  },
+  // Gcore is a mid format which should send to machine for generate gcode.
+  genCurrentGcoreConfig: (toolPathResult) => (dispatch, getState) => {
+    const {
+      data: {
+        mode,
+        transformation: { width, height, positionX, positionY },
+        gcodeConfig: {
+          density,
+          fixedPowerEnabled,
+          fixedPower,
+          multiPasses,
+          jogSpeed,
+          workSpeed,
+        },
+      },
+      modelPath,
+    } = toolPathResult;
+
+    const isVectorMode = mode && mode === 'vector';
+
+    // current not support vector mode
+    if (isVectorMode) {
+      return;
+    }
+    const { series } = getState().machine;
+
+    // Offset from the lower left corner
+    const offset = {
+      x: positionX - width / 2,
+      y: positionY - height / 2,
+    };
+
+    // percent number
+    const power_rate = fixedPowerEnabled ? fixedPower : 100;
+
+    // work_speed = speed_rate * max_work_speed
+    const max_work_speed = 2000;
+    const speed_rate = (workSpeed / max_work_speed) * 100;
+
+    // model
+
+    let model = null;
+    switch (series) {
+      case 'CV01PRO':
+        model = 2;
+        break;
+      case 'CV20':
+        model = 20;
+        break;
+      case 'CV30':
+        model = 30;
+        break;
+      case 'Ender3s':
+        model = 0;
+        break;
+      default:
+        model = 0;
+        break;
+    }
+
+    const gcoreConfig = {
+      sourcePath: modelPath,
+      offset,
+      density,
+      power_rate,
+      speed_rate,
+      model,
+      start: 1,
+      dire: 1,
+      gco_style: 1,
+      total_num: multiPasses,
+      jog_speed: jogSpeed,
+      work_speed: workSpeed,
+    };
+
+    console.log(gcoreConfig, '========== gcoreConfig =======');
+
+    dispatch(
+      editorActions.updateState('laser', {
+        currentGcoreConfig: gcoreConfig,
+      })
+    );
   },
 };
 

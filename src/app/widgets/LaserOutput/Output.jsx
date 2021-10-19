@@ -192,6 +192,17 @@ class Output extends PureComponent {
               >
                 {t('Export G-code to file')}
               </Button>
+              <Button
+                onClick={this.props.handleSendGcoreToMachine}
+                disabled={
+                  !hasModel ||
+                  workflowState === 'running' ||
+                  !isAllModelsPreviewed
+                }
+                style={{ display: 'block', width: '100%', marginTop: '10px' }}
+              >
+                {t('Send G-core to Machine')}
+              </Button>
             </div>
           )}
         </div>
@@ -231,6 +242,7 @@ Output.propTypes = {
   updateWidgetState: PropTypes.func.isRequired,
   togglePage: PropTypes.func.isRequired,
   isAnyModelOverstepped: PropTypes.bool,
+  handleSendGcoreToMachine: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -269,6 +281,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    handleSendGcoreToMachine: () =>
+      dispatch(editorActions.handleSendGcoreToMachine('laser')),
     togglePage: (page) => dispatch(editorActions.togglePage('laser', page)),
     generateGcode: (thumbnail) =>
       dispatch(editorActions.generateGcode('laser', thumbnail)),

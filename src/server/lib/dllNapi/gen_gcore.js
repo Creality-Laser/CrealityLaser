@@ -7,15 +7,15 @@ import getDllFilePath from './utils/getDllFilePath';
 /**
  * GcoreConfig type definition
  * @typedef {Object} GcoreConfig
+ * @property {Object} offset - 雕刻位置(图像左下角): (x, y) unit: mm
+ * @property {number} density - 雕刻密度： 大于0  (0 或 或有效范围之外： 机型默认）
+ * @property {number} power_rate - 雕刻功率： 0 - 100 (0 或 超出范围之外： 机型默认)
+ * @property {number} speed_rate - 雕刻深度： 0 - 100 (0 或 超出范围之外： 机型默认）
  * @property {number} model - 机器类型: CV_10:0, CV_10_PRO:1, CV_20:2, CV_30:3
  * @property {number} start - 从图像的那个角点开始雕刻：TopLeft：0, TopRight:1, BottomLeft:2, BottomRight:3
  * @property {number} dire - 雕刻路径和方式 StraightRight:0, StraightLeft:1, DiagonalRight:2, DiagonalLeft:3
  * @property {number }gco_style - gCode风格：DefaultStyle = 0, GRBLStyle = 1, MarlinStyle = 2
  * @property {number} total_num - 雕刻次数:0 - 1000
- * @property {Object} offset - 雕刻位置(图像左上角): (x, y) unit: mm
- * @property {number} density - 雕刻密度： 大于0  (0 或 或有效范围之外： 机型默认）
- * @property {number} power_rate - 雕刻功率： 0 - 100 (0 或 超出范围之外： 机型默认)
- * @property {number} speed_rate - 雕刻深度： 0 - 100 (0 或 超出范围之外： 机型默认）
  * @property {number} jog_speed - // 空走速度（G0）
  * @property {number} work_speed - // 工作速度（G1）
  */

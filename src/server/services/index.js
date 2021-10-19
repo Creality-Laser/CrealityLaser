@@ -1,6 +1,7 @@
 import SocketServer from '../lib/SocketManager';
 import TaskManager from './task-manager';
 
+import socketWifi from './socket/socket-wifi';
 // import socketSerial from './socket/socket-serial';
 // import socketSlice from './socket/socket-slice';
 import wifiServerManager from './socket/WifiServerManager';
@@ -37,6 +38,41 @@ function startServices(server) {
   // socketServer.registerEvent('serialport:close', socketSerial.serialportClose);
   // socketServer.registerEvent('command', socketSerial.command);
   // socketServer.registerEvent('writeln', socketSerial.writeln);
+
+  // wifi manager
+  socketServer.registerEvent('wifi:uploadGcore', socketWifi.uploadGcore);
+  socketServer.registerEvent(
+    'wifi:canCelUploadGcore',
+    socketWifi.cancelUploadGcore
+  );
+
+  socketServer.registerEvent(
+    'wifi:uploadGcodeFile',
+    socketWifi.uploadGcodeFile
+  );
+  socketServer.registerEvent(
+    'wifi:cancelUploadGcodeFile',
+    socketWifi.cancelUploadGcodeFile
+  );
+
+  socketServer.registerEvent('wifi:uploadOTAFile', socketWifi.uploadOTAFile);
+
+  socketServer.registerEvent('wifi:getDeviceInfo', socketWifi.getDeviceInfo);
+  socketServer.registerEvent(
+    'wifi:sendPrintCommand',
+    socketWifi.sendPrintCommand
+  );
+  socketServer.registerEvent('wifi:sendCommand', socketWifi.sendCommand);
+
+  socketServer.registerEvent(
+    'wifi:getDeviceStatusHeartbeat',
+    socketWifi.getDeviceStatusHeartbeat
+  );
+
+  socketServer.registerEvent(
+    'wifi:cancalGetDeviceStatusHeartbeat',
+    socketWifi.cancalGetDeviceStatusHeartbeat
+  );
 
   // task manager
   socketServer.registerEvent(

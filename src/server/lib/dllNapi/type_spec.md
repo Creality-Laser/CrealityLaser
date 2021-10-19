@@ -62,7 +62,7 @@ enum GCodeStyle {
 typedef struct GCoreConfig {
     GcoPoint            offset;     // 雕刻位置(x, y) unit: mm (图像左上角)
     float               density;    // 雕刻密度： 大于0  (0 或 或有效范围之外： 机型默认）
-    float               power_rate; // 雕刻功率： 0 - 100 (0 或 超出范围之外： 机型默认), 通过改变G1 主轴功率(S)实现
+    float               power_rate; // 雕刻功率： 0 - 100 (百分比)(0 或 超出范围之外： 机型默认), 通过改变G1 主轴功率(S)实现
     float               speed_rate; // 雕刻深度： 0 - 100 (0 或 超出范围之外： 机型默认), 通过改变G1 主轴速度(F)实现
     // 设备信息
     MachineModel        model;      // 机型

@@ -53,6 +53,7 @@ const generateLaserToolPath = async (modelInfo, onProgress) => {
         } else {
           resolve({
             filename: outputFilename,
+            modelPath,
           });
         }
       });

@@ -20,6 +20,7 @@
   "Generate G-code": "生成 G-code",
   "Load G-code to Workspace": "加载 G-code 到工作区",
   "Export G-code to file": "导出 G-code",
+  "Send G-core to Machine": "发送 G-core 文件到设备",
   "Parse Error": "解析错误",
   "Failed to parse image file,": "解析文件失败 {{fileName}}",
   "Failed to parse image file": "解析文件失败",
