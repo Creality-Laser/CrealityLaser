@@ -74,14 +74,12 @@ export default async function uploadFile(
       }
     });
 
-    if (onRequestHandler) {
-      onRequestHandler(requestHandler);
-    }
-
     progressHandler = setInterval(() => {
       // eslint-disable-next-line no-underscore-dangle
       const dispatched = requestHandler.req.connection._bytesDispatched;
-      const progress = ((dispatched * 100) / size).toFixed(0);
+      const progress = (
+        (dispatched * 100) / size > 100 ? 100 : (dispatched * 100) / size
+      ).toFixed(0);
       if (onProgress) {
         onProgress({
           progress,
@@ -90,6 +88,10 @@ export default async function uploadFile(
         });
       }
     }, 250);
+
+    if (onRequestHandler) {
+      onRequestHandler(requestHandler, progressHandler);
+    }
 
     return 'ok';
   } catch (error) {

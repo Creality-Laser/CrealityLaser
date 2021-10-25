@@ -10,6 +10,9 @@ import {
   sendCmd,
   postOTAFile,
 } from './utils/api';
+import Config from './config';
+
+const { deviceStatusHeartbeatIntervalTime } = Config;
 
 //can cancel gcore upload by this handler
 let uploadGcoreHandler = null;
@@ -19,6 +22,9 @@ let uploadGcodeFileHandler = null;
 
 // can cancel get device status header beat by this handler
 let getDeviceStatusHeartbeatIntervalHandler = null;
+
+// can cancel OTA file upload by this handler
+let uploadOTAFileHandler = null;
 
 const uploadGcore = async (socket, config) => {
   try {
@@ -52,8 +58,11 @@ const uploadGcore = async (socket, config) => {
         socket.emit('wifi:uploadGcoreErr', errRet);
         uploadGcoreHandler = null;
       },
-      (handler) => {
+      (handler, progressHandler) => {
         uploadGcoreHandler = handler;
+        if (progressHandler) {
+          uploadGcoreHandler.progressHandler = progressHandler;
+        }
       }
     );
   } catch (error) {
@@ -69,6 +78,9 @@ const cancelUploadGcore = (socket) => {
   try {
     if (uploadGcoreHandler && uploadGcoreHandler.abort) {
       uploadGcoreHandler.abort();
+    }
+    if (uploadGcoreHandler.progressHandler) {
+      clearInterval(uploadGcoreHandler.progressHandler);
     }
     socket.emit('wifi:cancelUploadGcoreSucc');
   } catch (error) {
@@ -119,10 +131,10 @@ const cancelUploadGcodeFile = (socket) => {
 
 const uploadOTAFile = async (socket, fileInfo) => {
   try {
-    const { filePath } = fileInfo;
+    const { path } = fileInfo;
 
     postOTAFile(
-      filePath,
+      path,
       (progress) => {
         socket.emit('wifi:uploadOTAFileProgress', progress);
       },
@@ -131,6 +143,12 @@ const uploadOTAFile = async (socket, fileInfo) => {
       },
       (errRet) => {
         socket.emit('wifi:uploadOTAFileErr', errRet);
+      },
+      (handler, progressHandler) => {
+        uploadOTAFileHandler = handler;
+        if (progressHandler) {
+          uploadOTAFileHandler.progressHandler = progressHandler;
+        }
       }
     );
   } catch (error) {
@@ -139,6 +157,20 @@ const uploadOTAFile = async (socket, fileInfo) => {
       ok: 1,
       msg: 'err',
     });
+  }
+};
+
+const cancelUploadOTAFile = (socket) => {
+  try {
+    if (uploadOTAFileHandler && uploadOTAFileHandler.abort) {
+      uploadOTAFileHandler.abort();
+    }
+    if (uploadOTAFileHandler.progressHandler) {
+      clearInterval(uploadOTAFileHandler.progressHandler);
+    }
+    socket.emit('wifi:cancelUploadOTAFileSucc');
+  } catch (error) {
+    socket.emit('wifi:cancelUploadOTAFileErr');
   }
 };
 
@@ -196,20 +228,33 @@ const sendCommand = async (socket, command) => {
 };
 
 const getDeviceStatusHeartbeat = async (socket) => {
+  let sequenceControlIndex = 1;
   try {
-    getDeviceStatusHeartbeatIntervalHandler = setInterval(() => {
-      const ret = await fetchDeviceStatusHeartbeat();
+    getDeviceStatusHeartbeatIntervalHandler = setInterval(async () => {
+      const [ret, retIndex] = await fetchDeviceStatusHeartbeat(
+        sequenceControlIndex
+      );
+
+      const isLatestResponse = retIndex === sequenceControlIndex;
+
+      sequenceControlIndex++;
+
       if (!ret) {
         socket.emit('wifi:getDeviceStatusHeartbeatErr');
         return false;
       }
+
+      if (!isLatestResponse) {
+        return false;
+      }
+
       socket.emit('wifi:getDeviceStatusHeartbeatSucc', {
         data: ret,
         ok: 0,
         msg: 'ok',
       });
       return true;
-    }, 2000);
+    }, deviceStatusHeartbeatIntervalTime);
 
     return true;
   } catch (error) {
@@ -236,6 +281,7 @@ export default {
   uploadGcodeFile,
   cancelUploadGcodeFile,
   uploadOTAFile,
+  cancelUploadOTAFile,
   getDeviceInfo,
   sendPrintCommand,
   sendCommand,

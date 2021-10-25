@@ -77,7 +77,7 @@ class SerialPortClient {
     'wifi:uploadGcoreSucc': [],
     'wifi:uploadGcoreErr': [],
     'wifi:uploadGcoreProgress': [],
-    'wifi:canCelUploadGcore': [],
+    'wifi:cancelUploadGcore': [],
     'wifi:cancelUploadGcoreSucc': [],
     'wifi:cancelUploadGcoreErr': [],
     'wifi:uploadGcodeFile': [],
@@ -91,6 +91,9 @@ class SerialPortClient {
     'wifi:uploadOTAFileProgress': [],
     'wifi:uploadOTAFileSucc': [],
     'wifi:uploadOTAFileErr': [],
+    'wifi:cancelUploadOTAFile': [],
+    'wifi:cancelUploadOTAFileSucc': [],
+    'wifi:cancelUploadOTAFileErr': [],
     'wifi:getDeviceInfo': [],
     'wifi:getDeviceInfoErr': [],
     'wifi:getDeviceInfoSucc': [],
@@ -288,7 +291,7 @@ class SerialPortClient {
   }
 
   wifiCancelUploadGcore() {
-    socketController.emit('wifi:canCelUploadGcore');
+    socketController.emit('wifi:cancelUploadGcore');
   }
 
   wifiUploadGcodeFile(gcodeFileInfo) {
@@ -301,6 +304,10 @@ class SerialPortClient {
 
   wifiUploadOTAFile(fileInfo) {
     socketController.emit('wifi:uploadOTAFile', fileInfo);
+  }
+
+  wifiCancelUploadOTAFile() {
+    socketController.emit('wifi:cancelUploadOTAFile');
   }
 
   wifiGetDeviceInfo() {

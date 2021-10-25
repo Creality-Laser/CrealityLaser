@@ -185,14 +185,25 @@ $sidebar-width: 64px;
 .visualizer_wrapper {
   flex: 1;
 }
+.widgets_area_wrapper {
+  z-index: 1;
+  background-color: #f6f7f8;
+  width: 360px;
+  height: calc(100vh - 50px);
+}
+
+.wifi_connect_wrapper {
+  height: 42px;
+  padding: 5px 6px;
+}
+
 .widgets_wrapper {
   z-index: 1;
-  width: 360px;
-  background-color: #f6f7f8;
-  height: calc(100vh - 50px);
-  max-height: calc(100vh - 50px);
+
+  // background-color: #f6f7f8;
   overflow-y: auto;
   overflow-x: hidden;
+  max-height: calc(100vh - 50px - 52px);
   padding: 5px;
 }
 

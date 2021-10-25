@@ -7,6 +7,7 @@ import { Modal } from 'antd';
 import { withTranslation } from 'react-i18next';
 
 import LaserVisualizer from '../../widgets/LaserVisualizer';
+import WiFiConnection from '../../widgets/WiFiConnection';
 import Widget from '../../widgets';
 import Dropzone from '../../components/Dropzone';
 import { actions as editorActions } from '../../flux/editor';
@@ -79,32 +80,37 @@ class Laser extends Component {
           <div className={styles.visualizer_wrapper}>
             <LaserVisualizer widgetId="laserVisualizer" />
           </div>
-          <div className={styles.widgets_wrapper}>
-            <Sortable
-              options={{
-                animation: 150,
-                delay: 0,
-                group: {
-                  name: 'laser-control',
-                },
-                handle: '.sortable-handle',
-                filter: '.sortable-filter',
-                chosenClass: 'sortable-chosen',
-                ghostClass: 'sortable-ghost',
-                dataIdAttr: 'data-widget-id',
-                onStart: this.actions.onDragWidgetStart,
-                onEnd: this.actions.onDragWidgetEnd,
-              }}
-              onChange={this.onChangeWidgetOrder}
-            >
-              {widgets.map((widget) => {
-                return (
-                  <div data-widget-id={widget} key={widget}>
-                    <Widget widgetId={widget} headType="laser" />
-                  </div>
-                );
-              })}
-            </Sortable>
+          <div className={styles.widgets_area_wrapper}>
+            <div className={styles.wifi_connect_wrapper}>
+              <WiFiConnection />
+            </div>
+            <div className={styles.widgets_wrapper}>
+              <Sortable
+                options={{
+                  animation: 150,
+                  delay: 0,
+                  group: {
+                    name: 'laser-control',
+                  },
+                  handle: '.sortable-handle',
+                  filter: '.sortable-filter',
+                  chosenClass: 'sortable-chosen',
+                  ghostClass: 'sortable-ghost',
+                  dataIdAttr: 'data-widget-id',
+                  onStart: this.actions.onDragWidgetStart,
+                  onEnd: this.actions.onDragWidgetEnd,
+                }}
+                onChange={this.onChangeWidgetOrder}
+              >
+                {widgets.map((widget) => {
+                  return (
+                    <div data-widget-id={widget} key={widget}>
+                      <Widget widgetId={widget} headType="laser" />
+                    </div>
+                  );
+                })}
+              </Sortable>
+            </div>
           </div>
         </div>
       </Dropzone>

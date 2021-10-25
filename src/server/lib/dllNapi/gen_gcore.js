@@ -60,11 +60,16 @@ export default async function genGcore(
       ],
     });
 
+    const offsetMagnification = 10000;
+
     const gCoreConfigRef = new GCoreConfig({
-      offset,
-      density,
-      power_rate,
-      speed_rate,
+      offset: {
+        x: offset.x * offsetMagnification,
+        y: offset.y * offsetMagnification,
+      },
+      density: density * 10,
+      power_rate: power_rate * 10,
+      speed_rate: speed_rate * 10,
       model,
       start,
       dire,

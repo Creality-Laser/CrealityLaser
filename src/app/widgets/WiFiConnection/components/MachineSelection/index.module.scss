@@ -1,0 +1,98 @@
+@import '../../../../styles/variables.scss';
+
+.status_btn {
+  height: 32px;
+  width: 300px;
+  background-color: $primary-color;
+  color: white;
+  border-radius: 3px;
+  border: none;
+  text-align: center;
+  line-height: 32px;
+  cursor: pointer;
+}
+
+.modal_footer {
+}
+
+.current_fireware_wrapper {
+  margin-right: 10px;
+  color: gray;
+}
+
+.current_fireware_label {
+}
+
+.current_fireware_loading {
+}
+
+.current_fireware_error {
+}
+.current_fireware_value {
+  font-weight: bold;
+}
+
+.select_wrapper {
+  display: flex;
+  max-height: 380px;
+  overflow-y: hidden;
+}
+
+.sidebar_wrapper {
+  overflow-y: auto;
+  padding: 2px;
+}
+
+.sidebar_machine_wrapper {
+  width: 100%;
+  border: none;
+  height: 87px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: white;
+  border-left: 4px solid white;
+  border-bottom: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.sidebar_machine_wrapper:last-child {
+  border-bottom: none;
+}
+
+.sidebar_machine_wrapper:hover {
+  background-color: #eee;
+  cursor: pointer;
+  border-left-color: #eee;
+}
+
+.sidebar_machine_current_choosed_wrapper {
+  background-color: #eee;
+  border-left-color: #eee;
+}
+
+.sidebar_machine_selected_wrapper,
+.sidebar_machine_selected_wrapper:hover {
+  border-left-color: $primary-color;
+  background-color: #efefef;
+}
+
+.sidebar_machine_label {
+}
+
+.sidebar_machine_profile {
+  width: 96px;
+  height: 67px;
+  border: 1px solid #ddd;
+}
+
+.machine_details_wrapper {
+  flex: 1;
+  margin-left: 10px;
+  padding: 6px;
+  border-left: 1px solid #ddd;
+}
+
+.firmware_update_modal_content_wraper {
+}

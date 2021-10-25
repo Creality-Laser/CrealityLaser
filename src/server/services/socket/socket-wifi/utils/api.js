@@ -6,18 +6,29 @@ const { baseUrl } = Config;
 
 const requestGet = async (url) => {
   try {
-    const ret = await request.get(url);
-    return ret;
+    const ret = await request.get(url).timeout({
+      response: 2000, // Wait 1 seconds for the server to start sending,
+      deadline: 2000, // but allow 2 seconds for the file to finish loading.
+    });
+    const isValidRet = ret && ret.body && ret.body.code === 0;
+    if (isValidRet) {
+      return ret.body;
+    }
+    return false;
   } catch (error) {
     console.error(error);
     return false;
   }
 };
 
-export const fetchDeviceStatusHeartbeat = async () => {
+/**
+ * fetchDeviceStatusHeartbeat
+ * @param {number} sequenceControlIndex - use to control sequence
+ */
+export const fetchDeviceStatusHeartbeat = async (sequenceControlIndex = 1) => {
   const url = `${baseUrl}/status/heartbeat`;
-  const ret = await request.get(url);
-  return ret;
+  const ret = await requestGet(url);
+  return [ret, sequenceControlIndex];
 };
 
 export const sendCmd = async (command = '') => {
@@ -82,7 +93,13 @@ export const postGcodeFile = (
   uploadFile(url, fileInfo, {}, onProgress, onOk, onError, onRequestHandler);
 };
 
-export const postOTAFile = (filePath = '', onProgress, onOk, onError) => {
+export const postOTAFile = (
+  filePath = '',
+  onProgress,
+  onOk,
+  onError,
+  onRequestHandler
+) => {
   const url = `${baseUrl}/file/update`;
 
   const fileInfo = {
@@ -91,5 +108,5 @@ export const postOTAFile = (filePath = '', onProgress, onOk, onError) => {
     name: filePath,
   };
 
-  uploadFile(url, fileInfo, {}, onProgress, onOk, onError, null);
+  uploadFile(url, fileInfo, {}, onProgress, onOk, onError, onRequestHandler);
 };

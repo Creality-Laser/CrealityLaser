@@ -1,8 +1,10 @@
 import { isArray, includes } from 'lodash';
 import EventEmitter from 'events';
+import { message } from 'antd';
 import { MACHINE_SERIES } from '../../constants';
 import store from '../../../store';
 import { actions as widgetActions } from '../widget';
+import { controller } from '../../lib/controller';
 
 export const valueOf = (obj, key, value) => {
   let result = null;
@@ -18,13 +20,57 @@ export const valueOf = (obj, key, value) => {
 };
 
 const INITIAL_STATE = {
-  series: MACHINE_SERIES.CV20.value,
-  size: MACHINE_SERIES.CV20.setting.size,
-  laserSize: MACHINE_SERIES.CV20.setting.laserSize,
-  style: MACHINE_SERIES.CV20.setting.style,
+  series: MACHINE_SERIES.CUSTOM.value,
+  size: MACHINE_SERIES.CUSTOM.setting.size,
+  laserSize: MACHINE_SERIES.CUSTOM.setting.laserSize,
+  style: MACHINE_SERIES.CUSTOM.setting.style,
+  machineInfoConnectedByWiFi: null,
+  // null |
+  // {
+  //  model: 'CV20',
+  //  status: 'work' | 'idle' | 'pause',
+  //  sn: '45684321234rfsdef',
+  //  process: 0.125,
+  // }
+  deviceWareInfoByWiFi: null,
+  deviceWareInfoByWiFiErr: false,
+  deviceWareInfoByWiFiLoading: false,
+  uploadOTAFileLoading: false,
+  uploadOTAFileSucc: false,
+  uploadOTAFileErr: false,
+  uploadOTAFileProgress: null,
 };
 
 const ACTION_UPDATE_STATE = 'machine/ACTION_UPDATE_STATE';
+
+const deviceStatusHeartbeatDataAdaptor = (ret = {}) => {
+  if (!ret || !ret.data) {
+    return null;
+  }
+  const { model = 'CV-20', status = 1, process: progress } = ret.data;
+  const modelMap = {
+    'CV-20': 'CV20',
+    'CV-30': 'CV30',
+    'CV-01 PRO': 'CV01PRO',
+  };
+
+  const modelVal = modelMap[model] || 'CV20';
+
+  const statusVal =
+    (status === 1 && 'idle') ||
+    (status === 2 && 'idle') ||
+    (status === 3 && 'work') ||
+    (status === 4 && 'pause') ||
+    (status === 5 && 'xmcerror_run') ||
+    (status === 6 && 'spindleerror_run') ||
+    'unknown';
+
+  return {
+    model: modelVal,
+    status: statusVal,
+    process: progress === undefined ? null : progress / 100,
+  };
+};
 
 export const machineEventEmitter = new EventEmitter();
 
@@ -47,6 +93,119 @@ export const actions = {
         style,
       })
     );
+
+    const controllerEvents = {
+      'wifi:uploadOTAFileProgress': (progress) => {
+        if (progress) {
+          dispatch(
+            actions.updateState({
+              uploadOTAFileProgress: progress,
+            })
+          );
+        }
+      },
+      'wifi:uploadOTAFileSucc': () => {
+        dispatch(
+          actions.updateState({
+            uploadOTAFileLoading: false,
+            uploadOTAFileSucc: true,
+            uploadOTAFileErr: false,
+            uploadOTAFileProgress: null,
+          })
+        );
+      },
+      'wifi:uploadOTAFileErr': () => {
+        message.error(`Send OTA file failed`);
+        dispatch(
+          actions.updateState({
+            uploadOTAFileLoading: false,
+            uploadOTAFileSucc: false,
+            uploadOTAFileErr: true,
+            uploadOTAFileProgress: null,
+          })
+        );
+      },
+      'wifi:cancelUploadOTAFileSucc': () => {
+        dispatch(
+          actions.updateState({
+            uploadOTAFileLoading: false,
+            uploadOTAFileSucc: false,
+            uploadOTAFileErr: false,
+            uploadOTAFileProgress: null,
+          })
+        );
+      },
+      'wifi:cancelUploadOTAFileErr': () => {
+        message.error(`Cancel send OTA file failed`);
+      },
+      'wifi:getDeviceInfoSucc': (ret) => {
+        const { data } = ret;
+        if (data.model) {
+          data.model =
+            (data.model === 'CV-20' && 'CV20') ||
+            (data.model === 'CV-30' && 'CV30') ||
+            (data.model === 'CV-01 Pro' && 'CV01PRO');
+        }
+        dispatch(
+          actions.updateState({
+            deviceWareInfoByWiFi: data,
+            deviceWareInfoByWiFiErr: false,
+            deviceWareInfoByWiFiLoading: false,
+          })
+        );
+      },
+      'wifi:getDeviceInfoErr': () => {
+        dispatch(
+          actions.updateState({
+            deviceWareInfoByWiFi: null,
+            deviceWareInfoByWiFiErr: true,
+            deviceWareInfoByWiFiLoading: false,
+          })
+        );
+      },
+      'wifi:getDeviceStatusHeartbeatSucc': (ret) => {
+        const { data } = ret;
+        console.log(
+          data,
+          '============= wifi:getDeviceStatusHeartbeatSucc -----------'
+        );
+        dispatch(
+          actions.updateState({
+            machineInfoConnectedByWiFi: deviceStatusHeartbeatDataAdaptor(data),
+          })
+        );
+      },
+      'wifi:getDeviceStatusHeartbeatErr': () => {
+        console.log(`========== wifi:getDeviceStatusHeartbeatErr ===========`);
+        dispatch(
+          actions.updateState({
+            machineInfoConnectedByWiFi: null,
+          })
+        );
+      },
+      'wifi:cancalGetDeviceStatusHeartbeatSucc': () => {
+        dispatch(
+          actions.updateState({
+            machineInfoConnectedByWiFi: null,
+          })
+        );
+        console.log(`======= wifi:cancalGetDeviceStatusHeartbeatSucc ====`);
+      },
+      'wifi:cancalGetDeviceStatusHeartbeatErr': () => {
+        console.log(
+          `========= wifi:cancalGetDeviceStatusHeartbeatErr ========`
+        );
+        dispatch(
+          actions.updateState({
+            machineInfoConnectedByWiFi: null,
+          })
+        );
+      },
+    };
+
+    Object.keys(controllerEvents).forEach((event) => {
+      controller.on(event, controllerEvents[event]);
+    });
   },
   updateMachineSeries: (series) => (dispatch, getState) => {
     store.set('machine.series', series);
@@ -91,6 +250,38 @@ export const actions = {
     machineEventEmitter.emit('laserSizeChange', laserSize);
 
     dispatch(actions.updateState({ laserSize }));
+  },
+  subscribeDeviceStatusHeartbeat: () => () => {
+    controller.wifiGetDeviceStatusHeartbeat();
+  },
+  unsubscribeDeviceStatusHeartbeat: () => () => {
+    controller.wifiCancalGetDeviceStatusHeartbeat();
+  },
+  sendPrintCommand:
+    (command = 'start') =>
+    () => {
+      controller.wifiSendPrintCommand(command);
+    },
+  getDeviceWareInfoByWiFi: () => (dispatch) => {
+    dispatch(actions.updateState({ deviceWareInfoByWiFiLoading: true }));
+    controller.wifiGetDeviceInfo();
+  },
+  uploadOTAFile: (fileInfo) => (dispatch) => {
+    dispatch(actions.updateState({ uploadOTAFileLoading: true }));
+    controller.wifiUploadOTAFile(fileInfo);
+  },
+  cancelUploadOTAFile: () => () => {
+    controller.wifiCancelUploadOTAFile();
+  },
+  resetUploadOTAFileStatus: () => (dispatch) => {
+    dispatch(
+      actions.updateState({
+        uploadOTAFileLoading: false,
+        uploadOTAFileSucc: false,
+        uploadOTAFileErr: false,
+        uploadOTAFileProgress: null,
+      })
+    );
   },
 };
 

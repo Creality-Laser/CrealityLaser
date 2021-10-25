@@ -192,7 +192,7 @@ class Output extends PureComponent {
               >
                 {t('Export G-code to file')}
               </Button>
-              <Button
+              {/* <Button
                 onClick={this.props.handleSendGcoreToMachine}
                 disabled={
                   !hasModel ||
@@ -202,7 +202,7 @@ class Output extends PureComponent {
                 style={{ display: 'block', width: '100%', marginTop: '10px' }}
               >
                 {t('Send G-core to Machine')}
-              </Button>
+              </Button> */}
             </div>
           )}
         </div>
@@ -242,7 +242,7 @@ Output.propTypes = {
   updateWidgetState: PropTypes.func.isRequired,
   togglePage: PropTypes.func.isRequired,
   isAnyModelOverstepped: PropTypes.bool,
-  handleSendGcoreToMachine: PropTypes.func.isRequired,
+  // handleSendGcoreToMachine: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {

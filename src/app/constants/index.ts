@@ -119,6 +119,24 @@ export const LASER_PRINT_MODE_AUTO = 'auto';
 export const LASER_PRINT_MODE_MANUAL = 'manual';
 
 export const MACHINE_SERIES = {
+  CUSTOM: {
+    value: 'Custom',
+    label: 'Please select a model',
+    setting: {
+      size: {
+        x: 125,
+        y: 125,
+        z: 125,
+      },
+      laserSize: {
+        x: 125,
+        y: 125,
+        z: 125,
+      },
+      style: 'grbl',
+    },
+    alias: ['Custom'],
+  },
   CV01PRO: {
     value: 'CV01PRO',
     label: 'CV-01 Pro',
@@ -254,23 +272,23 @@ export const MACHINE_SERIES = {
     },
     alias: ['SM2-L', 'Snapmaker 2.0 A350'],
   },
-  CUSTOM: {
-    value: 'Custom',
-    label: 'Custom',
-    setting: {
-      size: {
-        x: 125,
-        y: 125,
-        z: 125,
-      },
-      laserSize: {
-        x: 125,
-        y: 125,
-        z: 125,
-      },
-    },
-    alias: ['Custom'],
-  },
+  // CUSTOM: {
+  //   value: 'Custom',
+  //   label: 'Custom',
+  //   setting: {
+  //     size: {
+  //       x: 125,
+  //       y: 125,
+  //       z: 125,
+  //     },
+  //     laserSize: {
+  //       x: 125,
+  //       y: 125,
+  //       z: 125,
+  //     },
+  //   },
+  //   alias: ['Custom'],
+  // },
 };
 
 export const MACHINE_HEAD_TYPE = {

@@ -42,7 +42,7 @@ function startServices(server) {
   // wifi manager
   socketServer.registerEvent('wifi:uploadGcore', socketWifi.uploadGcore);
   socketServer.registerEvent(
-    'wifi:canCelUploadGcore',
+    'wifi:cancelUploadGcore',
     socketWifi.cancelUploadGcore
   );
 
@@ -56,6 +56,10 @@ function startServices(server) {
   );
 
   socketServer.registerEvent('wifi:uploadOTAFile', socketWifi.uploadOTAFile);
+  socketServer.registerEvent(
+    'wifi:cancelUploadOTAFile',
+    socketWifi.cancelUploadOTAFile
+  );
 
   socketServer.registerEvent('wifi:getDeviceInfo', socketWifi.getDeviceInfo);
   socketServer.registerEvent(

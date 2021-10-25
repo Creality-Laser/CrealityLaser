@@ -104,9 +104,9 @@ App.propTypes = {
   keyboardShortcutInit: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => {
-  return state;
-};
+// const mapStateToProps = (state) => {
+//   return state;
+// };
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -124,7 +124,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+export default withRouter(connect(null, mapDispatchToProps)(App));
 
 function isRouterPathAllowed(pathname) {
   const allowedPaths = [

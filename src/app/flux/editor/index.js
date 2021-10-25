@@ -1,5 +1,6 @@
 import path from 'path';
 import uuid from 'uuid';
+import { message } from 'antd';
 import api from '../../api';
 import {
   checkParams,
@@ -501,33 +502,96 @@ export const actions = {
       })
     );
   },
+  handleSendGFileToMachine:
+    (headType = 'laser') =>
+    (dispatch, getState) => {
+      const { currentGcoreConfig = {} } = getState()[headType];
 
+      const isCurrentGcoreConfigExists =
+        currentGcoreConfig && Object.keys(currentGcoreConfig).length > 0;
+
+      if (isCurrentGcoreConfigExists) {
+        dispatch(actions.handleSendGcoreToMachine(headType));
+      } else {
+        dispatch(actions.handleSendGcodeFileToMachine(headType));
+      }
+    },
+  handleCancelSendGFileToMachine: () => (dispatch) => {
+    dispatch(actions.handleCancelSendGcoreToMachine());
+    dispatch(actions.handleCancelSendGcodeToMachine());
+  },
   handleSendGcoreToMachine: (headType) => async (dispatch, getState) => {
-    const { currentGcoreConfig } = getState()[headType];
+    const { currentGcoreConfig = {} } = getState()[headType];
 
-    // const { currentConnectdMachine } = getState().machine;
+    const { machineInfoConnectedByWiFi } = getState().machine;
 
     // get connect state
-    // const isConnected = currentConnectdMachine;
+    const isConnected =
+      machineInfoConnectedByWiFi && machineInfoConnectedByWiFi.status;
 
-    // if (!isConnected) {
-    //   return new Error('Not connected');
-    // }
+    if (!isConnected) {
+      message.error(`Please connect to the machine WiFi first.`);
+      return false;
+    }
 
-    console.log(
-      currentGcoreConfig,
-      '=========== handleSendGcoreToMachine ======'
+    dispatch(
+      baseActions.updateState(headType, {
+        uploadFileLoading: true,
+      })
     );
 
-    if (currentGcoreConfig && Object.keys(currentGcoreConfig)) {
+    const isCurrentGcoreConfigExists =
+      currentGcoreConfig && Object.keys(currentGcoreConfig).length > 0;
+
+    if (isCurrentGcoreConfigExists) {
       controller.wifiUploadGcore(currentGcoreConfig);
-      // await api
-      //   .uploadGcore(currentGcoreConfig)
-      //   .then((res) => {
-      //     console.log(res, '------------- get response ----------- ');
-      //   })
-      //   .catch(console.error);
+      return true;
+    } else {
+      message.error(`Please Generate Gcode first`);
+      return false;
     }
+  },
+  handleCancelSendGcoreToMachine: () => () => {
+    controller.wifiCancelUploadGcore();
+  },
+  handleSendGcodeFileToMachine:
+    (headType = 'laser') =>
+    (dispatch, getState) => {
+      const { currentGcode = {} } = getState().laser;
+
+      const { machineInfoConnectedByWiFi } = getState().machine;
+
+      // get connect state
+      const isConnected =
+        machineInfoConnectedByWiFi && machineInfoConnectedByWiFi.status;
+
+      if (!isConnected) {
+        message.error(`Please connect to the machine WiFi first.`);
+        return false;
+      }
+
+      const isCurrentGcodeExists =
+        currentGcode && Object.keys(currentGcode).length > 0;
+
+      if (!isCurrentGcodeExists) {
+        message.error(`Please Generate Gcode first`);
+        return false;
+      }
+
+      dispatch(
+        baseActions.updateState(headType, {
+          uploadFileLoading: true,
+        })
+      );
+
+      const { name, size, path } = currentGcode;
+      const gcodeFileInfo = { name, size, path };
+
+      controller.wifiUploadGcodeFile(gcodeFileInfo);
+      return true;
+    },
+  handleCancelSendGcodeToMachine: () => () => {
+    controller.wifiCancelUploadGcodeFile();
   },
   updateSelectedModelFlip:
     (headType, transformation) => (dispatch, getState) => {

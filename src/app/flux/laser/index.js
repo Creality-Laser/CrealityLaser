@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { message } from 'antd';
 // import { DATA_PREFIX, EPSILON } from '../../constants';
 import { DATA_PREFIX, PAGE_PROCESS } from '../../constants';
 import { controller } from '../../lib/controller';
@@ -44,8 +45,6 @@ const INITIAL_STATE = {
   gcodeConfig: {},
   config: {},
 
-  // about wifi params
-  currentGcoreConfig: {}, // The custom pre gcode format's config
   // snapshot state
   undoSnapshots: [{ models: [], toolPathModels: [] }], // snapshot { models, toolPathModels }
   redoSnapshots: [], // snapshot { models, toolPathModels }
@@ -67,6 +66,14 @@ const INITIAL_STATE = {
 
   // rendering
   renderingTimestamp: 0,
+
+  // about wifi params
+  currentGcoreConfig: {}, // The custom pre gcode format's config
+  currentGcode: {}, // The gcode
+  uploadFileProgress: {}, // can be Gcore file or Gcode file
+  uploadFileSucc: false,
+  uploadFileErr: false,
+  uploadFileLoading: false,
 };
 
 const ACTION_SET_BACKGROUND_ENABLED = 'laser/ACTION_SET_BACKGROUND_ENABLED';
@@ -76,14 +83,89 @@ export const actions = {
     dispatch(editorActions.init('laser'));
 
     const controllerEvents = {
-      'wifi:uploadGcoreProgress': (process) => {
-        console.log(process, '======== wifi:uploadGcoreProgress =======');
+      'wifi:uploadGcodeFileProgress': (progress) => {
+        if (progress) {
+          dispatch(
+            editorActions.updateState('laser', {
+              uploadFileProgress: progress,
+            })
+          );
+        }
+        console.log(progress, '======== wifi:uploadGcoreProgress =======');
+      },
+      'wifi:uploadGcoreProgress': (progress) => {
+        if (progress) {
+          dispatch(
+            editorActions.updateState('laser', {
+              uploadFileProgress: progress,
+            })
+          );
+        }
+        console.log(progress, '======== wifi:uploadGcoreProgress =======');
       },
       'wifi:uploadGcoreSucc': (ret) => {
+        dispatch(
+          editorActions.updateState('laser', {
+            uploadFileSucc: true,
+            uploadFileLoading: false,
+          })
+        );
+        console.log(ret, '======== wifi:uploadGcoreSucc =======');
+      },
+      'wifi:uploadGcodeFileSucc': (ret) => {
+        dispatch(
+          editorActions.updateState('laser', {
+            uploadFileSucc: true,
+            uploadFileLoading: false,
+          })
+        );
         console.log(ret, '======== wifi:uploadGcoreSucc =======');
       },
       'wifi:uploadGcoreErr': (err) => {
-        console.log(err, '======== wifi:uploadGcoreSucc =======');
+        dispatch(
+          editorActions.updateState('laser', {
+            uploadFileErr: true,
+            uploadFileLoading: false,
+          })
+        );
+        message.error(`Send file failed`);
+        console.log(err, '======== wifi:uploadGcoreErr =======');
+      },
+      'wifi:uploadGcodeFileErr': (err) => {
+        dispatch(
+          editorActions.updateState('laser', {
+            uploadFileErr: true,
+            uploadFileLoading: false,
+          })
+        );
+        message.error(`Send file failed`);
+        console.log(err, '======== wifi:uploadGcoreErr =======');
+      },
+      'wifi:cancelUploadGcoreSucc': () => {
+        dispatch(
+          editorActions.updateState('laser', {
+            uploadFileLoading: false,
+            uploadFileProgress: {},
+            uploadFileSucc: false,
+            uploadFileErr: false,
+          })
+        );
+      },
+      'wifi:cancelUploadGcodeFileSucc': () => {
+        dispatch(
+          editorActions.updateState('laser', {
+            uploadFileLoading: false,
+            uploadFileProgress: {},
+            uploadFileSucc: false,
+            uploadFileErr: false,
+          })
+        );
+      },
+      'wifi:cancelUploadGcodeFileErr': () => {
+        message.error(`Cancel send file failed`);
+      },
+      'wifi:cancelUploadGcoreErr': () => {
+        message.error(`Cancel send file failed`);
       },
       'taskCompleted:generateToolPath': (taskResult) => {
         if (taskResult.headType === 'laser') {
@@ -93,6 +175,16 @@ export const actions = {
       },
       'taskCompleted:generateGcode': (taskResult) => {
         if (taskResult.headType === 'laser') {
+          const { gcodeFile = {} } = taskResult;
+
+          // appPath/userData/Tmp/[gcodeName].gcode
+          const path = `${DATA_PREFIX}/${gcodeFile.name}`;
+
+          dispatch(
+            editorActions.updateState('laser', {
+              currentGcode: { ...gcodeFile, path },
+            })
+          );
           dispatch(editorActions.onReceiveGcodeTaskResult('laser', taskResult));
         }
       },
@@ -139,6 +231,16 @@ export const actions = {
         dispatch(editorActions.onModelTransform('laser'));
       }
     });
+  },
+
+  resetUploadFileStatus: () => (dispatch) => {
+    dispatch(
+      editorActions.updateState('laser', {
+        uploadFileProgress: {},
+        uploadFileSucc: false,
+        uploadFileErr: false,
+      })
+    );
   },
 
   setBackgroundEnabled: (enabled) => {
@@ -218,6 +320,12 @@ export const actions = {
 
     // current not support vector mode
     if (isVectorMode) {
+      // clear prev currentGcoreConfig
+      dispatch(
+        editorActions.updateState('laser', {
+          currentGcoreConfig: {},
+        })
+      );
       return;
     }
     const { series } = getState().machine;
@@ -246,10 +354,10 @@ export const actions = {
         model = 20;
         break;
       case 'CV30':
-        model = 30;
+        model = 40;
         break;
       case 'Ender3s':
-        model = 0;
+        model = 100;
         break;
       default:
         model = 0;
