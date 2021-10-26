@@ -79,8 +79,24 @@ class GcodeGenerator {
           let value = item[key];
           if (key === 'X' && !!positionX) {
             value += positionX;
+
+            // force value in the bounds
+            const XboundValue = positionX * 2;
+            if (value < 0) {
+              value = 0;
+            } else if (value > XboundValue) {
+              value = XboundValue;
+            }
           } else if (key === 'Y' && !!positionY) {
             value += positionY;
+
+            // force value in the bounds
+            const YboundValue = positionY * 2;
+            if (value < 0) {
+              value = 0;
+            } else if (value > YboundValue) {
+              value = YboundValue;
+            }
           }
           if (key === 'X' || key === 'Y' || key === 'Z') {
             cmds.push(key + value.toFixed(3)); // restrict precision

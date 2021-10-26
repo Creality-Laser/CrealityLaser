@@ -174,6 +174,14 @@ export const generateGcode = (modelInfos, onProgress) => {
 
   const power = gcodeConfig.fixedPowerEnabled ? gcodeConfig.fixedPower : 1000;
 
+  if (boundingBox.min.x < 0) {
+    boundingBox.min.x = 0;
+  }
+
+  if (boundingBox.min.y < 0) {
+    boundingBox.min.y = 0;
+  }
+
   let headerStart =
     ';Header Start\n' +
     // `;header_type: ${headType}\n` +
