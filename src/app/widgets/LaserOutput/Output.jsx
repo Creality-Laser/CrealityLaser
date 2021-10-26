@@ -120,7 +120,6 @@ class Output extends PureComponent {
       autoPreviewEnabled,
       gcodeFile,
       hasModel,
-      isAnyModelOverstepped,
     } = this.props;
     const isEditor = this.props.page === PAGE_EDITOR;
     const isProcess = this.props.page === PAGE_PROCESS;

@@ -76,7 +76,7 @@ export const uploadGcoreFile = (
 };
 
 export const postGcodeFile = (
-  { path = '', name = '' },
+  { path = '' },
   onProgress,
   onOk,
   onError,
@@ -87,7 +87,7 @@ export const postGcodeFile = (
   const fileInfo = {
     path,
     key: 'myfile[]',
-    name,
+    name: 'index.gcode',
   };
 
   uploadFile(url, fileInfo, {}, onProgress, onOk, onError, onRequestHandler);
