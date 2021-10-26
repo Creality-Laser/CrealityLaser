@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import FileSaver from 'file-saver';
 import request from 'superagent';
 import { connect } from 'react-redux';
-import { Modal, Button, Checkbox } from 'antd';
+import { Modal, Button, Checkbox, message } from 'antd';
 import { withTranslation } from 'react-i18next';
 
 import { actions as workspaceActions } from '../../flux/workspace';
@@ -61,12 +61,19 @@ class Output extends PureComponent {
       });
     },
     onProcess: () => {
+      const { t, isAnyModelOverstepped } = this.props;
       // if (this.props.page === PAGE_EDITOR) {
       //   this.props.togglePage(PAGE_PROCESS);
       // } else {
       //   this.props.togglePage(PAGE_EDITOR);
       // this.props.manualPreview();
       // }
+      if (isAnyModelOverstepped) {
+        message.warning(
+          t('The model is out of bounds. Make sure the model is in bounds.')
+        );
+        return;
+      }
       this.props.togglePage(PAGE_PROCESS);
       this.props.manualPreview();
     },
@@ -122,11 +129,7 @@ class Output extends PureComponent {
       <div>
         <div>
           <Button
-            disabled={
-              !hasModel ||
-              (isProcess && autoPreviewEnabled) ||
-              isAnyModelOverstepped
-            }
+            disabled={!hasModel || (isProcess && autoPreviewEnabled)}
             onClick={this.actions.onProcess}
             style={{ display: 'block', width: '100%' }}
           >

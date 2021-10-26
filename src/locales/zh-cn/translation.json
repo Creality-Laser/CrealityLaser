@@ -165,5 +165,6 @@
   "License": "许可",
   "Add image file to workspace": "添加图片文件到工作区",
   "Add text to workspace": "添加文字到工作区",
-  "Add Qrcode": "添加二维码"
+  "Add Qrcode": "添加二维码",
+  "The model is out of bounds. Make sure the model is in bounds.": "模型超出边界，请确保模型在边界内"
 }

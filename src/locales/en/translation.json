@@ -165,5 +165,6 @@
   "License": "License",
   "Add image file to workspace": "Add image file to workspace",
   "Add text to workspace": "Add text to workspace",
-  "Add Qrcode": "Add Qrcode"
+  "Add Qrcode": "Add Qrcode",
+  "The model is out of bounds. Make sure the model is in bounds.": "The model is out of bounds. Make sure the model is in bounds."
 }
