@@ -243,7 +243,7 @@ class LaserToolPathGenerator extends EventEmitter {
         isReverse ? i-- : i++
       ) {
         const idx = i * 4 + j * width * 4;
-        power = grayToPower(img.bitmap.data[idx], powerMin, powerMax);
+        power = grayToPower(img.bitmap.data[idx], powerMin, powerMax) || 0;
 
         if (isNewRow) {
           content.push(`G0 X${normalizer.x(i)} Y${normalizer.y(j)}`);
