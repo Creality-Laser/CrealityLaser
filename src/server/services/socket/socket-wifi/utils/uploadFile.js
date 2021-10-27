@@ -37,6 +37,7 @@ export default async function uploadFile(
     const options = {
       method: 'POST',
       url,
+      timeout: 60000,
       headers: {
         accept: 'application/json',
       },
@@ -61,7 +62,7 @@ export default async function uploadFile(
       }
 
       if (error) {
-        console.error(error, '------- uploadFile error ------');
+        console.error(error, error.code, '------- uploadFile error ------');
         if (onError) {
           onError(error);
         }

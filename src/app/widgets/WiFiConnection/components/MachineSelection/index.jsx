@@ -116,7 +116,7 @@ function MachineSelection(props) {
         className={styles.status_btn}
         onClick={handleShowMachineSelectModal}
       >
-        {seriesLabel}
+        <span className={styles.status_btn_label}>{seriesLabel}</span>
       </button>
       <Modal
         title="Model"

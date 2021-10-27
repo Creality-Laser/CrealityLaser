@@ -15,7 +15,7 @@ import {
 import { actions as editorActions, CNC_LASER_STAGE } from '../editor';
 // import { baseActions } from '../editor/base';
 import SvgModelGroup from '../models/SvgModelGroup';
-import { machineEventEmitter } from '../machine';
+import { actions as machineActions, machineEventEmitter } from '../machine';
 
 const INITIAL_STATE = {
   page: PAGE_PROCESS,
@@ -110,6 +110,7 @@ export const actions = {
             uploadFileLoading: false,
           })
         );
+        dispatch(machineActions.subscribeDeviceStatusHeartbeat());
         console.log(ret, '======== wifi:uploadGcoreSucc =======');
       },
       'wifi:uploadGcodeFileSucc': (ret) => {
@@ -119,7 +120,8 @@ export const actions = {
             uploadFileLoading: false,
           })
         );
-        console.log(ret, '======== wifi:uploadGcoreSucc =======');
+        dispatch(machineActions.subscribeDeviceStatusHeartbeat());
+        console.log(ret, '======== wifi:uploadGcodeFileSucc =======');
       },
       'wifi:uploadGcoreErr': (err) => {
         dispatch(
@@ -128,6 +130,7 @@ export const actions = {
             uploadFileLoading: false,
           })
         );
+        dispatch(machineActions.subscribeDeviceStatusHeartbeat());
         message.error(`Send file failed`);
         console.log(err, '======== wifi:uploadGcoreErr =======');
       },
@@ -138,6 +141,7 @@ export const actions = {
             uploadFileLoading: false,
           })
         );
+        dispatch(machineActions.subscribeDeviceStatusHeartbeat());
         message.error(`Send file failed`);
         console.log(err, '======== wifi:uploadGcoreErr =======');
       },
@@ -176,6 +180,8 @@ export const actions = {
       'taskCompleted:generateGcode': (taskResult) => {
         if (taskResult.headType === 'laser') {
           const { gcodeFile = {} } = taskResult;
+
+          console.log(taskResult, '------------- taskResult -------');
 
           // appPath/userData/Tmp/[gcodeName].gcode
           const path = `${DATA_PREFIX}/${gcodeFile.name}`;

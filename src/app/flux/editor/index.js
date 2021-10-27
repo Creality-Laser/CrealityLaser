@@ -10,6 +10,7 @@ import {
 } from '../models/ModelInfoUtils';
 import { threejsModelActions } from './threejs-model';
 // import { svgModelActions } from './svg-model';
+import { actions as machineActions } from '../machine';
 import {
   baseActions,
   checkIsAllModelsPreviewed,
@@ -509,6 +510,8 @@ export const actions = {
 
       const isCurrentGcoreConfigExists =
         currentGcoreConfig && Object.keys(currentGcoreConfig).length > 0;
+
+      dispatch(machineActions.unsubscribeDeviceStatusHeartbeat());
 
       if (isCurrentGcoreConfigExists) {
         dispatch(actions.handleSendGcoreToMachine(headType));

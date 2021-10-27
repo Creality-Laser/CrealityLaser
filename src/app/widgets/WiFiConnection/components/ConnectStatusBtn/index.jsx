@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
@@ -17,6 +17,12 @@ import CV20Img from '../assets/CV20.png';
 import CV10ProProfileImg from './assets/CV01Pro_profile.png';
 import styles from './index.module.scss';
 
+function formatTime(t) {
+  const hours = Math.floor(t / 3600);
+  const minutes = Math.ceil((t - hours * 3600) / 60);
+  return hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`;
+}
+
 function ConnectStatusBtn(props) {
   const {
     machineInfoConnectedByWiFi,
@@ -33,6 +39,14 @@ function ConnectStatusBtn(props) {
   } = props;
 
   const [isShowOperateModal, setIsShowOperateModal] = useState(false);
+  const [isCarveFinishedThisTime, setIsCarveFinishedThisTime] = useState(false);
+  const [
+    uploadFileLoadingIsTrueFewTimesAgo,
+    setUploadFileLoadingIsTrueFewTimesAgo,
+  ] = useState(false);
+
+  const prevProcessRef = useRef(null);
+  const prevUploadFileLoadingRef = useRef(null);
 
   const handleStartMachineComProcess = useCallback(() => {
     const isConnectedWifi =
@@ -88,6 +102,30 @@ function ConnectStatusBtn(props) {
     process = 0,
   } = machineInfoConnectedByWiFi || {};
 
+  useEffect(() => {
+    if (!isShowOperateModal) {
+      setIsCarveFinishedThisTime(false);
+    }
+    if (
+      process === 100 &&
+      prevProcessRef.current &&
+      prevProcessRef.current !== 100
+    ) {
+      setIsCarveFinishedThisTime(true);
+    }
+    prevProcessRef.current = process;
+  }, [isShowOperateModal, process]);
+
+  useEffect(() => {
+    if (!uploadFileLoading && prevUploadFileLoadingRef.current) {
+      setUploadFileLoadingIsTrueFewTimesAgo(true);
+      setTimeout(() => {
+        setUploadFileLoadingIsTrueFewTimesAgo(false);
+      }, 6000);
+    }
+    prevUploadFileLoadingRef.current = uploadFileLoading;
+  }, [uploadFileLoading]);
+
   const sourcePath =
     (currentGcoreConfig && currentGcoreConfig.sourcePath) ||
     (currentGcode && currentGcode.thumbnail);
@@ -102,6 +140,10 @@ function ConnectStatusBtn(props) {
   const isMachineIdle = status === 'idle';
 
   const isMachinePause = status === 'pause';
+
+  const isMachineXmcerrorRun = status === 'xmcerror_run';
+
+  const isMachineSpindleerrorRun = status === 'spindleerror_run';
 
   const isMachineWaitingToStart = isMachineIdle && uploadFileSucc;
 
@@ -128,13 +170,90 @@ function ConnectStatusBtn(props) {
         <div className={styles.send_modal_preview_wrapper}>
           <span className={styles.device_disconnected_wrapper}>
             <CheckCircleOutlined
-              style={{ fontSize: '88px', color: '#52c41a' }}
+              style={{ fontSize: '240px', color: '#52c41a' }}
             />
             <span className={styles.device_disconnected_label}>Finish!</span>
           </span>
         </div>
         <div className={styles.send_modal_info_block_wrapper}>
           <p style={{ marginBottom: 0, fontWeight: 'bold' }}>Carve Finished.</p>
+        </div>
+        <div className={styles.operators_wrapper}>
+          <Button
+            shape="round"
+            onClick={() => {
+              setTimeout(() => {
+                handleCancelSendModal();
+              }, 0);
+            }}
+          >
+            Cancel
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
+  const carveModalContentSendedFileWhenWaitingMachineResponse = () => {
+    return (
+      <div className={styles.send_modal_content_wrapper}>
+        <div className={styles.send_modal_preview_wrapper}>
+          <span className={styles.device_disconnected_wrapper}>
+            <CheckCircleOutlined
+              style={{ fontSize: '240px', color: '#52c41a' }}
+            />
+            <span className={styles.device_disconnected_label}>
+              File Upload Success!
+            </span>
+          </span>
+        </div>
+        <div className={styles.send_modal_info_block_wrapper}>
+          <p>&nbsp;</p>
+        </div>
+        <div className={styles.operators_wrapper}>
+          <Button
+            shape="round"
+            onClick={() => {
+              setTimeout(() => {
+                handleCancelSendModal();
+              }, 0);
+            }}
+          >
+            Cancel
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
+  const carveModalContentWhenMachineError = (error = '') => {
+    const errorKinds = {
+      xmcerror_run: {
+        prompt: 'Alarm: Impacted!',
+        solution:
+          'Check the safety status of the machine and press the button on the machine again to continue the unfinished work',
+      },
+      spindleerror_run: {
+        prompt: 'Error: spindleerror_run',
+        solution: 'The device Error, please restart device',
+      },
+    };
+    return (
+      <div className={styles.send_modal_content_wrapper}>
+        <div className={styles.send_modal_preview_wrapper}>
+          <span className={styles.device_disconnected_wrapper}>
+            <CloseCircleOutlined
+              style={{ fontSize: '88px', color: '#f5222d' }}
+            />
+            <span className={styles.device_disconnected_label}>
+              {errorKinds[error].prompt}
+            </span>
+          </span>
+        </div>
+        <div className={styles.send_modal_info_block_wrapper}>
+          <p style={{ marginBottom: 0, fontWeight: 'bold' }}>
+            {errorKinds[error].solution}
+          </p>
         </div>
         <div className={styles.operators_wrapper}>
           <Button
@@ -327,7 +446,7 @@ function ConnectStatusBtn(props) {
                 Work Time:&nbsp;
               </span>
               <span className={styles.send_modal_info_print_time_value}>
-                12min
+                {formatTime((currentGcode && currentGcode.printTime) || 0)}
               </span>
             </span>
           </div>
@@ -379,7 +498,7 @@ function ConnectStatusBtn(props) {
     );
   };
 
-  const isProgressFinish = process === 10000;
+  const isMachineResponse = isConnectedWifi || uploadFileLoading;
 
   return (
     <>
@@ -387,7 +506,7 @@ function ConnectStatusBtn(props) {
         <MachineSelection />
         <span>
           <Button
-            type={isConnectedWifi ? 'primary' : 'default'}
+            type={isMachineResponse ? 'primary' : 'default'}
             icon={<CaretRightOutlined style={{ fontSize: '24px' }} />}
             onClick={handleStartMachineComProcess}
           />
@@ -400,23 +519,39 @@ function ConnectStatusBtn(props) {
         onCancel={handleCancelSendModal}
         destroyOnClose
       >
-        {!isConnectedWifi && carveModalContentWhenConnectMiss()}
-        {isConnectedWifi && isProgressFinish && carveModalContentCarveSuccess()}
-        {isConnectedWifi &&
+        {!isMachineResponse &&
+          uploadFileLoadingIsTrueFewTimesAgo &&
+          carveModalContentSendedFileWhenWaitingMachineResponse()}
+        {!isMachineResponse &&
+          !uploadFileLoadingIsTrueFewTimesAgo &&
+          carveModalContentWhenConnectMiss()}
+        {isMachineResponse &&
+          isCarveFinishedThisTime &&
+          carveModalContentCarveSuccess()}
+        {isMachineResponse &&
           isMachinePause &&
+          !isCarveFinishedThisTime &&
           carveModalContentWhenMachinePause()}
-        {isConnectedWifi &&
-          !isProgressFinish &&
+        {isMachineResponse &&
+          !isCarveFinishedThisTime &&
           isMachineWaitingToStart &&
           carveModalContentWhenMachineWaitingToStart()}
-        {isConnectedWifi &&
-          !isProgressFinish &&
+        {isMachineResponse &&
+          !isCarveFinishedThisTime &&
           isMachineWorking &&
           carveModalContentWhenMachineWorking()}
-        {isConnectedWifi &&
-          !isProgressFinish &&
+        {isMachineResponse &&
+          !isCarveFinishedThisTime &&
           isMachineIdleButNotWaitingToStart &&
           carveModalContentWhenMachineIdle()}
+        {isMachineResponse &&
+          !isCarveFinishedThisTime &&
+          isMachineXmcerrorRun &&
+          carveModalContentWhenMachineError('xmcerror_run')}
+        {isMachineResponse &&
+          !isCarveFinishedThisTime &&
+          isMachineSpindleerrorRun &&
+          carveModalContentWhenMachineError('spindleerror_run')}
       </Modal>
     </>
   );
