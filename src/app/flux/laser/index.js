@@ -377,7 +377,7 @@ export const actions = {
       power_rate,
       speed_rate,
       model,
-      start: 1,
+      start: 3,
       dire: 1,
       gco_style: 1,
       total_num: multiPasses,
