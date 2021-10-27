@@ -30,22 +30,29 @@
 }
 
 .send_modal_preview_img {
-  width: 200px;
-  // width: 100%;
-  // max-width: 100%;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .send_modal_info_block_wrapper {
   min-height: 54px;
   margin-bottom: 5px;
 }
-
+.send_modal_two_info_wrapper,
 .send_modal_info_wrapper {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   margin-top: 10px;
 }
+
+.send_modal_info_wrapper {
+  justify-content: center;
+}
+
+.send_modal_two_info_wrapper {
+  justify-content: space-between;
+}
+
 .send_modal_info_model_wrapper {
 }
 

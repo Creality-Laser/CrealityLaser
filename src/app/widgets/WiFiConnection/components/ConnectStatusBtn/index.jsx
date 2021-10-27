@@ -3,11 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { Button, message, Modal, Progress } from 'antd';
-import {
-  CaretRightOutlined,
-  CloseCircleOutlined,
-  CheckCircleOutlined,
-} from '@ant-design/icons';
+import { CaretRightOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { MACHINE_SERIES } from '../../../../constants';
 import { actions as machineActions } from '../../../../flux/machine';
 import { actions as editorActions } from '../../../../flux/editor';
@@ -15,6 +11,7 @@ import { actions as laserActions } from '../../../../flux/laser';
 import MachineSelection from '../MachineSelection';
 import CV20Img from '../assets/CV20.png';
 import CV10ProProfileImg from './assets/CV01Pro_profile.png';
+import carveFinishedImg from './assets/carve_finished.png';
 import styles from './index.module.scss';
 
 function formatTime(t) {
@@ -25,6 +22,7 @@ function formatTime(t) {
 
 function ConnectStatusBtn(props) {
   const {
+    series,
     machineInfoConnectedByWiFi,
     currentGcode,
     currentGcoreConfig,
@@ -55,6 +53,7 @@ function ConnectStatusBtn(props) {
     if (!isConnectedWifi) {
       const machineNotConnectedMsg =
         'No device connected, Please check your WIFI Connection.';
+      message.destroy();
       message.warn(machineNotConnectedMsg);
       return;
     }
@@ -66,11 +65,26 @@ function ConnectStatusBtn(props) {
     if (!isCanSendFile) {
       const noFileMsg =
         'The workspace is blank, please add the content and try again.';
+      message.destroy();
       message.warn(noFileMsg);
       return;
     }
+
+    const isConnectedMatchedMachine =
+      machineInfoConnectedByWiFi &&
+      machineInfoConnectedByWiFi.model &&
+      machineInfoConnectedByWiFi.model === series;
+
+    if (!isConnectedMatchedMachine) {
+      const machineNotMatchMsg =
+        'The currently connected model is the CV-01 Pro, which does not match the selected model, please select the correct model and try again';
+      message.destroy();
+      message.warn(machineNotMatchMsg);
+      return;
+    }
+
     setIsShowOperateModal(true);
-  }, [currentGcode, currentGcoreConfig, machineInfoConnectedByWiFi]);
+  }, [currentGcode, currentGcoreConfig, machineInfoConnectedByWiFi, series]);
 
   const handleCancelSendModal = useCallback(() => {
     resetUploadFileStatus();
@@ -169,46 +183,12 @@ function ConnectStatusBtn(props) {
       <div className={styles.send_modal_content_wrapper}>
         <div className={styles.send_modal_preview_wrapper}>
           <span className={styles.device_disconnected_wrapper}>
-            <CheckCircleOutlined
-              style={{ fontSize: '240px', color: '#52c41a' }}
-            />
+            <img src={carveFinishedImg} alt="succss" />
             <span className={styles.device_disconnected_label}>Finish!</span>
           </span>
         </div>
         <div className={styles.send_modal_info_block_wrapper}>
           <p style={{ marginBottom: 0, fontWeight: 'bold' }}>Carve Finished.</p>
-        </div>
-        <div className={styles.operators_wrapper}>
-          <Button
-            shape="round"
-            onClick={() => {
-              setTimeout(() => {
-                handleCancelSendModal();
-              }, 0);
-            }}
-          >
-            Cancel
-          </Button>
-        </div>
-      </div>
-    );
-  };
-
-  const carveModalContentSendedFileWhenWaitingMachineResponse = () => {
-    return (
-      <div className={styles.send_modal_content_wrapper}>
-        <div className={styles.send_modal_preview_wrapper}>
-          <span className={styles.device_disconnected_wrapper}>
-            <CheckCircleOutlined
-              style={{ fontSize: '240px', color: '#52c41a' }}
-            />
-            <span className={styles.device_disconnected_label}>
-              File Upload Success!
-            </span>
-          </span>
-        </div>
-        <div className={styles.send_modal_info_block_wrapper}>
-          <p>&nbsp;</p>
         </div>
         <div className={styles.operators_wrapper}>
           <Button
@@ -388,14 +368,6 @@ function ConnectStatusBtn(props) {
                 {seriesLabel}
               </span>
             </span>
-            <span className={styles.send_modal_info_print_time_wrapper}>
-              <span className={styles.send_modal_info_print_time_label}>
-                Remain:&nbsp;
-              </span>
-              <span className={styles.send_modal_info_print_time_value}>
-                1h 23min 49s
-              </span>
-            </span>
           </div>
           <div className={styles.send_file_progress_wrapper}>
             <Progress percent={process.toFixed(0)} />
@@ -432,7 +404,7 @@ function ConnectStatusBtn(props) {
           />
         </div>
         <div className={styles.send_modal_info_block_wrapper}>
-          <div className={styles.send_modal_info_wrapper}>
+          <div className={styles.send_modal_two_info_wrapper}>
             <span className={styles.send_modal_info_model_wrapper}>
               <span className={styles.send_modal_info_model_label}>
                 Current Model:&nbsp;
@@ -520,9 +492,6 @@ function ConnectStatusBtn(props) {
         destroyOnClose
       >
         {!isMachineResponse &&
-          uploadFileLoadingIsTrueFewTimesAgo &&
-          carveModalContentSendedFileWhenWaitingMachineResponse()}
-        {!isMachineResponse &&
           !uploadFileLoadingIsTrueFewTimesAgo &&
           carveModalContentWhenConnectMiss()}
         {isMachineResponse &&
@@ -540,9 +509,10 @@ function ConnectStatusBtn(props) {
           !isCarveFinishedThisTime &&
           isMachineWorking &&
           carveModalContentWhenMachineWorking()}
-        {isMachineResponse &&
+        {((isMachineResponse &&
           !isCarveFinishedThisTime &&
-          isMachineIdleButNotWaitingToStart &&
+          isMachineIdleButNotWaitingToStart) ||
+          (!isMachineResponse && uploadFileLoadingIsTrueFewTimesAgo)) &&
           carveModalContentWhenMachineIdle()}
         {isMachineResponse &&
           !isCarveFinishedThisTime &&
@@ -558,6 +528,7 @@ function ConnectStatusBtn(props) {
 }
 
 ConnectStatusBtn.propTypes = {
+  series: PropTypes.string.isRequired,
   machineInfoConnectedByWiFi: PropTypes.object,
   currentGcode: PropTypes.object,
   currentGcoreConfig: PropTypes.object,
@@ -573,7 +544,7 @@ ConnectStatusBtn.propTypes = {
 
 const mapStateToProps = (state) => {
   const {
-    machine: { machineInfoConnectedByWiFi },
+    machine: { machineInfoConnectedByWiFi, series },
     laser: {
       currentGcode,
       currentGcoreConfig,
@@ -585,6 +556,7 @@ const mapStateToProps = (state) => {
   } = state;
 
   return {
+    series,
     machineInfoConnectedByWiFi,
     currentGcoreConfig,
     currentGcode,
