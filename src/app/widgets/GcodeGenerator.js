@@ -119,7 +119,7 @@ class GcodeGenerator {
         if (i !== 0) {
           result += '; Laser multi-pass: dropping z\n';
           result += 'G91\n'; // relative positioning
-          result += `G0 Z-${multiPassDepth} F150\n`;
+          // result += `G0 Z-${multiPassDepth} F150\n`;
           result += 'G90\n'; // absolute positioning
         }
         result += `${gcodeStr}\n`;
@@ -127,7 +127,7 @@ class GcodeGenerator {
 
       // move back to work origin
       result += 'G91\n'; // relative
-      result += `G0 Z${multiPassDepth * (multiPasses - 1)} F150\n`;
+      // result += `G0 Z${multiPassDepth * (multiPasses - 1)} F150\n`;
       result += 'G90\n'; // absolute
       gcodeStr = result;
     }
