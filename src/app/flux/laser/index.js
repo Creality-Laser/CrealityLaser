@@ -378,7 +378,7 @@ export const actions = {
       speed_rate,
       model,
       start: 3,
-      dire: 1,
+      dire: 2,
       gco_style: 1,
       total_num: multiPasses,
       jog_speed: jogSpeed,
