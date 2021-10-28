@@ -45,6 +45,9 @@ function ConnectStatusBtn(props) {
 
   const prevProcessRef = useRef(null);
   const prevUploadFileLoadingRef = useRef(null);
+  const machineSeriesRef = useRef(
+    (machineInfoConnectedByWiFi && machineInfoConnectedByWiFi.model) || null
+  );
 
   const handleStartMachineComProcess = useCallback(() => {
     const isConnectedWifi =
@@ -110,12 +113,6 @@ function ConnectStatusBtn(props) {
     sendPrintCommand('pause');
   }, [sendPrintCommand]);
 
-  const {
-    model = 'CV20',
-    status = 'idle',
-    process = 0,
-  } = machineInfoConnectedByWiFi || {};
-
   useEffect(() => {
     if (!isShowOperateModal) {
       setIsCarveFinishedThisTime(false);
@@ -139,6 +136,25 @@ function ConnectStatusBtn(props) {
     }
     prevUploadFileLoadingRef.current = uploadFileLoading;
   }, [uploadFileLoading]);
+
+  // show wrong model value when can not get model by machineInfoConnectedByWiFi,
+  // show we save the prev model value in prev machineInfoConnectedByWiFi;
+  useEffect(() => {
+    if (machineInfoConnectedByWiFi && machineInfoConnectedByWiFi.model) {
+      machineSeriesRef.current = machineInfoConnectedByWiFi.model;
+    }
+  }, [machineInfoConnectedByWiFi]);
+
+  const {
+    // model = 'CV20',
+    status = 'idle',
+    process = 0,
+  } = machineInfoConnectedByWiFi || {};
+
+  const model =
+    machineSeriesRef.current ||
+    (machineInfoConnectedByWiFi && machineInfoConnectedByWiFi.model) ||
+    'CV20';
 
   const sourcePath =
     (currentGcoreConfig && currentGcoreConfig.sourcePath) ||
@@ -167,7 +183,7 @@ function ConnectStatusBtn(props) {
     machineInfoConnectedByWiFi && machineInfoConnectedByWiFi.status;
 
   const seriesLabel = Object.values(MACHINE_SERIES).find(
-    (machine) => machine.value === model
+    (machine) => machine.value === (machineSeriesRef.current || 'CV20')
   )?.label;
 
   const carveModalCancelButton = () => {
