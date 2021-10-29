@@ -230,6 +230,11 @@ const sendCommand = async (socket, command) => {
 const getDeviceStatusHeartbeat = async (socket) => {
   let sequenceControlIndex = 1;
   try {
+    // clear prev setInterval first
+    if (getDeviceStatusHeartbeatIntervalHandler) {
+      clearInterval(getDeviceStatusHeartbeatIntervalHandler);
+    }
+
     getDeviceStatusHeartbeatIntervalHandler = setInterval(async () => {
       const [ret, retIndex] = await fetchDeviceStatusHeartbeat(
         sequenceControlIndex

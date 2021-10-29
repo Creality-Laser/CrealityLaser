@@ -146,6 +146,7 @@ export const actions = {
         console.log(err, '======== wifi:uploadGcoreErr =======');
       },
       'wifi:cancelUploadGcoreSucc': () => {
+        dispatch(machineActions.subscribeDeviceStatusHeartbeat());
         dispatch(
           editorActions.updateState('laser', {
             uploadFileLoading: false,
@@ -156,6 +157,7 @@ export const actions = {
         );
       },
       'wifi:cancelUploadGcodeFileSucc': () => {
+        dispatch(machineActions.subscribeDeviceStatusHeartbeat());
         dispatch(
           editorActions.updateState('laser', {
             uploadFileLoading: false,
@@ -166,10 +168,12 @@ export const actions = {
         );
       },
       'wifi:cancelUploadGcodeFileErr': () => {
+        dispatch(machineActions.subscribeDeviceStatusHeartbeat());
         message.error(`Cancel send file failed`);
       },
       'wifi:cancelUploadGcoreErr': () => {
         message.error(`Cancel send file failed`);
+        dispatch(machineActions.subscribeDeviceStatusHeartbeat());
       },
       'taskCompleted:generateToolPath': (taskResult) => {
         if (taskResult.headType === 'laser') {
