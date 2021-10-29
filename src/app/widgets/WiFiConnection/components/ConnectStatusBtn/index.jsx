@@ -14,12 +14,6 @@ import CV10ProProfileImg from './assets/CV01Pro_profile.png';
 import carveFinishedImg from './assets/carve_finished.png';
 import styles from './index.module.scss';
 
-function formatTime(t) {
-  const hours = Math.floor(t / 3600);
-  const minutes = Math.ceil((t - hours * 3600) / 60);
-  return hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`;
-}
-
 function ConnectStatusBtn(props) {
   const {
     series,
@@ -427,14 +421,6 @@ function ConnectStatusBtn(props) {
               </span>
               <span className={styles.send_modal_info_model_value}>
                 {seriesLabel}
-              </span>
-            </span>
-            <span className={styles.send_modal_info_print_time_wrapper}>
-              <span className={styles.send_modal_info_print_time_label}>
-                Work Time:&nbsp;
-              </span>
-              <span className={styles.send_modal_info_print_time_value}>
-                {formatTime((currentGcode && currentGcode.printTime) || 0)}
               </span>
             </span>
           </div>
