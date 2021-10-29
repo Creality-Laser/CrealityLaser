@@ -131,7 +131,8 @@ export const actions = {
           })
         );
         dispatch(machineActions.subscribeDeviceStatusHeartbeat());
-        message.error(`Send file failed`);
+        const msg = (err && err.msg) || '';
+        message.error(`Send file failed: ${msg}`);
         console.log(err, '======== wifi:uploadGcoreErr =======');
       },
       'wifi:uploadGcodeFileErr': (err) => {
@@ -142,7 +143,8 @@ export const actions = {
           })
         );
         dispatch(machineActions.subscribeDeviceStatusHeartbeat());
-        message.error(`Send file failed`);
+        const msg = (err && err.msg) || '';
+        message.error(`Send file failed: ${msg}`);
         console.log(err, '======== wifi:uploadGcoreErr =======');
       },
       'wifi:cancelUploadGcoreSucc': () => {
@@ -169,10 +171,10 @@ export const actions = {
       },
       'wifi:cancelUploadGcodeFileErr': () => {
         dispatch(machineActions.subscribeDeviceStatusHeartbeat());
-        message.error(`Cancel send file failed`);
+        message.error(`Cancel send gcode file failed`);
       },
       'wifi:cancelUploadGcoreErr': () => {
-        message.error(`Cancel send file failed`);
+        message.error(`Cancel send gcore file failed`);
         dispatch(machineActions.subscribeDeviceStatusHeartbeat());
       },
       'taskCompleted:generateToolPath': (taskResult) => {

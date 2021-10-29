@@ -62,15 +62,34 @@ export default async function uploadFile(
       }
 
       if (error) {
-        console.error(error, error.code, '------- uploadFile error ------');
+        console.error(error, '------- uploadFile error ------');
         if (onError) {
           onError(error);
         }
       }
 
       if (response && response.body) {
-        if (onOk) {
-          onOk(JSON.parse(response.body));
+        try {
+          const { code, msg = 'error' } = JSON.parse(response.body);
+          console.log(
+            code,
+            msg,
+            '------------------- uploadFile response ---------'
+          );
+          if (code === 0) {
+            if (onOk) {
+              onOk(JSON.parse(response.body));
+            }
+          } else {
+            if (onError) {
+              onError({ code: 1, msg });
+            }
+          }
+        } catch (error) {
+          console.error(error, '------- uploadFile error ------');
+          if (onError) {
+            onError(error);
+          }
         }
       }
     });

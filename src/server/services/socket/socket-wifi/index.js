@@ -79,7 +79,7 @@ const cancelUploadGcore = (socket) => {
     if (uploadGcoreHandler && uploadGcoreHandler.abort) {
       uploadGcoreHandler.abort();
     }
-    if (uploadGcoreHandler.progressHandler) {
+    if (uploadGcoreHandler && uploadGcoreHandler.progressHandler) {
       clearInterval(uploadGcoreHandler.progressHandler);
     }
     socket.emit('wifi:cancelUploadGcoreSucc');
@@ -105,8 +105,11 @@ const uploadGcodeFile = async (socket, gcodeFileInfo) => {
         socket.emit('wifi:uploadGcodeFileErr', errRet);
         uploadGcodeFileHandler = null;
       },
-      (handler) => {
+      (handler, progressHandler) => {
         uploadGcodeFileHandler = handler;
+        if (progressHandler) {
+          uploadGcodeFileHandler.progressHandler = progressHandler;
+        }
       }
     );
   } catch (error) {
@@ -123,8 +126,12 @@ const cancelUploadGcodeFile = (socket) => {
     if (uploadGcodeFileHandler && uploadGcodeFileHandler.abort) {
       uploadGcodeFileHandler.abort();
     }
+    if (uploadGcodeFileHandler && uploadGcodeFileHandler.progressHandler) {
+      clearInterval(uploadGcodeFileHandler.progressHandler);
+    }
     socket.emit('wifi:cancelUploadGcodeFileSucc');
   } catch (error) {
+    console.log(error.message, '--------- cancelUploadGcodeFile---------');
     socket.emit('wifi:cancelUploadGcodeFileErr');
   }
 };
