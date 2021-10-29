@@ -188,6 +188,7 @@ export const actions = {
 
           dispatch(
             editorActions.updateState('laser', {
+              currentGcoreConfig: {},
               currentGcode: { ...gcodeFile, path },
             })
           );
@@ -390,6 +391,7 @@ export const actions = {
     dispatch(
       editorActions.updateState('laser', {
         currentGcoreConfig: gcoreConfig,
+        currentGcode: {},
       })
     );
   },
