@@ -47,7 +47,9 @@ function ConnectStatusBtn(props) {
     const isConnectedWifi =
       machineInfoConnectedByWiFi && machineInfoConnectedByWiFi.status;
 
-    if (!isConnectedWifi) {
+    const isMachineResponse = isConnectedWifi || uploadFileLoading;
+
+    if (!isMachineResponse) {
       const machineNotConnectedMsg =
         'No device connected, Please check your WIFI Connection.';
       message.destroy();
@@ -72,7 +74,7 @@ function ConnectStatusBtn(props) {
       machineInfoConnectedByWiFi.model &&
       machineInfoConnectedByWiFi.model === series;
 
-    if (!isConnectedMatchedMachine) {
+    if (!isConnectedMatchedMachine && !uploadFileLoading) {
       const machineNotMatchMsg =
         'The currently connected model is the CV-01 Pro, which does not match the selected model, please select the correct model and try again';
       message.destroy();
@@ -81,7 +83,13 @@ function ConnectStatusBtn(props) {
     }
 
     setIsShowOperateModal(true);
-  }, [currentGcode, currentGcoreConfig, machineInfoConnectedByWiFi, series]);
+  }, [
+    currentGcode,
+    currentGcoreConfig,
+    machineInfoConnectedByWiFi,
+    series,
+    uploadFileLoading,
+  ]);
 
   const handleCancelSendModal = useCallback(() => {
     resetUploadFileStatus();
@@ -488,6 +496,7 @@ function ConnectStatusBtn(props) {
       </div>
       <Modal
         title="Carve"
+        maskClosable={false}
         visible={isShowOperateModal}
         footer={null}
         onCancel={handleCancelSendModal}

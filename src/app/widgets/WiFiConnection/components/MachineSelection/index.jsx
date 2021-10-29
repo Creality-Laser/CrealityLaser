@@ -74,7 +74,7 @@ function MachineSelection(props) {
 
   useEffect(() => {
     if (uploadOTAFileSucc) {
-      message.success(`Send firmware file succ`);
+      message.success(`Send firmware file success`);
       handleCancelFirmwareUpdateModal();
     }
   }, [handleCancelFirmwareUpdateModal, uploadOTAFileSucc]);
@@ -120,6 +120,7 @@ function MachineSelection(props) {
       </button>
       <Modal
         title="Model"
+        maskClosable={false}
         visible={isShowMachineSelectModal}
         footer={
           <div className={styles.modal_footer}>
@@ -207,6 +208,7 @@ function MachineSelection(props) {
       </Modal>
       <Modal
         title="Firmware Update"
+        maskClosable={false}
         visible={isShowFirmwareUpdateModal}
         footer={
           <div>
