@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, useTranslation } from 'react-i18next';
 import { Button, message, Modal, Progress } from 'antd';
 import { CaretRightOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { MACHINE_SERIES } from '../../../../constants';
@@ -30,6 +30,8 @@ function ConnectStatusBtn(props) {
     sendPrintCommand,
   } = props;
 
+  const { t } = useTranslation();
+
   const [isShowOperateModal, setIsShowOperateModal] = useState(false);
   const [isCarveFinishedThisTime, setIsCarveFinishedThisTime] = useState(false);
   const [
@@ -50,8 +52,9 @@ function ConnectStatusBtn(props) {
     const isMachineResponse = isConnectedWifi || uploadFileLoading;
 
     if (!isMachineResponse) {
-      const machineNotConnectedMsg =
-        'No device connected, Please check your WIFI Connection.';
+      const machineNotConnectedMsg = t(
+        'No device connected, Please check your WIFI Connection.'
+      );
       message.destroy();
       message.warn(machineNotConnectedMsg);
       return;
@@ -62,8 +65,9 @@ function ConnectStatusBtn(props) {
       (currentGcode && currentGcode.path);
 
     if (!isCanSendFile) {
-      const noFileMsg =
-        'The workspace is blank, please add the content and try again.';
+      const noFileMsg = t(
+        'The workspace is blank, please add the content and try again.'
+      );
       message.destroy();
       message.warn(noFileMsg);
       return;
@@ -75,8 +79,9 @@ function ConnectStatusBtn(props) {
       machineInfoConnectedByWiFi.model === series;
 
     if (!isConnectedMatchedMachine && !uploadFileLoading) {
-      const machineNotMatchMsg =
-        'The currently connected model is the CV-01 Pro, which does not match the selected model, please select the correct model and try again';
+      const machineNotMatchMsg = t(
+        'The currently connected model is not match the selected model, please select the correct model and try again'
+      );
       message.destroy();
       message.warn(machineNotMatchMsg);
       return;
@@ -202,11 +207,15 @@ function ConnectStatusBtn(props) {
         <div className={styles.send_modal_preview_wrapper}>
           <span className={styles.device_disconnected_wrapper}>
             <img src={carveFinishedImg} alt="succss" />
-            <span className={styles.device_disconnected_label}>Finish!</span>
+            <span className={styles.device_disconnected_label}>
+              {t('Finish!')}
+            </span>
           </span>
         </div>
         <div className={styles.send_modal_info_block_wrapper}>
-          <p style={{ marginBottom: 0, fontWeight: 'bold' }}>Carve Finished.</p>
+          <p style={{ marginBottom: 0, fontWeight: 'bold' }}>
+            {t('Carve Finished.')}
+          </p>
         </div>
         <div className={styles.operators_wrapper}>
           <Button
@@ -278,13 +287,15 @@ function ConnectStatusBtn(props) {
               style={{ fontSize: '88px', color: '#f5222d' }}
             />
             <span className={styles.device_disconnected_label}>
-              Device DisConnected.
+              {t('Device DisConnected.')}
             </span>
           </span>
         </div>
         <div className={styles.send_modal_info_block_wrapper}>
           <p style={{ marginBottom: 0, fontWeight: 'bold' }}>
-            The device loses connection, please reconnect the device WiFi.
+            {t(
+              'The device loses connection, please reconnect the device WiFi.'
+            )}
           </p>
         </div>
         <div className={styles.operators_wrapper}>
@@ -296,7 +307,7 @@ function ConnectStatusBtn(props) {
               }, 0);
             }}
           >
-            Cancel
+            {t('Cancel')}
           </Button>
         </div>
       </div>
@@ -318,8 +329,9 @@ function ConnectStatusBtn(props) {
         </div>
         <div className={styles.send_modal_info_block_wrapper}>
           <p style={{ marginBottom: 0, fontWeight: 'bold' }}>
-            Press the button on the engraving machine to resume work.Do not use
-            the carving machine unattended
+            {t(
+              `Press the button on the engraving machine to resume work.Do not use the carving machine unattended.`
+            )}
           </p>
         </div>
         <div className={styles.operators_wrapper}>
@@ -332,7 +344,7 @@ function ConnectStatusBtn(props) {
               }, 0);
             }}
           >
-            Cancel
+            {t('Cancel')}
           </Button>
         </div>
       </div>
@@ -355,8 +367,9 @@ function ConnectStatusBtn(props) {
         </div>
         <div className={styles.send_modal_info_block_wrapper}>
           <p style={{ marginBottom: 0, fontWeight: 'bold' }}>
-            Please press the button on the machine to start work.(Press for the
-            first time to start preview, press again to start carving.)
+            {t(
+              `Please press the button on the machine to start work.(Press for the first time to start preview, press again to start carving.)`
+            )}
           </p>
         </div>
         <div className={styles.operators_wrapper}>
@@ -380,7 +393,7 @@ function ConnectStatusBtn(props) {
           <div className={styles.send_modal_info_wrapper}>
             <span className={styles.send_modal_info_model_wrapper}>
               <span className={styles.send_modal_info_model_label}>
-                Current Model:&nbsp;
+                {t('Current Model:')}&nbsp;
               </span>
               <span className={styles.send_modal_info_model_value}>
                 {seriesLabel}
@@ -401,10 +414,10 @@ function ConnectStatusBtn(props) {
               }, 0);
             }}
           >
-            Cancel
+            {t('Cancel')}
           </Button>
           <Button type="primary" shape="round" onClick={handlePauseMachine}>
-            Pause
+            {t('Pause')}
           </Button>
         </div>
       </div>
@@ -425,7 +438,7 @@ function ConnectStatusBtn(props) {
           <div className={styles.send_modal_two_info_wrapper}>
             <span className={styles.send_modal_info_model_wrapper}>
               <span className={styles.send_modal_info_model_label}>
-                Current Model:&nbsp;
+                {t('Current Model:')}&nbsp;
               </span>
               <span className={styles.send_modal_info_model_value}>
                 {seriesLabel}
@@ -456,7 +469,7 @@ function ConnectStatusBtn(props) {
               handleCancelSendModal();
             }}
           >
-            Cancel
+            {t('Cancel')}
           </Button>
           <span>
             <Button
@@ -464,7 +477,7 @@ function ConnectStatusBtn(props) {
               shape="round"
               onClick={handlePreview}
             >
-              Preview
+              {t('Preview')}
             </Button>
             <Button
               type="primary"
@@ -472,7 +485,7 @@ function ConnectStatusBtn(props) {
               onClick={handleSendFileToMachine}
               disabled={uploadFileLoading}
             >
-              Send
+              {t('Send')}
             </Button>
           </span>
         </div>

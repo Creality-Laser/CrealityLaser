@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import classNames from 'classnames';
-// import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Modal, Button, Progress, message } from 'antd';
@@ -36,6 +36,8 @@ function MachineSelection(props) {
     uploadOTAFileProgress,
     machineInfoConnectedByWiFi,
   } = props;
+
+  const { t } = useTranslation();
 
   const [isShowMachineSelectModal, setIsShowMachineSelectModal] =
     useState(false);
@@ -119,18 +121,18 @@ function MachineSelection(props) {
         <span className={styles.status_btn_label}>{seriesLabel}</span>
       </button>
       <Modal
-        title="Model"
+        title={t('Model')}
         maskClosable={false}
         visible={isShowMachineSelectModal}
         footer={
           <div className={styles.modal_footer}>
             <span className={styles.current_fireware_wrapper}>
               <span className={styles.current_fireware_label}>
-                Current fireware version:&nbsp;
+                {t('Current fireware version:')}&nbsp;
               </span>
               {deviceWareInfoByWiFiLoading && (
                 <span className={styles.current_fireware_loading}>
-                  loading...
+                  {t('loading...')}
                 </span>
               )}
               {deviceWareInfoByWiFiErr && !deviceWareInfoByWiFiLoading && (
@@ -151,7 +153,7 @@ function MachineSelection(props) {
               }
               onClick={handleShowFirmwareUpdateModal}
             >
-              Update Firmware
+              {t('Update Firmware')}
             </Button>
             <Button
               type="primary"
@@ -159,7 +161,7 @@ function MachineSelection(props) {
               onClick={handleUpdateMachineSeries}
               disabled={currentSelectedMachine === series}
             >
-              Enter
+              {t('Enter')}
             </Button>
           </div>
         }
@@ -218,14 +220,14 @@ function MachineSelection(props) {
               disabled={!uploadOTAFileLoading}
               onClick={handleCancelUploadOTAFile}
             >
-              Cancel
+              {t('Cancel')}
             </Button>
             <Button
               type="primary"
               disabled={uploadOTAFileLoading || !otaFile}
               onClick={handleUploadOTAFile}
             >
-              Update
+              {t('Update')}
             </Button>
           </div>
         }
@@ -234,7 +236,7 @@ function MachineSelection(props) {
       >
         <div className={styles.firmware_update_modal_content_wraper}>
           <span>
-            <span>Choose firmware file:&nbsp;</span>
+            <span>{t('Choose firmware file:')}&nbsp;</span>
             <input
               type="file"
               multiple={false}
