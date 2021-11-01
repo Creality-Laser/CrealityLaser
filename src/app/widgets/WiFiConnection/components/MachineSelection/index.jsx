@@ -57,6 +57,7 @@ function MachineSelection(props) {
 
   const handleUpdateMachineSeries = useCallback(() => {
     updateMachineSeries(currentSelectedMachine);
+    message.destroy();
     message.success(`Toggle model success`);
   }, [currentSelectedMachine, updateMachineSeries]);
 

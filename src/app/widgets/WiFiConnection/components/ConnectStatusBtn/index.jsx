@@ -93,6 +93,7 @@ function ConnectStatusBtn(props) {
     currentGcoreConfig,
     machineInfoConnectedByWiFi,
     series,
+    t,
     uploadFileLoading,
   ]);
 
