@@ -29,12 +29,22 @@ class ConfigGreyscale extends PureComponent {
       this.props.updateSelectedModelConfig({ invert: !this.props.invert });
     },
     onChangeContrast: (contrast) => {
+      if (!contrast && typeof contrast === 'object') {
+        return;
+      }
+
       this.props.updateSelectedModelConfig({ contrast });
     },
     onChangeBrightness: (brightness) => {
+      if (!brightness && typeof brightness === 'object') {
+        return;
+      }
       this.props.updateSelectedModelConfig({ brightness });
     },
     onChangeWhiteClip: (whiteClip) => {
+      if (!whiteClip && typeof whiteClip === 'object') {
+        return;
+      }
       this.props.updateSelectedModelConfig({ whiteClip });
     },
     onChangeAlgorithm: (options) => {
