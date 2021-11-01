@@ -198,7 +198,7 @@ function ConnectStatusBtn(props) {
   const carveModalCancelButton = () => {
     return (
       <Button shape="round" onClick={handleCancelSendModal}>
-        Cancel
+        {t('Cancel')}
       </Button>
     );
   };
@@ -228,7 +228,7 @@ function ConnectStatusBtn(props) {
               }, 0);
             }}
           >
-            Cancel
+            {t('Cancel')}
           </Button>
         </div>
       </div>
@@ -273,7 +273,7 @@ function ConnectStatusBtn(props) {
               }, 0);
             }}
           >
-            Cancel
+            {t('Cancel')}
           </Button>
         </div>
       </div>

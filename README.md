@@ -21,6 +21,8 @@ yarn
 
 ### Starting Development
 
+1. Install node >= 15.14.0
+
 Start the app in the `dev` environment:
 
 ```bash
