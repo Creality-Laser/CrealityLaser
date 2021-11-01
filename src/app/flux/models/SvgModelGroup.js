@@ -365,6 +365,9 @@ class SvgModelGroup {
 
   hideSelectedElement() {
     const selectedElement = this.svgContentGroup.getSelected();
+    if (!selectedElement) {
+      return;
+    }
     selectedElement.hideFlag = true;
     selectedElement.setAttribute('display', 'none');
     const selector = this.svgContentGroup.requestSelector(selectedElement);
@@ -373,6 +376,9 @@ class SvgModelGroup {
 
   showSelectedElement() {
     const selectedElement = this.svgContentGroup.getSelected();
+    if (!selectedElement) {
+      return;
+    }
     selectedElement.hideFlag = false;
     selectedElement.setAttribute('display', 'inherit');
     const selector = this.svgContentGroup.requestSelector(selectedElement);
