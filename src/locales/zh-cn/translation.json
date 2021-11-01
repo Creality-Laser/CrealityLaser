@@ -180,10 +180,12 @@
   "Pause": "暂停",
   "Send": "发送",
   "Model": "机型",
-  "Current fireware version:": "当前固件版本:",
+  "Current fireware version": "当前固件版本",
   "loading...": "加载中...",
   "Update Firmware": "升级固件",
   "Enter": "确定",
   "Update": "升级",
-  "Choose firmware file:": "选择固件文件："
+  "Choose firmware file": "选择固件文件",
+  "Toggle model success": "切换机型成功",
+  "Firmware Update": "固件升级"
 }

@@ -58,8 +58,8 @@ function MachineSelection(props) {
   const handleUpdateMachineSeries = useCallback(() => {
     updateMachineSeries(currentSelectedMachine);
     message.destroy();
-    message.success(`Toggle model success`);
-  }, [currentSelectedMachine, updateMachineSeries]);
+    message.success(t(`Toggle model success`));
+  }, [currentSelectedMachine, updateMachineSeries, t]);
 
   const handleChangeCurrentSelectedMachine = useCallback((machine) => {
     setCurrentSelectedMachine(machine);
@@ -129,7 +129,7 @@ function MachineSelection(props) {
           <div className={styles.modal_footer}>
             <span className={styles.current_fireware_wrapper}>
               <span className={styles.current_fireware_label}>
-                {t('Current fireware version:')}&nbsp;
+                {t('Current fireware version')}:&nbsp;
               </span>
               {deviceWareInfoByWiFiLoading && (
                 <span className={styles.current_fireware_loading}>
@@ -210,7 +210,7 @@ function MachineSelection(props) {
         </div>
       </Modal>
       <Modal
-        title="Firmware Update"
+        title={t('Firmware Update')}
         maskClosable={false}
         visible={isShowFirmwareUpdateModal}
         footer={
@@ -237,7 +237,7 @@ function MachineSelection(props) {
       >
         <div className={styles.firmware_update_modal_content_wraper}>
           <span>
-            <span>{t('Choose firmware file:')}&nbsp;</span>
+            <span>{t('Choose firmware file')}:&nbsp;</span>
             <input
               type="file"
               multiple={false}

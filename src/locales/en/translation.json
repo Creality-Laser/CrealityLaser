@@ -180,10 +180,12 @@
   "Pause": "Pause",
   "Send": "Send",
   "Model": "Model",
-  "Current fireware version:": "Current fireware version:",
+  "Current fireware version": "Current fireware version",
   "loading...": "loading...",
   "Update Firmware": "Update Firmware",
   "Enter": "Enter",
   "Update": "Update",
-  "Choose firmware file:": "Choose firmware file:"
+  "Choose firmware file": "Choose firmware file",
+  "Toggle model success": "Toggle model success",
+  "Firmware Update": "Firmware Update"
 }
