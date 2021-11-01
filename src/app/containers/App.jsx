@@ -2,7 +2,9 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import useListenLanguageChangeAndChangeLanguage from '../hooks/useListenLanguageChangeAndChangeLanguage';
+import useSendLanguageChanged from '../hooks/useSendLanguageChanged';
 import { actions as machineActions } from '../flux/machine';
 import { actions as laserActions } from '../flux/laser';
 import { actions as editorActions } from '../flux/editor';
@@ -16,8 +18,6 @@ import GlobalInfoModal from './GlobalInfoModal';
 import './App.global.less';
 
 function App(props) {
-  useListenLanguageChangeAndChangeLanguage();
-
   const {
     location,
     machineInit,
@@ -28,6 +28,10 @@ function App(props) {
     workspaceInit,
     keyboardShortcutInit,
   } = props;
+
+  useListenLanguageChangeAndChangeLanguage();
+  const { i18n } = useTranslation();
+  const changeLanguage = useSendLanguageChanged();
 
   const isAllowedRouterPath = isRouterPathAllowed(location.pathname);
 
@@ -54,6 +58,12 @@ function App(props) {
     document.onselectstart = () => {
       return false;
     };
+  }, []);
+
+  // synchronize language;
+  useEffect(() => {
+    const { language } = i18n;
+    changeLanguage(language);
   }, []);
 
   if (!isAllowedRouterPath) {
