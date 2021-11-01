@@ -81,8 +81,8 @@ class Canvas extends Component {
     this.renderScene();
 
     setTimeout(() => {
-      this.renderScene();
-    }, 100);
+      this.resizeWindow();
+    }, 300);
 
     window.addEventListener('resize', this.resizeWindow, false);
   }
