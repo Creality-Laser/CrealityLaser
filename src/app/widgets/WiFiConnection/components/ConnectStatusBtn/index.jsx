@@ -122,6 +122,7 @@ function ConnectStatusBtn(props) {
   }, [sendPrintCommand]);
 
   useEffect(() => {
+    const { process } = machineInfoConnectedByWiFi || {};
     if (!isShowOperateModal) {
       setIsCarveFinishedThisTime(false);
     }
@@ -133,7 +134,7 @@ function ConnectStatusBtn(props) {
       setIsCarveFinishedThisTime(true);
     }
     prevProcessRef.current = process;
-  }, [isShowOperateModal, process]);
+  }, [isShowOperateModal, machineInfoConnectedByWiFi]);
 
   useEffect(() => {
     if (!uploadFileLoading && prevUploadFileLoadingRef.current) {
@@ -402,7 +403,7 @@ function ConnectStatusBtn(props) {
             </span>
           </div>
           <div className={styles.send_file_progress_wrapper}>
-            <Progress percent={process.toFixed(0)} />
+            <Progress percent={process.toFixed(2)} />
           </div>
         </div>
         <div className={styles.operators_wrapper}>
@@ -537,7 +538,9 @@ function ConnectStatusBtn(props) {
         {((isMachineResponse &&
           !isCarveFinishedThisTime &&
           isMachineIdleButNotWaitingToStart) ||
-          (!isMachineResponse && uploadFileLoadingIsTrueFewTimesAgo)) &&
+          (!isMachineResponse &&
+            uploadFileLoadingIsTrueFewTimesAgo &&
+            !isCarveFinishedThisTime)) &&
           carveModalContentWhenMachineIdle()}
         {isMachineResponse &&
           !isCarveFinishedThisTime &&
