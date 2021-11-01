@@ -386,7 +386,7 @@ export const genQrcode = (req, res) => {
 
         QRCode.toFile(
           path,
-          [{ data: Buffer.from(text, 'utf8') }],
+          [{ data: text, mode: 'byte' }],
           {
             color: {
               dark: colorDark,
