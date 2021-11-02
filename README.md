@@ -60,3 +60,5 @@ See our [docs and guides here](https://electron-react-boilerplate.js.org/docs/in
 
 `yarn add <package...> [--tilde/-T]`
 Using `--tilde` or `-T` installs **the most recent release** of the packages that have **the same minor version**. The default is to use the most recent release with the same major version. For example, `yarn add foo@1.2.3 --tilde` would accept 1.2.9 but not 1.3.0.
+
+[WiFi 功能后端接口](https://www.yuque.com/u21211020/fw9v4f)
