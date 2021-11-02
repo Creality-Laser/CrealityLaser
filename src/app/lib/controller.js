@@ -109,6 +109,9 @@ class SerialPortClient {
     'wifi:cancalGetDeviceStatusHeartbeat': [],
     'wifi:cancalGetDeviceStatusHeartbeatSucc': [],
     'wifi:cancalGetDeviceStatusHeartbeatErr': [],
+    'wifi:genGcodeByGcoreConfig': [],
+    'wifi:genGcodeByGcoreConfigSucc': [],
+    'wifi:genGcodeByGcoreConfigErr': [],
   };
 
   dataSource = '';
@@ -328,6 +331,10 @@ class SerialPortClient {
 
   wifiCancalGetDeviceStatusHeartbeat() {
     socketController.emit('wifi:cancalGetDeviceStatusHeartbeat');
+  }
+
+  wifiGenGcodeByGcoreConfig(gcoreConfig) {
+    socketController.emit('wifi:genGcodeByGcoreConfig', gcoreConfig);
   }
 
   commitGcodeTask(task) {

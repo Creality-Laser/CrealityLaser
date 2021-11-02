@@ -74,6 +74,9 @@ const INITIAL_STATE = {
   uploadFileSucc: false,
   uploadFileErr: false,
   uploadFileLoading: false,
+
+  // CV01 gcode Info
+  currentCV01GcodeInfo: {}, // adapte CVO1 gcode style
 };
 
 const ACTION_SET_BACKGROUND_ENABLED = 'laser/ACTION_SET_BACKGROUND_ENABLED';
@@ -176,6 +179,20 @@ export const actions = {
       'wifi:cancelUploadGcoreErr': () => {
         message.error(`Cancel send gcore file failed`);
         dispatch(machineActions.subscribeDeviceStatusHeartbeat());
+      },
+      'wifi:genGcodeByGcoreConfigSucc': (ret) => {
+        const { gcodePath } = ret;
+        console.log(ret, '======== wifi:genGcodeByGcoreConfigSucc =======');
+        dispatch(
+          editorActions.updateState('laser', {
+            currentCV01GcodeInfo: {
+              path: gcodePath,
+            },
+          })
+        );
+      },
+      'wifi:genGcodeByGcoreConfigErr': () => {
+        message.error(`Generate gcode error`);
       },
       'taskCompleted:generateToolPath': (taskResult) => {
         if (taskResult.headType === 'laser') {
@@ -360,6 +377,9 @@ export const actions = {
 
     let model = null;
     switch (series) {
+      case 'CV01':
+        model = 1;
+        break;
       case 'CV01PRO':
         model = 2;
         break;
@@ -400,6 +420,13 @@ export const actions = {
         currentGcode: {},
       })
     );
+
+    // genGcode if CV01
+    const isCV01Model = series === 'CV01';
+
+    if (isCV01Model) {
+      dispatch(editorActions.genGcodeByGcoreConfig(gcoreConfig));
+    }
   },
 };
 

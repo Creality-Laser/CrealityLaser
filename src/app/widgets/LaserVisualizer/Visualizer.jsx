@@ -169,6 +169,7 @@ class Visualizer extends Component {
       // canRedo,
       // undo,
       // redo,
+      series,
       togglePage,
       uploadImage,
       setAutoPreview,
@@ -198,6 +199,7 @@ class Visualizer extends Component {
         {true && (
           <div className={styles['visualizer-top-left']}>
             <AddImage
+              series={series}
               togglePage={togglePage}
               uploadImage={uploadImage}
               setAutoPreview={setAutoPreview}
@@ -298,6 +300,7 @@ class Visualizer extends Component {
 }
 
 Visualizer.propTypes = {
+  series: PropTypes.string.isRequired,
   // page: PropTypes.string.isRequired,
   stage: PropTypes.number.isRequired,
   progress: PropTypes.number.isRequired,
@@ -340,7 +343,7 @@ Visualizer.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const { size } = state.machine;
+  const { size, series } = state.machine;
 
   const { background } = state.laser;
   // call canvas.updateTransformControl2D() when transformation changed or model selected changed
@@ -360,6 +363,7 @@ const mapStateToProps = (state) => {
   } = state.laser;
 
   return {
+    series,
     canUndo,
     canRedo,
     page,

@@ -78,6 +78,11 @@ function startServices(server) {
     socketWifi.cancalGetDeviceStatusHeartbeat
   );
 
+  socketServer.registerEvent(
+    'wifi:genGcodeByGcoreConfig',
+    socketWifi.genGcodeByGcoreConfig
+  );
+
   // task manager
   socketServer.registerEvent(
     'taskCommit:generateToolPath',

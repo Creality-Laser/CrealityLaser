@@ -530,7 +530,9 @@ class ModelGroup {
   showAllModelsObj3D() {
     this.object.visible = true;
     for (const model of this.getModels()) {
-      model.updateVisible(true);
+      if (model) {
+        model.updateVisible(true);
+      }
     }
   }
 

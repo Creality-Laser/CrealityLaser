@@ -287,6 +287,33 @@ const cancalGetDeviceStatusHeartbeat = (socket) => {
   }
 };
 
+const genGcodeByGcoreConfig = async (socket, config) => {
+  try {
+    const { sourcePath, ...options } = config;
+
+    const gcodePath = `${DataStorage.tmpDir}/gcode_${uuid
+      .v4()
+      .substring(0, 8)}.gcode`;
+
+    const ret = await genGcore(sourcePath, gcodePath, options, true);
+
+    if (ret !== 0) {
+      socket.emit('wifi:genGcodeByGcoreConfigErr', {
+        ok: 1,
+        msg: 'err',
+      });
+      return;
+    }
+
+    socket.emit('wifi:genGcodeByGcoreConfigSucc', {
+      gcodePath,
+    });
+  } catch (error) {
+    console.error(`gen gcode by gcore config error: ${error.message}`);
+    socket.emit('wifi:genGcodeByGcoreConfigErr');
+  }
+};
+
 export default {
   uploadGcore,
   cancelUploadGcore,
@@ -299,4 +326,5 @@ export default {
   sendCommand,
   getDeviceStatusHeartbeat,
   cancalGetDeviceStatusHeartbeat,
+  genGcodeByGcoreConfig,
 };

@@ -596,6 +596,9 @@ export const actions = {
   handleCancelSendGcodeToMachine: () => () => {
     controller.wifiCancelUploadGcodeFile();
   },
+  genGcodeByGcoreConfig: (gcoreConfig) => () => {
+    controller.wifiGenGcodeByGcoreConfig(gcoreConfig);
+  },
   updateSelectedModelFlip:
     (headType, transformation) => (dispatch, getState) => {
       const { modelGroup } = getState()[headType];

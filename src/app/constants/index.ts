@@ -205,6 +205,23 @@ export const MACHINE_SERIES = {
       style: 'marlin',
     },
   },
+  CV01: {
+    value: 'CV01',
+    label: 'CV-01',
+    setting: {
+      size: {
+        x: 170,
+        y: 200,
+        z: 200,
+      },
+      laserSize: {
+        x: 170,
+        y: 200,
+        z: 200,
+      },
+      style: 'grbl',
+    },
+  },
   ORIGINAL: {
     value: 'Original',
     label: 'Snapmaker Original',

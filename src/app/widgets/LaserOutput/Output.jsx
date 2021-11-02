@@ -41,7 +41,31 @@ class Output extends PureComponent {
       document.location.href = '/#/workspace';
       window.scrollTo(0, 0);
     },
-    onExport: () => {
+    onExport: (isCV01Model) => {
+      if (isCV01Model) {
+        const {
+          currentCV01GcodeInfo: { path: gcodePath },
+        } = this.props;
+
+        if (!gcodePath) {
+          message.error('export gcode error, please preview first');
+          return;
+        }
+        const gcodeName = gcodePath.split('/').pop();
+        request.get(gcodePath).end((err, res) => {
+          if (!res.text) {
+            return;
+          }
+          const gcodeStr = res.text;
+          const blob = new Blob([gcodeStr], {
+            type: 'text/plain;charset=utf-8',
+          });
+          FileSaver.saveAs(blob, gcodeName, true);
+        });
+
+        return;
+      }
+
       const { gcodeFile } = this.props;
       if (gcodeFile === null) {
         return;
@@ -113,6 +137,8 @@ class Output extends PureComponent {
   render() {
     const actions = this.actions;
     const {
+      series,
+      currentCV01GcodeInfo,
       t,
       workflowState,
       isAllModelsPreviewed,
@@ -123,6 +149,22 @@ class Output extends PureComponent {
     } = this.props;
     const isEditor = this.props.page === PAGE_EDITOR;
     const isProcess = this.props.page === PAGE_PROCESS;
+
+    const commonShouldDisableExport =
+      !hasModel ||
+      workflowState === 'running' ||
+      isGcodeGenerating ||
+      !isAllModelsPreviewed ||
+      gcodeFile === null;
+
+    const isCV01Model = series === 'CV01';
+
+    const isCanExportGcodeWhenCV01Model =
+      hasModel &&
+      isAllModelsPreviewed &&
+      isCV01Model &&
+      currentCV01GcodeInfo &&
+      currentCV01GcodeInfo.path;
 
     return (
       <div>
@@ -157,16 +199,18 @@ class Output extends PureComponent {
                   />
                 </div>
               </WrapPopover>
-              <Button
-                type="primary"
-                style={{ display: 'block', width: '100%', marginTop: '10px' }}
-                onClick={actions.onGenerateGcode}
-                disabled={
-                  !hasModel || !isAllModelsPreviewed || isGcodeGenerating
-                }
-              >
-                {t('Generate G-code')}
-              </Button>
+              {!isCV01Model && (
+                <Button
+                  type="primary"
+                  style={{ display: 'block', width: '100%', marginTop: '10px' }}
+                  onClick={actions.onGenerateGcode}
+                  disabled={
+                    !hasModel || !isAllModelsPreviewed || isGcodeGenerating
+                  }
+                >
+                  {t('Generate G-code')}
+                </Button>
+              )}
               {/* <button
                 type="button"
                 className="sm-btn-large sm-btn-default"
@@ -182,13 +226,11 @@ class Output extends PureComponent {
                 {t('Load G-code to Workspace')}
               </button> */}
               <Button
-                onClick={actions.onExport}
+                onClick={() => actions.onExport(isCV01Model)}
                 disabled={
-                  !hasModel ||
-                  workflowState === 'running' ||
-                  isGcodeGenerating ||
-                  !isAllModelsPreviewed ||
-                  gcodeFile === null
+                  isCV01Model
+                    ? !isCanExportGcodeWhenCV01Model
+                    : commonShouldDisableExport
                 }
                 style={{ display: 'block', width: '100%', marginTop: '10px' }}
               >
@@ -220,6 +262,8 @@ class Output extends PureComponent {
 }
 
 Output.propTypes = {
+  series: PropTypes.string,
+  currentCV01GcodeInfo: PropTypes.object,
   i18n: PropTypes.object,
   t: PropTypes.func,
   setTitle: PropTypes.func.isRequired,
@@ -253,6 +297,7 @@ const mapStateToProps = (state, ownProps) => {
   const { widgets } = state.widget;
   const { widgetId } = ownProps;
   const {
+    currentCV01GcodeInfo,
     page,
     isGcodeGenerating,
     isAllModelsPreviewed,
@@ -265,7 +310,11 @@ const mapStateToProps = (state, ownProps) => {
     isAnyModelOverstepped,
   } = state.laser;
 
+  const { series } = state.machine;
+
   return {
+    series,
+    currentCV01GcodeInfo,
     isAnyModelOverstepped,
     page,
     modelGroup,

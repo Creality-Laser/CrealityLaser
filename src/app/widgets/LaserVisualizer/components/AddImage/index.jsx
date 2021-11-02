@@ -10,6 +10,7 @@ const { TextArea } = Input;
 
 export default function AddImage(props) {
   const {
+    series,
     // togglePage,
     uploadImage,
     setAutoPreview,
@@ -27,6 +28,8 @@ export default function AddImage(props) {
 
   const inputRef = useRef(null);
   const grcodeModalTextAreaRef = useRef(null);
+
+  const isCV01Model = series === 'CV01';
 
   const onClickToUpload = () => {
     if (inputRef) {
@@ -104,12 +107,16 @@ export default function AddImage(props) {
       });
   };
 
+  const commonInputFileTypes = '.svg, .png, .jpg, .jpeg, .bmp, .dxf';
+
+  const Cv01FileTypes = '.png, .jpg, .jpeg, .bmp';
+
   return (
     <>
       <input
         ref={inputRef}
         type="file"
-        accept=".svg, .png, .jpg, .jpeg, .bmp, .dxf"
+        accept={isCV01Model ? Cv01FileTypes : commonInputFileTypes}
         style={{ display: 'none' }}
         multiple={false}
         onChange={onChangeFile}
@@ -123,16 +130,18 @@ export default function AddImage(props) {
       >
         {t('Add File', 'Add File')}
       </Button>
-      <Button
-        shape="round"
-        style={{ float: 'left', marginRight: '20px' }}
-        title={t('Add text to workspace')}
-        onClick={() => {
-          insertDefaultTextVector();
-        }}
-      >
-        {t('Add Text', 'Add Text')}
-      </Button>
+      {!isCV01Model && (
+        <Button
+          shape="round"
+          style={{ float: 'left', marginRight: '20px' }}
+          title={t('Add text to workspace')}
+          onClick={() => {
+            insertDefaultTextVector();
+          }}
+        >
+          {t('Add Text', 'Add Text')}
+        </Button>
+      )}
       <Button
         shape="round"
         style={{ float: 'left' }}
@@ -202,6 +211,7 @@ export default function AddImage(props) {
 }
 
 AddImage.propTypes = {
+  series: PropTypes.string.isRequired,
   // togglePage: PropTypes.func.isRequired,
   uploadImage: PropTypes.func.isRequired,
   setAutoPreview: PropTypes.func.isRequired,

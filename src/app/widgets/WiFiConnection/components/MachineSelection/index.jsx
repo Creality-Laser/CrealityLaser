@@ -194,6 +194,7 @@ function MachineSelection(props) {
                   className={styles.sidebar_machine_profile}
                   alt={machine.label}
                   src={
+                    (machine.value === 'CV01' && CV10ProImg) ||
                     (machine.value === 'CV01PRO' && CV10ProImg) ||
                     (machine.value === 'CV20' && CV20Img) ||
                     (machine.value === 'CV30' && CV30Img) ||
