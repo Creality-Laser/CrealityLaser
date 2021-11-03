@@ -137,6 +137,23 @@ export const MACHINE_SERIES = {
     },
     alias: ['Custom'],
   },
+  CV01: {
+    value: 'CV01',
+    label: 'CV-01',
+    setting: {
+      size: {
+        x: 170,
+        y: 200,
+        z: 200,
+      },
+      laserSize: {
+        x: 170,
+        y: 200,
+        z: 200,
+      },
+      style: 'grbl',
+    },
+  },
   CV01PRO: {
     value: 'CV01PRO',
     label: 'CV-01 Pro',
@@ -203,23 +220,6 @@ export const MACHINE_SERIES = {
         z: 210,
       },
       style: 'marlin',
-    },
-  },
-  CV01: {
-    value: 'CV01',
-    label: 'CV-01',
-    setting: {
-      size: {
-        x: 170,
-        y: 200,
-        z: 200,
-      },
-      laserSize: {
-        x: 170,
-        y: 200,
-        z: 200,
-      },
-      style: 'grbl',
     },
   },
   ORIGINAL: {

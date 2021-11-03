@@ -510,7 +510,7 @@ function ConnectStatusBtn(props) {
         </span>
       </div>
       <Modal
-        title="Carve"
+        title={t('Carve')}
         maskClosable={false}
         visible={isShowOperateModal}
         footer={null}

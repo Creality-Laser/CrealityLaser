@@ -397,6 +397,8 @@ export const actions = {
         break;
     }
 
+    const isCV01Model = series === 'CV01';
+
     const gcoreConfig = {
       sourcePath: modelPath,
       offset,
@@ -406,7 +408,7 @@ export const actions = {
       model,
       start: 3,
       dire: 2,
-      gco_style: 1,
+      gco_style: isCV01Model ? 3 : 1,
       total_num: multiPasses,
       jog_speed: jogSpeed,
       work_speed: workSpeed,
@@ -420,9 +422,6 @@ export const actions = {
         currentGcode: {},
       })
     );
-
-    // genGcode if CV01
-    const isCV01Model = series === 'CV01';
 
     if (isCV01Model) {
       dispatch(editorActions.genGcodeByGcoreConfig(gcoreConfig));

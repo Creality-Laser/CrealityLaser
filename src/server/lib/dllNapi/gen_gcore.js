@@ -25,12 +25,14 @@ import getDllFilePath from './utils/getDllFilePath';
  * @param {string} imgPath - the img path
  * @param {string} generatedGcorePath - the generated gcore path
  * @param {*} gcoreConfig
+ * @param {boolean} isGenGcode - if true, will generate a gcode file
  * @returns
  */
 export default async function genGcore(
   imgPath = '',
   generatedGcorePath = '',
-  gcoreConfig = {}
+  gcoreConfig = {},
+  isGenGcode = false
 ) {
   try {
     const {
@@ -47,7 +49,7 @@ export default async function genGcore(
       work_speed = 800,
     } = gcoreConfig;
 
-    const dllPath = getDllFilePath('gcore_gen');
+    const dllPath = getDllFilePath('gcore_full');
     if (!dllPath) {
       return 'err';
     }
@@ -57,6 +59,10 @@ export default async function genGcore(
       gcore_generate: [
         ref.types.char,
         ['char *', 'char *', ref.refType(GCoreConfig)],
+      ],
+      gcore_image_to_gcode: [
+        ref.types.char,
+        [ref.refType(GCoreConfig), 'char *', 'char *'],
       ],
     });
 
@@ -79,14 +85,25 @@ export default async function genGcore(
       work_speed,
     });
 
-    // success: 0, error: others
-    const ret = await libm.gcore_generate(
-      genImgPathRef(imgPath),
-      genGcorePathRef(generatedGcorePath),
-      gCoreConfigRef.ref()
-    );
+    if (isGenGcode) {
+      // success: 0, error: others
+      const ret = await libm.gcore_image_to_gcode(
+        gCoreConfigRef.ref(),
+        genImgPathRef(imgPath),
+        genGcorePathRef(generatedGcorePath)
+      );
 
-    return ret;
+      return ret;
+    } else {
+      // success: 0, error: others
+      const ret = await libm.gcore_generate(
+        genImgPathRef(imgPath),
+        genGcorePathRef(generatedGcorePath),
+        gCoreConfigRef.ref()
+      );
+
+      return ret;
+    }
   } catch (error) {
     console.log(`genGcore error: ${error.message}`);
     return 'err';

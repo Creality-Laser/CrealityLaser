@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Modal, Button, Progress, message } from 'antd';
 import { MACHINE_SERIES } from '../../../../constants';
 import { actions as machineActions } from '../../../../flux/machine';
+import CV01Img from '../assets/CV01.png';
 import CV10ProImg from '../assets/CV01Pro.png';
 import CV20Img from '../assets/CV20.png';
 import CV30Img from '../assets/CV30.png';
@@ -194,7 +195,7 @@ function MachineSelection(props) {
                   className={styles.sidebar_machine_profile}
                   alt={machine.label}
                   src={
-                    (machine.value === 'CV01' && CV10ProImg) ||
+                    (machine.value === 'CV01' && CV01Img) ||
                     (machine.value === 'CV01PRO' && CV10ProImg) ||
                     (machine.value === 'CV20' && CV20Img) ||
                     (machine.value === 'CV30' && CV30Img) ||
