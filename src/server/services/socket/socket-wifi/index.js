@@ -300,7 +300,7 @@ const genGcodeByGcoreConfig = async (socket, config) => {
     if (ret !== 0) {
       socket.emit('wifi:genGcodeByGcoreConfigErr', {
         ok: 1,
-        msg: 'err',
+        msg: ret || 'error',
       });
       return;
     }
@@ -310,7 +310,10 @@ const genGcodeByGcoreConfig = async (socket, config) => {
     });
   } catch (error) {
     console.error(`gen gcode by gcore config error: ${error.message}`);
-    socket.emit('wifi:genGcodeByGcoreConfigErr');
+    socket.emit('wifi:genGcodeByGcoreConfigErr', {
+      ok: 1,
+      msg: error.message,
+    });
   }
 };
 

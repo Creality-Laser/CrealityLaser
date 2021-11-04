@@ -191,8 +191,8 @@ export const actions = {
           })
         );
       },
-      'wifi:genGcodeByGcoreConfigErr': () => {
-        message.error(`Generate gcode error`);
+      'wifi:genGcodeByGcoreConfigErr': (err) => {
+        message.error(`Generate gcode error: ${err && err.msg}`);
       },
       'taskCompleted:generateToolPath': (taskResult) => {
         if (taskResult.headType === 'laser') {

@@ -49,10 +49,20 @@ export default async function genGcore(
       work_speed = 800,
     } = gcoreConfig;
 
-    const dllPath = getDllFilePath('gcore_full');
+    const dllPath = getDllFilePath('gcore_full_1');
     if (!dllPath) {
       return 'err';
     }
+
+    // const kernel32 = ffi.Library('kernel32', {
+    //   SetDllDirectoryA: ['bool', ['string']],
+    // });
+    // kernel32.SetDllDirectoryA('pathToAdd');
+
+    // const ucrtbased = ffi.Library('ucrtbased', {
+    //   SetDllDirectoryA: ['bool', ['string']],
+    // });
+    // ucrtbased.SetDllDirectoryA('pathToAdd');
 
     const libm = ffi.Library(dllPath, {
       // success: 0, error: others
@@ -92,7 +102,6 @@ export default async function genGcore(
         genImgPathRef(imgPath),
         genGcorePathRef(generatedGcorePath)
       );
-
       return ret;
     } else {
       // success: 0, error: others
@@ -106,6 +115,6 @@ export default async function genGcore(
     }
   } catch (error) {
     console.log(`genGcore error: ${error.message}`);
-    return 'err';
+    return error.message;
   }
 }
