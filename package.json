@@ -95,6 +95,12 @@
     "extraResources": [
       "./assets/**"
     ],
+    "extraFiles": [
+      {
+        "from": "./sys_dlls",
+        "to": "./"
+      }
+    ],
     "publish": {
       "provider": "github",
       "owner": "Creality-Laser",
